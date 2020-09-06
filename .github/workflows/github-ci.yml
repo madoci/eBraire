@@ -33,4 +33,4 @@ jobs:
             - name: Build and publish docker image
               if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
               run: |
-                  ./mvnw -ntp jib:build -Djib.to.image=thomasherve/ebraire:latest -Djib.to.auth.username="thomasherve" -Djib.to.auth.password="banane123"
+                  ./mvnw -ntp jib:build -Djib.to.image=thomasherve/ebraire:latest -Djib.to.auth.username="thomasherve" -Djib.to.auth.password="${{ secrets.DOCKER_HUB_PWD }}"
