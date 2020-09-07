@@ -51,6 +51,19 @@ public class CacheConfiguration {
             createCache(cm, com.shaf.ebraire.domain.User.class.getName());
             createCache(cm, com.shaf.ebraire.domain.Authority.class.getName());
             createCache(cm, com.shaf.ebraire.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.shaf.ebraire.domain.Customer.class.getName());
+            createCache(cm, com.shaf.ebraire.domain.Customer.class.getName() + ".idOrders");
+            createCache(cm, com.shaf.ebraire.domain.Ordered.class.getName());
+            createCache(cm, com.shaf.ebraire.domain.Ordered.class.getName() + ".oderedBooks");
+            createCache(cm, com.shaf.ebraire.domain.OrderLine.class.getName());
+            createCache(cm, com.shaf.ebraire.domain.Book.class.getName());
+            createCache(cm, com.shaf.ebraire.domain.Book.class.getName() + ".tags");
+            createCache(cm, com.shaf.ebraire.domain.Book.class.getName() + ".genres");
+            createCache(cm, com.shaf.ebraire.domain.Genre.class.getName());
+            createCache(cm, com.shaf.ebraire.domain.Genre.class.getName() + ".books");
+            createCache(cm, com.shaf.ebraire.domain.Tag.class.getName());
+            createCache(cm, com.shaf.ebraire.domain.Tag.class.getName() + ".books");
+            createCache(cm, com.shaf.ebraire.domain.Type.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
