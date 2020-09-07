@@ -43,9 +43,6 @@ public class Book implements Serializable {
     @Column(name = "unit_price")
     private Float unitPrice;
 
-    @Column(name = "total_price")
-    private Float totalPrice;
-
     @Lob
     @Column(name = "image")
     private byte[] image;
@@ -143,19 +140,6 @@ public class Book implements Serializable {
 
     public void setUnitPrice(Float unitPrice) {
         this.unitPrice = unitPrice;
-    }
-
-    public Float getTotalPrice() {
-        return totalPrice;
-    }
-
-    public Book totalPrice(Float totalPrice) {
-        this.totalPrice = totalPrice;
-        return this;
-    }
-
-    public void setTotalPrice(Float totalPrice) {
-        this.totalPrice = totalPrice;
     }
 
     public byte[] getImage() {
@@ -274,7 +258,6 @@ public class Book implements Serializable {
             ", description='" + getDescription() + "'" +
             ", descriptionContentType='" + getDescriptionContentType() + "'" +
             ", unitPrice=" + getUnitPrice() +
-            ", totalPrice=" + getTotalPrice() +
             ", image='" + getImage() + "'" +
             ", imageContentType='" + getImageContentType() + "'" +
             "}";

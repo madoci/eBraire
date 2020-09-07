@@ -45,7 +45,6 @@
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.authors">Authors</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.description">Description</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.unitPrice">Unit Price</span></th>
-                    <th scope="col" ><span jhiTranslate="eBraireApp.book.totalPrice">Total Price</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.image">Image</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.type">Type</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.tags">Tags</span></th>
@@ -63,7 +62,6 @@
                         <span *ngIf="book.description">{{ book.descriptionContentType }}, {{ byteSize(book.description) }}</span>
                     </td>
                     <td>{{ book.unitPrice }}</td>
-                    <td>{{ book.totalPrice }}</td>
                     <td>
                         <a *ngIf="book.image" (click)="openFile(book.imageContentType, book.image)" jhiTranslate="entity.action.open">open</a>
                         <span *ngIf="book.image">{{ book.imageContentType }}, {{ byteSize(book.image) }}</span>

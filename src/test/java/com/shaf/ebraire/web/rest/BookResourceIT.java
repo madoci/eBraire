@@ -55,9 +55,6 @@ public class BookResourceIT {
     private static final Float DEFAULT_UNIT_PRICE = 1F;
     private static final Float UPDATED_UNIT_PRICE = 2F;
 
-    private static final Float DEFAULT_TOTAL_PRICE = 1F;
-    private static final Float UPDATED_TOTAL_PRICE = 2F;
-
     private static final byte[] DEFAULT_IMAGE = TestUtil.createByteArray(1, "0");
     private static final byte[] UPDATED_IMAGE = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_IMAGE_CONTENT_TYPE = "image/jpg";
@@ -98,7 +95,6 @@ public class BookResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .descriptionContentType(DEFAULT_DESCRIPTION_CONTENT_TYPE)
             .unitPrice(DEFAULT_UNIT_PRICE)
-            .totalPrice(DEFAULT_TOTAL_PRICE)
             .image(DEFAULT_IMAGE)
             .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE);
         return book;
@@ -116,7 +112,6 @@ public class BookResourceIT {
             .description(UPDATED_DESCRIPTION)
             .descriptionContentType(UPDATED_DESCRIPTION_CONTENT_TYPE)
             .unitPrice(UPDATED_UNIT_PRICE)
-            .totalPrice(UPDATED_TOTAL_PRICE)
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
         return book;
@@ -146,7 +141,6 @@ public class BookResourceIT {
         assertThat(testBook.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testBook.getDescriptionContentType()).isEqualTo(DEFAULT_DESCRIPTION_CONTENT_TYPE);
         assertThat(testBook.getUnitPrice()).isEqualTo(DEFAULT_UNIT_PRICE);
-        assertThat(testBook.getTotalPrice()).isEqualTo(DEFAULT_TOTAL_PRICE);
         assertThat(testBook.getImage()).isEqualTo(DEFAULT_IMAGE);
         assertThat(testBook.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
 
@@ -193,7 +187,6 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.[*].descriptionContentType").value(hasItem(DEFAULT_DESCRIPTION_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(Base64Utils.encodeToString(DEFAULT_DESCRIPTION))))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.doubleValue())))
-            .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))));
     }
@@ -234,7 +227,6 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.descriptionContentType").value(DEFAULT_DESCRIPTION_CONTENT_TYPE))
             .andExpect(jsonPath("$.description").value(Base64Utils.encodeToString(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.doubleValue()))
-            .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE.doubleValue()))
             .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
             .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)));
     }
@@ -264,7 +256,6 @@ public class BookResourceIT {
             .description(UPDATED_DESCRIPTION)
             .descriptionContentType(UPDATED_DESCRIPTION_CONTENT_TYPE)
             .unitPrice(UPDATED_UNIT_PRICE)
-            .totalPrice(UPDATED_TOTAL_PRICE)
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
 
@@ -282,7 +273,6 @@ public class BookResourceIT {
         assertThat(testBook.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testBook.getDescriptionContentType()).isEqualTo(UPDATED_DESCRIPTION_CONTENT_TYPE);
         assertThat(testBook.getUnitPrice()).isEqualTo(UPDATED_UNIT_PRICE);
-        assertThat(testBook.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);
         assertThat(testBook.getImage()).isEqualTo(UPDATED_IMAGE);
         assertThat(testBook.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
 
@@ -349,7 +339,6 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.[*].descriptionContentType").value(hasItem(DEFAULT_DESCRIPTION_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(Base64Utils.encodeToString(DEFAULT_DESCRIPTION))))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.doubleValue())))
-            .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))));
     }
