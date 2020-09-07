@@ -1,0 +1,74 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="book">
+            <h2><span jhiTranslate="eBraireApp.book.detail.title">Book</span> {{ book.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="eBraireApp.book.title">Title</span></dt>
+                <dd>
+                    <span>{{ book.title }}</span>
+                </dd>
+                <dt><span jhiTranslate="eBraireApp.book.authors">Authors</span></dt>
+                <dd>
+                    <span>{{ book.authors }}</span>
+                </dd>
+                <dt><span jhiTranslate="eBraireApp.book.description">Description</span></dt>
+                <dd>
+                    <div *ngIf="book.description">
+                        <a (click)="openFile(book.descriptionContentType, book.description)" jhiTranslate="entity.action.open">open</a>
+                        {{ book.descriptionContentType }}, {{ byteSize(book.description) }}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="eBraireApp.book.unitPrice">Unit Price</span></dt>
+                <dd>
+                    <span>{{ book.unitPrice }}</span>
+                </dd>
+                <dt><span jhiTranslate="eBraireApp.book.totalPrice">Total Price</span></dt>
+                <dd>
+                    <span>{{ book.totalPrice }}</span>
+                </dd>
+                <dt><span jhiTranslate="eBraireApp.book.image">Image</span></dt>
+                <dd>
+                    <div *ngIf="book.image">
+                        <a (click)="openFile(book.imageContentType, book.image)" jhiTranslate="entity.action.open">open</a>
+                        {{ book.imageContentType }}, {{ byteSize(book.image) }}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="eBraireApp.book.type">Type</span></dt>
+                <dd>
+                    <div *ngIf="book.type">
+                        <a [routerLink]="['/type', book.type?.id, 'view']">{{ book.type?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="eBraireApp.book.tags">Tags</span></dt>
+                <dd>
+                    <span *ngFor="let tags of book.tags; let last = last">
+                        <a [routerLink]="['/tag', tags?.id, 'view']">{{ tags.id }}</a>{{ last ? '' : ', ' }}
+                    </span>
+                </dd>
+                <dt><span jhiTranslate="eBraireApp.book.genres">Genres</span></dt>
+                <dd>
+                    <span *ngFor="let genres of book.genres; let last = last">
+                        <a [routerLink]="['/genre', genres?.id, 'view']">{{ genres.id }}</a>{{ last ? '' : ', ' }}
+                    </span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/book', book.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
