@@ -61,7 +61,6 @@ export const fontAwesomeIcons = [
   faTasks,
   faBook,
   faHdd,
-  faEye,
   faFlag,
   faWrench,
   faLock,
