@@ -24,7 +24,7 @@ public class Type implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "type")
+    @Column(name = "type", unique = true)
     private String type;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

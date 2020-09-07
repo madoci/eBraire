@@ -27,7 +27,7 @@ public class Genre implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "genre")
+    @Column(name = "genre", unique = true)
     private String genre;
 
     @ManyToMany(mappedBy = "genres")

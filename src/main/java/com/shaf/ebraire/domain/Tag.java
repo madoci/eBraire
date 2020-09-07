@@ -27,7 +27,7 @@ public class Tag implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "tag")
+    @Column(name = "tag", unique = true)
     private String tag;
 
     @ManyToMany(mappedBy = "tags")
