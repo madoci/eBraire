@@ -6,6 +6,6 @@ export const managebookRoute: Route = {
   path: '',
   component: ManagebookComponent,
   data: {
-    pageTitle: 'logs.title',
+    pageTitle: 'managebook.title',
   },
 };
