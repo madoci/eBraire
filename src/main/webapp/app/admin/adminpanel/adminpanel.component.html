@@ -1,7 +1,7 @@
 <h2 id="page-heading">
     <span jhiTranslate="eBraireApp.book.home.title">Books</span>
 
-    <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-book" >
+    <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-book"  routerLink="/admin/managebook/-1" >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"  jhiTranslate="eBraireApp.book.home.createLabel">
         Create a new Book
@@ -53,13 +53,13 @@
                 <td class="text-right">
                     <div class="btn-group">
 
-                        <button type="submit"
+                        <button type="submit" routerLink="/admin/managebook/{{book.id}}"
                                 class="btn btn-primary btn-sm">
                             <fa-icon icon="pencil-alt"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
 
-                        <button type="submit" (click)="delete(book)"
+                        <button type="submit" (click)="delete(book)" 
                         class="btn btn-danger btn-sm">
                     <fa-icon icon="times"></fa-icon>
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
