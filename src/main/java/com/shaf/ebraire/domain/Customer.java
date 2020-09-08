@@ -4,6 +4,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
@@ -27,12 +28,15 @@ public class Customer implements Serializable {
     private Long id;
 
     @Column(name = "name")
+    @NotNull
     private String name;
 
     @Column(name = "last_name")
+    @NotNull
     private String lastName;
 
     @Column(name = "address")
+    @NotNull
     private String address;
 
     @OneToMany(mappedBy = "idCustomer")

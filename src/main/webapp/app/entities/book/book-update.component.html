@@ -25,21 +25,8 @@
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eBraireApp.book.description" for="field_description">Description</label>
-                    <div>
-                        <div *ngIf="editForm.get('description')!.value" class="form-text text-danger clearfix">
-                            <a class="pull-left" (click)="openFile(editForm.get('descriptionContentType')!.value, editForm.get('description')!.value)" jhiTranslate="entity.action.open">open</a><br>
-                            <span class="pull-left">{{ editForm.get('descriptionContentType')!.value }}, {{ byteSize(editForm.get('description')!.value) }}</span>
-                            <button type="button" (click)="editForm.patchValue({description: null});editForm.patchValue({descriptionContentType: null});"
-                                    class="btn btn-secondary btn-xs pull-right">
-                                <fa-icon icon="times"></fa-icon>
-                            </button>
-                        </div>
-                        <input type="file" id="file_description" (change)="setFileData($event, 'description', false)" jhiTranslate="entity.action.addblob"/>
-                    </div>
-                    <input type="hidden" class="form-control" name="description" id="field_description"
+                    <input type="text" class="form-control" name="description" id="field_description"
                            formControlName="description"/>
-                    <input type="hidden" class="form-control" name="descriptionContentType" id="field_descriptionContentType"
-                           formControlName="descriptionContentType" />
                 </div>
 
                 <div class="form-group">
