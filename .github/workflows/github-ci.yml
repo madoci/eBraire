@@ -34,7 +34,7 @@ jobs:
               if: github.event_name == 'push' && github.ref == 'refs/heads/master'
               env:
                   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-              run: ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=ebraire-staging
+              run: ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=ebraire-test
             - name: Build and publish docker image
               if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
               run: |
