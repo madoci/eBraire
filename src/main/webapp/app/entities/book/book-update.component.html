@@ -13,39 +13,22 @@
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eBraireApp.book.title" for="field_title">Title</label>
-                    <input type="text" class="form-control" name="title" id="field_title"
-                           formControlName="title"/>
+                    <input type="text" class="form-control" name="title" id="field_title" formControlName="title" />
                 </div>
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eBraireApp.book.authors" for="field_authors">Authors</label>
-                    <input type="text" class="form-control" name="authors" id="field_authors"
-                           formControlName="authors"/>
+                    <input type="text" class="form-control" name="authors" id="field_authors" formControlName="authors" />
                 </div>
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eBraireApp.book.description" for="field_description">Description</label>
-                    <div>
-                        <div *ngIf="editForm.get('description')!.value" class="form-text text-danger clearfix">
-                            <a class="pull-left" (click)="openFile(editForm.get('descriptionContentType')!.value, editForm.get('description')!.value)" jhiTranslate="entity.action.open">open</a><br>
-                            <span class="pull-left">{{ editForm.get('descriptionContentType')!.value }}, {{ byteSize(editForm.get('description')!.value) }}</span>
-                            <button type="button" (click)="editForm.patchValue({description: null});editForm.patchValue({descriptionContentType: null});"
-                                    class="btn btn-secondary btn-xs pull-right">
-                                <fa-icon icon="times"></fa-icon>
-                            </button>
-                        </div>
-                        <input type="file" id="file_description" (change)="setFileData($event, 'description', false)" jhiTranslate="entity.action.addblob"/>
-                    </div>
-                    <input type="hidden" class="form-control" name="description" id="field_description"
-                           formControlName="description"/>
-                    <input type="hidden" class="form-control" name="descriptionContentType" id="field_descriptionContentType"
-                           formControlName="descriptionContentType" />
+                    <input type="hidden" class="form-control" name="description" id="field_description" formControlName="description" />
                 </div>
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eBraireApp.book.unitPrice" for="field_unitPrice">Unit Price</label>
-                    <input type="number" class="form-control" name="unitPrice" id="field_unitPrice"
-                           formControlName="unitPrice"/>
+                    <input type="number" class="form-control" name="unitPrice" id="field_unitPrice" formControlName="unitPrice" />
                 </div>
 
                 <div class="form-group">
@@ -54,17 +37,14 @@
                         <div *ngIf="editForm.get('image')!.value" class="form-text text-danger clearfix">
                             <a class="pull-left" (click)="openFile(editForm.get('imageContentType')!.value, editForm.get('image')!.value)" jhiTranslate="entity.action.open">open</a><br>
                             <span class="pull-left">{{ editForm.get('imageContentType')!.value }}, {{ byteSize(editForm.get('image')!.value) }}</span>
-                            <button type="button" (click)="editForm.patchValue({image: null});editForm.patchValue({imageContentType: null});"
-                                    class="btn btn-secondary btn-xs pull-right">
+                            <button type="button" (click)="editForm.patchValue({image: null});editForm.patchValue({imageContentType: null});" class="btn btn-secondary btn-xs pull-right">
                                 <fa-icon icon="times"></fa-icon>
                             </button>
                         </div>
-                        <input type="file" id="file_image" (change)="setFileData($event, 'image', false)" jhiTranslate="entity.action.addblob"/>
+                        <input type="file" id="file_image" (change)="setFileData($event, 'image', false)" jhiTranslate="entity.action.addblob" />
                     </div>
-                    <input type="hidden" class="form-control" name="image" id="field_image"
-                           formControlName="image"/>
-                    <input type="hidden" class="form-control" name="imageContentType" id="field_imageContentType"
-                           formControlName="imageContentType" />
+                    <input type="hidden" class="form-control" name="image" id="field_image" formControlName="image" />
+                    <input type="hidden" class="form-control" name="imageContentType" id="field_imageContentType" formControlName="imageContentType" />
                 </div>
 
                 <div class="form-group">
