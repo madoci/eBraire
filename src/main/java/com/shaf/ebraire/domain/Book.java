@@ -35,11 +35,8 @@ public class Book implements Serializable {
     private String authors;
     @NotNull
     @Lob
-    @Column(name = "description")
-    private byte[] description;
-    @NotNull
-    @Column(name = "description_content_type")
-    private String descriptionContentType;
+    @Column(name = "description", length=2048)
+    private String description;
     @NotNull
     @Column(name = "unit_price")
     private Float unitPrice;
@@ -103,30 +100,17 @@ public class Book implements Serializable {
         this.authors = authors;
     }
 
-    public byte[] getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public Book description(byte[] description) {
+    public Book description(String description) {
         this.description = description;
         return this;
     }
 
-    public void setDescription(byte[] description) {
+    public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getDescriptionContentType() {
-        return descriptionContentType;
-    }
-
-    public Book descriptionContentType(String descriptionContentType) {
-        this.descriptionContentType = descriptionContentType;
-        return this;
-    }
-
-    public void setDescriptionContentType(String descriptionContentType) {
-        this.descriptionContentType = descriptionContentType;
     }
 
     public Float getUnitPrice() {
@@ -256,7 +240,6 @@ public class Book implements Serializable {
             ", title='" + getTitle() + "'" +
             ", authors='" + getAuthors() + "'" +
             ", description='" + getDescription() + "'" +
-            ", descriptionContentType='" + getDescriptionContentType() + "'" +
             ", unitPrice=" + getUnitPrice() +
             ", image='" + getImage() + "'" +
             ", imageContentType='" + getImageContentType() + "'" +

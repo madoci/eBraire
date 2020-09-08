@@ -18,10 +18,7 @@
                 </dd>
                 <dt><span jhiTranslate="eBraireApp.book.description">Description</span></dt>
                 <dd>
-                    <div *ngIf="book.description">
-                        <a (click)="openFile(book.descriptionContentType, book.description)" jhiTranslate="entity.action.open">open</a>
-                        {{ book.descriptionContentType }}, {{ byteSize(book.description) }}
-                    </div>
+                    <span>{{ book.description }}  </span> 
                 </dd>
                 <dt><span jhiTranslate="eBraireApp.book.unitPrice">Unit Price</span></dt>
                 <dd>
