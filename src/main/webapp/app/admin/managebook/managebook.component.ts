@@ -11,12 +11,12 @@ import { Observable } from 'rxjs';
 })
 export class ManagebookComponent implements OnInit {
   id?: string | null;
-  book?: IBook;
+  book?: IBook | null;
   isSaving = false;
   newBook = true;
 
   // Nouvelles variables contenant certains champs convertis du livre
-  desc: string | ArrayBuffer = '';
+  desc?: string | null = '';
 
   constructor(private route: ActivatedRoute, protected bookService: BookService) {}
 
@@ -30,21 +30,21 @@ export class ManagebookComponent implements OnInit {
           this.newBook = false;
         }
         this.book = book.body;
-        this.desc = this.book.description;
+        const tempBook = this.book || new Book();
+        this.desc = tempBook.description;
       });
       this.book = this.book || new Book();
-      const reader = new FileReader();
-      reader.readAsText(this.book.description);
-      this.desc = reader.result;
+      // const reader = new FileReader();
+      // reader.readAsArrayBuffer(this.book.description);
     });
   }
 
   save(): void {
     this.isSaving = true;
     if (this.newBook) {
-      this.subscribeToSaveResponse(this.bookService.create(this.book));
+      this.subscribeToSaveResponse(this.bookService.create(this.book || new Book()));
     } else {
-      this.subscribeToSaveResponse(this.bookService.update(this.book));
+      this.subscribeToSaveResponse(this.bookService.update(this.book || new Book()));
     }
   }
 

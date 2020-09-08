@@ -1,14 +1,14 @@
 {{desc}}
 <div class="row justify-content-center">
     <div class="col-8">
-        <form (ngSubmit)="save()">
+        <form *ngIf="book" (ngSubmit)="save()">
             <div class="form-group">
                 <label class="form-control-label" jhiTranslate="eBraireApp.book.title" for="field_title">Title</label>
-                <input type="text" class="form-control" name="title" id="field_title" [(ngModel)]="book.title" />
+                <input *ngIf="book.title" type="text" class="form-control" name="title" id="field_title" [(ngModel)]="book.title" />
             </div>
             <div class="form-group">
                 <label class="form-control-label" jhiTranslate="eBraireApp.book.authors" for="field_author">Author</label>
-                <input type="text" class="form-control" name="authors" id="field_author" [(ngModel)]="book.authors" />
+                <input *ngIf="book.authors" type="text" class="form-control" name="authors" id="field_author" [(ngModel)]="book.authors" />
             </div>
 
             <div>
