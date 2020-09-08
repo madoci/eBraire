@@ -34,8 +34,8 @@ export class ManagebookComponent implements OnInit {
         this.desc = tempBook.description;
       });
       this.book = this.book || new Book();
-      // const reader = new FileReader();
-      // reader.readAsArrayBuffer(this.book.description);
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(this.book.description);
     });
   }
 
