@@ -5,6 +5,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
@@ -26,30 +27,29 @@ public class Book implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-
+    @NotNull
     @Column(name = "title")
     private String title;
-
+    @NotNull
     @Column(name = "authors")
     private String authors;
-
+    @NotNull
     @Lob
     @Column(name = "description")
     private byte[] description;
-
+    @NotNull
     @Column(name = "description_content_type")
     private String descriptionContentType;
-
+    @NotNull
     @Column(name = "unit_price")
     private Float unitPrice;
-
+    @NotNull
     @Lob
     @Column(name = "image")
     private byte[] image;
-
+    @NotNull
     @Column(name = "image_content_type")
     private String imageContentType;
-
     @ManyToOne
     @JsonIgnoreProperties(value = "books", allowSetters = true)
     private Type type;
@@ -60,7 +60,7 @@ public class Book implements Serializable {
                joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "tags_id", referencedColumnName = "id"))
     private Set<Tag> tags = new HashSet<>();
-
+    @NotNull
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(name = "book_genres",
