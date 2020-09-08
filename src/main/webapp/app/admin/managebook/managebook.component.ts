@@ -22,9 +22,9 @@ export class ManagebookComponent implements OnInit {
   newBook = true;
 
   // Variables en plus necessaire à afficher correctement les champs
-  types: Type[];
-  tags: Tag[];
-  genres: Genre[];
+  types?: Type[];
+  tags?: Tag[];
+  genres?: Genre[];
 
   constructor(
     private route: ActivatedRoute,
