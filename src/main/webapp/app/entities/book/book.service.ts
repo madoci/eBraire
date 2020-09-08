@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption, Search } from 'app/shared/util/request-util';
-import { IBook } from 'app/shared/model/book.model';
+import { IBook } from '../../shared/model/book.model';
 
 type EntityResponseType = HttpResponse<IBook>;
 type EntityArrayResponseType = HttpResponse<IBook[]>;
