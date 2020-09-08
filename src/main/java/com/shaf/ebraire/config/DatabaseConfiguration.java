@@ -21,6 +21,7 @@ import java.sql.SQLException;
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
 @EnableElasticsearchRepositories("com.shaf.ebraire.repository.search")
+@ConditionalOnMissingClass(name = "com.shaf.ebraire.HerokuDatabaseConfiguration")
 public class DatabaseConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
