@@ -34,6 +34,7 @@
                 </td>
                 <td>{{ book.unitPrice }}</td>
                 <td>
+                       <img [src]="'data:' + book.imageContentType + ';base64,' + book.image" width="50" height="50"/>
                 </td>
                 <td>
                     <div *ngIf="book.type">
