@@ -34,6 +34,14 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule),
       },
       {
+        path: 'adminpanel',
+        loadChildren: () => import('./adminpanel/adminpanel.module').then(m => m.AdminpanelModule),
+      },
+      {
+        path: 'managebook/:id',
+        loadChildren: () => import('./managebook/managebook.module').then(m => m.ManagebookModule),
+      },
+      {
         path: 'metrics',
         loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule),
       },

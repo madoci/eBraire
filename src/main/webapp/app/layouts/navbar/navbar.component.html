@@ -129,6 +129,12 @@
                             <span jhiTranslate="global.menu.admin.database">Database</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="admin/adminpanel" routerLinkActive="active" (click)="collapseNavbar()">
+                            <fa-icon icon="eye" [fixedWidth]="true"></fa-icon>
+                            <span jhiTranslate="global.menu.admin.panel">Edit database</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" *ngIf="languages && languages.length > 1">

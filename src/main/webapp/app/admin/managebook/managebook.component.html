@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form *ngIf="book" (ngSubmit)="save()">
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="eBraireApp.book.title" for="field_title">Title</label>
+                <input type="text" class="form-control" name="title" id="field_title" [(ngModel)]="book.title" />
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="eBraireApp.book.authors" for="field_author">Author</label>
+                <input type="text" class="form-control" name="authors" id="field_author" [(ngModel)]="book.authors" />
+            </div>
+            <!-- ICI DESCRIPTION -->
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="eBraireApp.book.unitPrice" for="field_unitPrice">Author</label>
+                <input type="number" class="form-control" name="unitPrice" id="field_unitPrice" [(ngModel)]="book.unitPrice" />
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="eBraireApp.book.type" for="field_type">Type</label>
+                <select class="form-control" id="field_type" name="type" [(ngModel)]="book.type">
+                    <option *ngFor="let typeOption of types">{{ typeOption.type }}</option>
+                </select>
+            </div>
+            <!-- 
+            <div class="form-group">
+                <label jhiTranslate="eBraireApp.book.tags" for="field_tags">Tags</label>
+                <select class="form-control" id="field_tags" multiple name="tags" [(ngModel)]="book.tags">
+                    <option *ngFor="let tagOption of tags">{{ tagOption.tag }}</option>
+                </select>
+            </div>
+            -->
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                        <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                    </button>
+
+                <button type="submit" id="save-entity" [disabled]="isSaving" class="btn btn-primary">
+                        <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                    </button>
+            </div>
+        </form>
+    </div>
+</div>
