@@ -26,6 +26,9 @@ export class ManagebookComponent implements OnInit {
   tags?: Tag[];
   genres?: Genre[];
 
+  tagList: number[] = [];
+  urlImage?: string;
+
   constructor(
     private route: ActivatedRoute,
     protected bookService: BookService,
@@ -45,7 +48,13 @@ export class ManagebookComponent implements OnInit {
         this.newBook = false;
       }
       this.book = book.body;
-      // const tempBook = this.book || new Book();
+      const tempBook = this.book || new Book();
+      const tagListBook = tempBook.tags || [];
+      tagListBook.forEach(element => {
+        this.tagList.push((element || new Tag()).id || 0);
+      });
+
+      this.urlImage = 'data:' + tempBook.imageContentType + ';base64,' + tempBook.image;
     });
     this.book = this.book || new Book();
 
@@ -61,6 +70,15 @@ export class ManagebookComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
+    const checkedListTag = document.getElementsByName('tag');
+    const savingTag: Tag[] = [];
+    checkedListTag.forEach(element => {
+      const check = element.childNodes[1] as HTMLInputElement;
+      if (check.checked) {
+        savingTag.push(element.childNodes[3].textContent);
+      }
+    });
+    this.book.tags = savingTag;
     if (this.newBook) {
       this.subscribeToSaveResponse(this.bookService.create(this.book || new Book()));
     } else {
@@ -86,5 +104,12 @@ export class ManagebookComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  contain(value: number): boolean {
+    for (let i = 0; i < this.tagList.length; i++) {
+      if (this.tagList[i] === value) return true;
+    }
+    return false;
   }
 }
