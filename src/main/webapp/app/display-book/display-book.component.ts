@@ -10,7 +10,7 @@ import { HttpResponse } from '@angular/common/http';
   templateUrl: './display-book.component.html',
 })
 export class DisplayBookComponent implements OnInit {
-  book!: IBook;
+  book?: IBook | null;
 
   constructor(private activatedRoute: ActivatedRoute, private bookService: BookService) {}
 
