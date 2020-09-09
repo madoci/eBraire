@@ -58,7 +58,6 @@ describe('Service Tests', () => {
             authors: 'BBBBBB',
             description: 'BBBBBB',
             unitPrice: 1,
-            totalPrice: 1,
             image: 'BBBBBB',
           },
           elemDefault
@@ -80,7 +79,6 @@ describe('Service Tests', () => {
             authors: 'BBBBBB',
             description: 'BBBBBB',
             unitPrice: 1,
-            totalPrice: 1,
             image: 'BBBBBB',
           },
           elemDefault
