@@ -1,3 +1,9 @@
+import { TypeService } from './../../entities/type/type.service';
+import { GenreService } from './../../entities/genre/genre.service';
+import { TagService } from './../../entities/tag/tag.service';
+import { Type, IType } from './../../shared/model/type.model';
+import { Genre, IGenre } from './../../shared/model/genre.model';
+import { Tag, ITag } from './../../shared/model/tag.model';
 import { IBook, Book } from './../../shared/model/book.model';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -15,28 +21,42 @@ export class ManagebookComponent implements OnInit {
   isSaving = false;
   newBook = true;
 
-  // Nouvelles variables contenant certains champs convertis du livre
-  desc?: string | null = '';
+  // Variables en plus necessaire à afficher correctement les champs
+  types?: Type[];
+  tags?: Tag[];
+  genres?: Genre[];
 
-  constructor(private route: ActivatedRoute, protected bookService: BookService) {}
+  constructor(
+    private route: ActivatedRoute,
+    protected bookService: BookService,
+    protected typeService: TypeService,
+    protected genreService: GenreService,
+    protected tagService: TagService
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       if (params) {
         this.id = params.get('id');
       }
-      this.bookService.find(+(this.id || '-1')).subscribe(book => {
-        if (book.body) {
-          this.newBook = false;
-        }
-        this.book = book.body;
-        const tempBook = this.book || new Book();
-        this.desc = tempBook.description;
-      });
-      this.book = this.book || new Book();
-      // const reader = new FileReader();
-      // reader.readAsArrayBuffer(this.book.description);
     });
+    this.bookService.find(+(this.id || '-1')).subscribe(book => {
+      if (book.body) {
+        this.newBook = false;
+      }
+      this.book = book.body;
+      // const tempBook = this.book || new Book();
+    });
+    this.book = this.book || new Book();
+
+    // Types
+    this.typeService.query().subscribe((res: HttpResponse<IType[]>) => (this.types = res.body || []));
+
+    // Genres
+    this.genreService.query().subscribe((res: HttpResponse<IGenre[]>) => (this.genres = res.body || []));
+
+    // Tags
+    this.tagService.query().subscribe((res: HttpResponse<ITag[]>) => (this.tags = res.body || []));
   }
 
   save(): void {
