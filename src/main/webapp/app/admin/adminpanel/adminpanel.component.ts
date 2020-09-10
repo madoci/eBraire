@@ -85,7 +85,8 @@ export class AdminpanelComponent implements OnInit {
     return result;
   }
 
-  limit(l: string): string {
+  limit(l: string | undefined): string {
+    if (l === undefined) return '';
     if (l.length < 10) return l;
     return l.substr(0, 10) + '...';
   }
