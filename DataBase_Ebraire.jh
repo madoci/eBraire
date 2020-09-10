@@ -24,9 +24,8 @@ entity Book {
 	id Long,
 	title String,
     authors String,
-    description Blob, // FILEPATH
+    description String, // FILEPATH
     unitPrice Float,
-    totalPrice Float,
     image Blob //FILEPATH
 }
 

@@ -36,6 +36,7 @@
         "audits": "Audits",
         "apidocs": "API",
         "database": "Base de données",
+        "panel": "Editer la base de donnée",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
       "language": "Langue"

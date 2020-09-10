@@ -5,6 +5,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
@@ -24,17 +25,17 @@ public class OrderLine implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-
-    @Column(name = "quantity")
+    @NotNull
+    @Column(name = "quantity",columnDefinition = "integer default 1")
     private Integer quantity;
-
-    @Column(name = "price")
+    @NotNull
+    @Column(name = "price",nullable=false)
     private Float price;
-
+    @NotNull
     @ManyToOne
     @JsonIgnoreProperties(value = "orderLines", allowSetters = true)
     private Book orderLines;
-
+    @NotNull
     @ManyToOne
     @JsonIgnoreProperties(value = "oderedBooks", allowSetters = true)
     private Ordered order;

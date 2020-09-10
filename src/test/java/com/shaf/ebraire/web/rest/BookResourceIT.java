@@ -47,10 +47,8 @@ public class BookResourceIT {
     private static final String DEFAULT_AUTHORS = "AAAAAAAAAA";
     private static final String UPDATED_AUTHORS = "BBBBBBBBBB";
 
-    private static final byte[] DEFAULT_DESCRIPTION = TestUtil.createByteArray(1, "0");
-    private static final byte[] UPDATED_DESCRIPTION = TestUtil.createByteArray(1, "1");
-    private static final String DEFAULT_DESCRIPTION_CONTENT_TYPE = "image/jpg";
-    private static final String UPDATED_DESCRIPTION_CONTENT_TYPE = "image/png";
+    private static final String DEFAULT_DESCRIPTION = "Desc";
+    private static final String UPDATED_DESCRIPTION = "Desc";
 
     private static final Float DEFAULT_UNIT_PRICE = 1F;
     private static final Float UPDATED_UNIT_PRICE = 2F;
@@ -93,7 +91,6 @@ public class BookResourceIT {
             .title(DEFAULT_TITLE)
             .authors(DEFAULT_AUTHORS)
             .description(DEFAULT_DESCRIPTION)
-            .descriptionContentType(DEFAULT_DESCRIPTION_CONTENT_TYPE)
             .unitPrice(DEFAULT_UNIT_PRICE)
             .image(DEFAULT_IMAGE)
             .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE);
@@ -110,7 +107,6 @@ public class BookResourceIT {
             .title(UPDATED_TITLE)
             .authors(UPDATED_AUTHORS)
             .description(UPDATED_DESCRIPTION)
-            .descriptionContentType(UPDATED_DESCRIPTION_CONTENT_TYPE)
             .unitPrice(UPDATED_UNIT_PRICE)
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
@@ -139,7 +135,6 @@ public class BookResourceIT {
         assertThat(testBook.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testBook.getAuthors()).isEqualTo(DEFAULT_AUTHORS);
         assertThat(testBook.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testBook.getDescriptionContentType()).isEqualTo(DEFAULT_DESCRIPTION_CONTENT_TYPE);
         assertThat(testBook.getUnitPrice()).isEqualTo(DEFAULT_UNIT_PRICE);
         assertThat(testBook.getImage()).isEqualTo(DEFAULT_IMAGE);
         assertThat(testBook.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
@@ -184,8 +179,7 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].authors").value(hasItem(DEFAULT_AUTHORS)))
-            .andExpect(jsonPath("$.[*].descriptionContentType").value(hasItem(DEFAULT_DESCRIPTION_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(Base64Utils.encodeToString(DEFAULT_DESCRIPTION))))
+            .andExpect(jsonPath("$.[*].description").value(hasItem((DEFAULT_DESCRIPTION))))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))));
@@ -224,8 +218,7 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.id").value(book.getId().intValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.authors").value(DEFAULT_AUTHORS))
-            .andExpect(jsonPath("$.descriptionContentType").value(DEFAULT_DESCRIPTION_CONTENT_TYPE))
-            .andExpect(jsonPath("$.description").value(Base64Utils.encodeToString(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.description").value((DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.doubleValue()))
             .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
             .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)));
@@ -254,7 +247,6 @@ public class BookResourceIT {
             .title(UPDATED_TITLE)
             .authors(UPDATED_AUTHORS)
             .description(UPDATED_DESCRIPTION)
-            .descriptionContentType(UPDATED_DESCRIPTION_CONTENT_TYPE)
             .unitPrice(UPDATED_UNIT_PRICE)
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
@@ -271,7 +263,6 @@ public class BookResourceIT {
         assertThat(testBook.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testBook.getAuthors()).isEqualTo(UPDATED_AUTHORS);
         assertThat(testBook.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testBook.getDescriptionContentType()).isEqualTo(UPDATED_DESCRIPTION_CONTENT_TYPE);
         assertThat(testBook.getUnitPrice()).isEqualTo(UPDATED_UNIT_PRICE);
         assertThat(testBook.getImage()).isEqualTo(UPDATED_IMAGE);
         assertThat(testBook.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
@@ -336,8 +327,7 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].authors").value(hasItem(DEFAULT_AUTHORS)))
-            .andExpect(jsonPath("$.[*].descriptionContentType").value(hasItem(DEFAULT_DESCRIPTION_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(Base64Utils.encodeToString(DEFAULT_DESCRIPTION))))
+            .andExpect(jsonPath("$.[*].description").value(hasItem((DEFAULT_DESCRIPTION))))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))));

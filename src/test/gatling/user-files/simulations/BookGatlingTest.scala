@@ -76,7 +76,6 @@ class BookGatlingTest extends Simulation {
                 , "authors":"SAMPLE_TEXT"
                 , "description":null
                 , "unitPrice":null
-                , "totalPrice":null
                 , "image":null
                 }""")).asJson
             .check(status.is(201))
