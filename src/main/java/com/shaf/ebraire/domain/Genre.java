@@ -27,6 +27,7 @@ public class Genre implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+    @NotNull
     @Column(name = "genre", unique = true)
     private String genre;
 

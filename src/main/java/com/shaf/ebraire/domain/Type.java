@@ -24,6 +24,7 @@ public class Type implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+    @NotNull
     @Column(name = "type", unique = true)
     private String type;
 

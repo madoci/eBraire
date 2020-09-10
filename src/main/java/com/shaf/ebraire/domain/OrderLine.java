@@ -25,13 +25,17 @@ public class OrderLine implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+    @NotNull
     @Column(name = "quantity",columnDefinition = "integer default 1")
     private Integer quantity;
+    @NotNull
     @Column(name = "price",nullable=false)
     private Float price;
+    @NotNull
     @ManyToOne
     @JsonIgnoreProperties(value = "orderLines", allowSetters = true)
     private Book orderLines;
+    @NotNull
     @ManyToOne
     @JsonIgnoreProperties(value = "oderedBooks", allowSetters = true)
     private Ordered order;

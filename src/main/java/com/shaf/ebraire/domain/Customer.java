@@ -28,12 +28,15 @@ public class Customer implements Serializable {
     private Long id;
 
     @Column(name = "name")
+    @NotNull
     private String name;
 
     @Column(name = "last_name")
+    @NotNull
     private String lastName;
 
     @Column(name = "address")
+    @NotNull
     private String address;
 
     @OneToMany(mappedBy = "idCustomer")

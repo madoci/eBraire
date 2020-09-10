@@ -30,18 +30,24 @@ public class Ordered implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+    @NotNull
     @Column(name = "command_start")
     private LocalDate commandStart;
+    @NotNull
     @Column(name = "delevry_address")
     private String delevryAddress;
+    @NotNull
     @Column(name = "billing_address")
     private String billingAddress;
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
+    @NotNull
     @OneToMany(mappedBy = "order")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<OrderLine> oderedBooks = new HashSet<>();
+    @NotNull
     @ManyToOne
     @JsonIgnoreProperties(value = "idOrders", allowSetters = true)
     private Customer idCustomer;
