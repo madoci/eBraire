@@ -11,6 +11,7 @@ import { HttpResponse } from '@angular/common/http';
 })
 export class DisplayBookComponent implements OnInit {
   book?: IBook | null;
+  imageBlobUrl: String = '';
 
   constructor(private activatedRoute: ActivatedRoute, private bookService: BookService) {}
 
@@ -25,6 +26,7 @@ export class DisplayBookComponent implements OnInit {
         }),
         map((res: HttpResponse<IBook>) => {
           this.book = res.body;
+          this.imageBlobUrl = 'data:' + this.book?.imageContentType + ';base64,' + this.book?.image;
         })
       )
       .subscribe();
