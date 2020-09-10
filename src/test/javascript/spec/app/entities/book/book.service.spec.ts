@@ -20,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(BookService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Book(0, 'AAAAAAA', 'AAAAAAA', 'image/png', 'AAAAAAA', 0, 0, 'image/png', 'AAAAAAA');
+      elemDefault = new Book(0, 'title', 'author', 'description', 0, 'image/png');
     });
 
     describe('Service methods', () => {

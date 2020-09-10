@@ -8,7 +8,6 @@ export interface IBook {
   authors?: string;
   description?: string;
   unitPrice?: number;
-  totalPrice?: number;
   imageContentType?: string;
   image?: any;
   type?: IType;
@@ -23,7 +22,6 @@ export class Book implements IBook {
     public authors?: string,
     public description?: string,
     public unitPrice?: number,
-    public totalPrice?: number,
     public imageContentType?: string,
     public image?: any,
     public type?: IType,
