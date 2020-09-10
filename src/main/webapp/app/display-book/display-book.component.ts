@@ -5,6 +5,7 @@ import { map, flatMap } from 'rxjs/operators';
 import { BookService } from 'app/entities/book/book.service';
 import { HttpResponse } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
+import { ShoppingCartService } from 'app/shopping-cart/shopping-cart.service';
 
 @Component({
   selector: 'jhi-display-book',
@@ -14,7 +15,12 @@ export class DisplayBookComponent implements OnInit {
   book?: IBook | null;
   imageBlobUrl: String = '';
 
-  constructor(private activatedRoute: ActivatedRoute, private bookService: BookService, private titleService: Title) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private bookService: BookService,
+    private titleService: Title,
+    private shoppingCartService: ShoppingCartService
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.params
@@ -27,8 +33,6 @@ export class DisplayBookComponent implements OnInit {
         }),
         map((res: HttpResponse<IBook>) => {
           this.book = res.body;
-          this.imageBlobUrl = 'data:' + this.book?.imageContentType + ';base64,' + this.book?.image;
-          this.titleService.setTitle('' + this.book?.title);
         })
       )
       .subscribe();

@@ -15,6 +15,7 @@ import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 import { ErrorComponent } from './layouts/error/error.component';
 import { BookdialogdeleteComponent } from './admin/bookdialogdelete/bookdialogdelete.component';
+import { BookDetailsComponent } from './diplay-book/book-details/book-details.component';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { BookdialogdeleteComponent } from './admin/bookdialogdelete/bookdialogde
     ActiveMenuDirective,
     FooterComponent,
     BookdialogdeleteComponent,
+    BookDetailsComponent,
   ],
   bootstrap: [MainComponent],
 })
