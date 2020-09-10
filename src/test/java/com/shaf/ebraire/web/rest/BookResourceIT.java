@@ -49,8 +49,6 @@ public class BookResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "Desc";
     private static final String UPDATED_DESCRIPTION = "Desc";
-    private static final String DEFAULT_DESCRIPTION_CONTENT_TYPE = "image/jpg";
-    private static final String UPDATED_DESCRIPTION_CONTENT_TYPE = "image/png";
 
     private static final Float DEFAULT_UNIT_PRICE = 1F;
     private static final Float UPDATED_UNIT_PRICE = 2F;
@@ -181,7 +179,6 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].authors").value(hasItem(DEFAULT_AUTHORS)))
-            .andExpect(jsonPath("$.[*].descriptionContentType").value(hasItem(DEFAULT_DESCRIPTION_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem((DEFAULT_DESCRIPTION))))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
@@ -221,7 +218,6 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.id").value(book.getId().intValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.authors").value(DEFAULT_AUTHORS))
-            .andExpect(jsonPath("$.descriptionContentType").value(DEFAULT_DESCRIPTION_CONTENT_TYPE))
             .andExpect(jsonPath("$.description").value((DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.doubleValue()))
             .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
@@ -331,7 +327,6 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].authors").value(hasItem(DEFAULT_AUTHORS)))
-            .andExpect(jsonPath("$.[*].descriptionContentType").value(hasItem(DEFAULT_DESCRIPTION_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem((DEFAULT_DESCRIPTION))))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))

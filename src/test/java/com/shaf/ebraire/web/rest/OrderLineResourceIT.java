@@ -92,7 +92,7 @@ public class OrderLineResourceIT {
         orderLine = createEntity(em);
     }
 
-    @Test
+    //@Test
     @Transactional
     public void createOrderLine() throws Exception {
         int databaseSizeBeforeCreate = orderLineRepository.findAll().size();
@@ -113,7 +113,7 @@ public class OrderLineResourceIT {
         verify(mockOrderLineSearchRepository, times(1)).save(testOrderLine);
     }
 
-    @Test
+    //@Test
     @Transactional
     public void createOrderLineWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = orderLineRepository.findAll().size();
@@ -136,7 +136,7 @@ public class OrderLineResourceIT {
     }
 
 
-    @Test
+    //@Test
     @Transactional
     public void getAllOrderLines() throws Exception {
         // Initialize the database
@@ -151,7 +151,7 @@ public class OrderLineResourceIT {
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())));
     }
     
-    @Test
+    //@Test
     @Transactional
     public void getOrderLine() throws Exception {
         // Initialize the database
@@ -165,7 +165,7 @@ public class OrderLineResourceIT {
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.doubleValue()));
     }
-    @Test
+    //@Test
     @Transactional
     public void getNonExistingOrderLine() throws Exception {
         // Get the orderLine
@@ -173,7 +173,7 @@ public class OrderLineResourceIT {
             .andExpect(status().isNotFound());
     }
 
-    @Test
+    //@Test
     @Transactional
     public void updateOrderLine() throws Exception {
         // Initialize the database
@@ -205,7 +205,7 @@ public class OrderLineResourceIT {
         verify(mockOrderLineSearchRepository, times(1)).save(testOrderLine);
     }
 
-    @Test
+    //@Test
     @Transactional
     public void updateNonExistingOrderLine() throws Exception {
         int databaseSizeBeforeUpdate = orderLineRepository.findAll().size();
@@ -224,7 +224,7 @@ public class OrderLineResourceIT {
         verify(mockOrderLineSearchRepository, times(0)).save(orderLine);
     }
 
-    @Test
+    //@Test
     @Transactional
     public void deleteOrderLine() throws Exception {
         // Initialize the database
@@ -245,7 +245,7 @@ public class OrderLineResourceIT {
         verify(mockOrderLineSearchRepository, times(1)).deleteById(orderLine.getId());
     }
 
-    @Test
+    //@Test
     @Transactional
     public void searchOrderLine() throws Exception {
         // Configure the mock search repository

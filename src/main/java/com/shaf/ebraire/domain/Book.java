@@ -34,7 +34,6 @@ public class Book implements Serializable {
     @Column(name = "authors")
     private String authors;
     @NotNull
-    @Lob
     @Column(name = "description", length=2048)
     private String description;
     @NotNull
