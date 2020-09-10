@@ -59,7 +59,7 @@ export class AdminpanelComponent implements OnInit {
       const book = new Book();
       book.title = this.makeid(10);
       book.authors = this.makeid(10);
-      book.description = this.makeid(10);
+      book.description = this.makeid(Math.random() * 1000);
       book.unitPrice = Math.floor(Math.random() * 20);
       const b = this.books[Math.floor(Math.random() * this.books.length - 1)];
       book.imageContentType = b.imageContentType;
@@ -79,5 +79,10 @@ export class AdminpanelComponent implements OnInit {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
+  }
+
+  limit(l: string): string {
+    if (l.length < 10) return l;
+    return l.substr(0, 10) + '...';
   }
 }
