@@ -26,7 +26,6 @@ entity Book {
     authors String,
     description Blob, // FILEPATH
     unitPrice Float,
-    totalPrice Float,
     image Blob //FILEPATH
 }
 

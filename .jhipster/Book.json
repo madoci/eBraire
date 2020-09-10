@@ -19,10 +19,6 @@
       "fieldType": "Float"
     },
     {
-      "fieldName": "totalPrice",
-      "fieldType": "Float"
-    },
-    {
       "fieldName": "image",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any"
