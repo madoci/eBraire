@@ -27,24 +27,18 @@ public class Book implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-    @NotNull
     @Column(name = "title")
     private String title;
-    @NotNull
     @Column(name = "authors")
     private String authors;
-    @NotNull
     @Lob
     @Column(name = "description", length=2048)
     private String description;
-    @NotNull
     @Column(name = "unit_price")
     private Float unitPrice;
-    @NotNull
     @Lob
     @Column(name = "image")
     private byte[] image;
-    @NotNull
     @Column(name = "image_content_type")
     private String imageContentType;
     @ManyToOne
@@ -57,7 +51,6 @@ public class Book implements Serializable {
                joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "tags_id", referencedColumnName = "id"))
     private Set<Tag> tags = new HashSet<>();
-    @NotNull
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(name = "book_genres",
