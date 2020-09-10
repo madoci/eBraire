@@ -67,7 +67,11 @@ export class AdminpanelComponent implements OnInit {
       book.genres = [this.genres![Math.floor(Math.random() * this.genres!.length)]];
       book.tags = [this.tags![Math.floor(Math.random() * this.tags!.length)]];
       book.type = this.types![Math.floor(Math.random() * this.types!.length)];
-      this.bookService.create(book).subscribe(() => {});
+      this.bookService.create(book).subscribe(() => {
+        if (i === this.numGenerate - 1) {
+          window.location.reload();
+        }
+      });
     }
   }
 
