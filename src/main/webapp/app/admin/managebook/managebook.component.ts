@@ -149,6 +149,7 @@ export class ManagebookComponent implements OnInit {
 
     // Save image
     this.book!.image = this.editForm.get(['image'])!.value;
+    this.book!.imageContentType = this.editForm.get(['imageContentType'])!.value;
     if (this.newBook) {
       this.subscribeToSaveResponse(this.bookService.create(this.book || new Book()));
     } else {
