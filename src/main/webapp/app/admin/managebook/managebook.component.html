@@ -1,6 +1,6 @@
 <div class="row justify-content-center">
     <div class="col-8">
-        <form *ngIf="book" (ngSubmit)="save()">
+        <form name="editForm" role="form" *ngIf="book" (ngSubmit)="save()">
             <div class="form-group">
                 <label class="form-control-label" jhiTranslate="eBraireApp.book.title" for="field_title">Title</label>
                 <input type="text" class="form-control" name="title" id="field_title" [(ngModel)]="book.title" />
@@ -23,6 +23,7 @@
                     <option *ngFor="let typeOption of types" [ngValue]="typeOption">{{ typeOption.type }}</option>
                 </select>
             </div>
+            <a routerLink="/type"><button class="btn btn-primary">Ajouter un Type</button></a>
             <div class="form-group">
                 <label class="form-control-label" jhiTranslate="eBraireApp.book.tags" for="field_tag">Tag</label>
                 <div *ngFor="let tagOption of tags" id="field_tag" name="tag">
@@ -30,19 +31,20 @@
                     <label>{{tagOption.tag}}</label>
                 </div>
             </div>
-            <!--
-
+            <a routerLink="/tag"><button class="btn btn-primary">Ajouter un Tag</button></a>
             <div class="form-group ">
-                <label class="form-control-label " jhiTranslate="eBraireApp.book.tags " for="field_tags ">Tags</label>
-                <select class="form-control " id="field_tags " multiple name="tags " [(ngModel)]="book.tags ">
-                    <option *ngFor="let tagOption of tags " [ngValue]="tagOption ">{{ tagOption.tag }}</option>
-                </select>
+                <label class="form-control-label " jhiTranslate="eBraireApp.book.genres" for="field_genres ">Genres</label>
+                <div *ngFor="let genreOption of genres" id="field_genre" name="genre">
+                    <input type="checkbox" name="genreCheckbox" [checked]="contain(genreOption.id || -1)">
+                    <label>{{genreOption.genre}}</label>
+                </div>
             </div>
-            -->
+            <a routerLink="/genre"><button class="btn btn-primary">Ajouter un Genre</button></a>
             <div class="form-group">
                 <label class="form-control-label" jhiTranslate="eBraireApp.book.image" for="field_image">Image</label>
                 <img [src]="urlImage" width="100" height="100" />
             </div>
+            <input type="file" id="file_image" (change)="setFileData($event, 'image', false)" jhiTranslate="entity.action.addblob" />
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
                     <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
