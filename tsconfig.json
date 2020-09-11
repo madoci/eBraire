@@ -7,5 +7,6 @@
     {
       "path": "./tsconfig.e2e.json"
     }
-  ]
+  ],
+  "lib": ["es2015", "dom"]
 }
