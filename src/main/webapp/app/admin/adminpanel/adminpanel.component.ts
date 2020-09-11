@@ -61,8 +61,8 @@ export class AdminpanelComponent implements OnInit {
       book.authors = this.makeid(10);
       book.description = this.makeid(Math.random() * 1000);
       book.unitPrice = Math.floor(Math.random() * 20);
-      const b = this.books[Math.floor(Math.random() * this.books.length - 1)];
-      book.imageContentType = b.imageContentType;
+      const b = this.books[0];
+      book.imageContentType = 'image/png';
       book.image = b.image;
       book.genres = [this.genres![Math.floor(Math.random() * this.genres!.length)]];
       book.tags = [this.tags![Math.floor(Math.random() * this.tags!.length)]];
