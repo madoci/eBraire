@@ -13,11 +13,17 @@ export class BooklistComponent implements OnInit {
   books: Book[] = [];
   allBooks: Book[] = [];
   currentSearch: String = '';
+  types: String = '';
+  genres: String = '';
+  tags: String = '';
   constructor(private bookService: BookService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       this.currentSearch = params['search'];
+      this.types = params['types'];
+      this.genres = params['genres'];
+      this.tags = params['tags'];
       const flag = this.currentSearch.includes('search-');
       this.currentSearch = this.currentSearch.substring(7);
       if (!flag || this.currentSearch === '') {
