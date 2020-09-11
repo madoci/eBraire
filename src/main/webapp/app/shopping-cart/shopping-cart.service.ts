@@ -27,7 +27,7 @@ export class ShoppingCartService {
 
   getNumberOfItems(): number {
     let numberOfItems = 0;
-    for (const item of this.items) {
+    for (const item of this.getItems()) {
       numberOfItems += item.quantity;
     }
     return numberOfItems;
