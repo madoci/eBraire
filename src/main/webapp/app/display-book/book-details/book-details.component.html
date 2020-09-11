@@ -4,9 +4,7 @@
     <p *ngIf="book.type">Type : {{book.type.type}}</p>
     <p>Genre(s) : </p> <p *ngFor="let g of book.genres">{{g.genre}}</p>
     <p>Tag(s) : </p> <p *ngFor="let t of book.tags">{{t.tag}}</p>
-    <div>
-        <img [src]="imageBlobUrl" id="img" [style.border]="border" [style.borderWidth] = "borderSize" [width]="width" [height]="height" (load)="img()" />
-    </div>
+    <jhi-book-image *ngIf="book" [book]="book" [imgSize]=500></jhi-book-image>
     <p>{{book.description}}</p>
     <p>{{book.unitPrice}}</p>
 
