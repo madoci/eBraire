@@ -7,4 +7,8 @@
     <img [src]="imageBlobUrl"/>
     <p>{{book.description}}</p>
     <p>{{book.unitPrice}}</p>
+
+    <button (click)="addToCart()">Ajouter au panier</button>
+
+    <p>{{numInCart}} items dans le panier</p>
 </div>

@@ -10,16 +10,20 @@ export class ShoppingCartService {
 
   constructor() {}
 
-  addToCart(book: IBook, quantity: number) {
+  addToCart(book: IBook, quantity: number): void {
     this.items.push(new ShoppingItem(book, quantity));
+    localStorage.setItem('ShoppingCart', JSON.stringify(this.items));
   }
 
-  getItems() {
-    return this.items;
-  }
-
-  clearCart() {
+  clearCart(): void {
     this.items = [];
+    localStorage.setItem('ShoppingCart', JSON.stringify(this.items));
+  }
+
+  getItems(): ShoppingItem[] {
+    if (localStorage.getItem('ShoppingCart')) {
+      this.items = JSON.parse(localStorage.getItem('ShoppingCart')!);
+    }
     return this.items;
   }
 }
