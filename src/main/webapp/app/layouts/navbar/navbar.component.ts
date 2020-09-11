@@ -26,6 +26,7 @@ export class NavbarComponent implements OnInit {
   types!: String;
   genres!: String;
   tags!: String;
+
   constructor(
     private loginService: LoginService,
     private languageService: JhiLanguageService,
