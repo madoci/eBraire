@@ -1,10 +1,1 @@
-<div *ngIf="book">
-    <h1>{{book.title}}</h1>
-    <p>Auteur(s) : {{book.authors}}</p>
-    <p *ngIf="book.type">Type : {{book.type.type}}</p>
-    <p>Genre(s) : </p> <p *ngFor="let g of book.genres">{{g.genre}}</p>
-    <p>Tag(s) : </p> <p *ngFor="let t of book.tags">{{t.tag}}</p>
-    <img [src]="imageBlobUrl"/>
-    <p>{{book.description}}</p>
-    <p>{{book.unitPrice}}</p>
-</div>
+<jhi-book-details *ngIf="book" [book]="book"></jhi-book-details>
