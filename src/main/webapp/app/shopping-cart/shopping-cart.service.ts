@@ -36,7 +36,7 @@ export class ShoppingCartService {
   private addOrUpdate(book: IBook, quantity: number): boolean {
     for (const item of this.items) {
       if (item.book.id === book.id) {
-        item.quantity += 1;
+        item.quantity += quantity;
         return true;
       }
     }

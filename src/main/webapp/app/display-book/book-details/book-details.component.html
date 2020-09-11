@@ -8,5 +8,6 @@
     <p>{{book.description}}</p>
     <p>{{book.unitPrice}}</p>
 
+    <input type="number" name="quantity" id="quantity" [(ngModel)]="quantity">
     <button (click)="addToCart()">Ajouter au panier</button>
 </div>
