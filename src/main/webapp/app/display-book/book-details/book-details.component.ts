@@ -10,7 +10,6 @@ import { Title } from '@angular/platform-browser';
 export class BookDetailsComponent implements OnInit {
   @Input() book: IBook = new Book();
   quantity = 1;
-
   numInCart = 0;
 
   constructor(public shoppingCartService: ShoppingCartService, private titleService: Title) {}
