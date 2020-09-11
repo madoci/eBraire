@@ -29,6 +29,10 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           path: ':bookId',
           loadChildren: () => import('./display-book/display-book.module').then(m => m.EBraireDisplayBookModule),
         },
+        {
+          path: 'catalogue',
+          loadChildren: () => import('./catalogue/catalogue.module').then(m => m.CatalogueModule),
+        },
         ...LAYOUT_ROUTES,
       ],
       { enableTracing: DEBUG_INFO_ENABLED }

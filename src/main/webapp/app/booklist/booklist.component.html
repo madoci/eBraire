@@ -11,7 +11,9 @@
         }
         
         </style>
-        {{temp}}
+        <div class="d-flex justify-content-center">
+          <p *ngIf="books.length == 0" class="h2" >Aucun livre ne correspond à votre recherche "{{currentSearch}}"</p>
+        </div>
 <ul >
     <li *ngFor="let book of books"> 
             <jhi-booklistitem [myBook]=book></jhi-booklistitem>

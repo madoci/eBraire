@@ -114,6 +114,21 @@ public class BookResource {
         return ResponseUtil.wrapOrNotFound(book);
     }
 
+
+        /**
+     * {@code GET  /books/:title} : get the "title" book.
+     *
+     * @param title the title of the book to retrieve.
+     * @return the list of book containing the title.
+     */
+    @GetMapping("/booksResearch/{title}")
+    public List<Book>  getBook(@PathVariable String title) {
+        log.debug("REST request to get Book : {}", title);
+        List<Book> books = bookRepository.findBooksByTitle(title);
+        
+        return books;
+    }
+
     /**
      * {@code DELETE  /books/:id} : delete the "id" book.
      *
