@@ -1,6 +1,8 @@
 package com.shaf.ebraire.web.rest;
 
 import com.shaf.ebraire.domain.Book;
+import com.shaf.ebraire.domain.Genre;
+import com.shaf.ebraire.domain.Tag;
 import com.shaf.ebraire.repository.BookRepository;
 import com.shaf.ebraire.repository.search.BookSearchRepository;
 import com.shaf.ebraire.web.rest.errors.BadRequestAlertException;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -128,6 +131,73 @@ public class BookResource {
         
         return books;
     }
+    /**
+ * {@code GET  /books/:title} : get the "title" book.
+ *
+ * @param title the title of the book to retrieve.
+ * @return the list of book containing the title.
+ */
+@GetMapping("/booksResearch/{title}/{types}/{genres}/{tags}")
+public List<Book>  getBook(@PathVariable String title,@PathVariable String types,@PathVariable String genres,@PathVariable String tags) {
+    
+    List<Book> books;
+    if (title.equals("title-") && types.equals("types-")) {
+    	log.debug("tous les livres");
+    	 books = getAllBooks(true);
+    } else if (types.equals("types-")) {
+    	books = bookRepository.findBooksByTitle(title.substring(6));
+    }else if (title.equals("title-")){
+    	 books = bookRepository.findBooksByFilter("",types.substring(6).split("&"));
+    }else{
+    	 books = bookRepository.findBooksByFilter(title.substring(6),types.substring(6).split("&"));
+    }
+    if (!(tags.contentEquals("tags-"))) {
+    	String[] tagList = tags.substring(5).split("&");
+    	List<Book> finalBooks = new ArrayList<>();
+    	for (int i =0;i<books.size();i++) {
+    		boolean haveTag = false;
+    			for(Tag tag:books.get(i).getTags()) {
+    				for (int j=0;j<tagList.length;j++) {
+    					if(tagList[j].equals(tag.getTag())) {
+    						haveTag = true;
+    						break;
+    					}
+    				}
+    				if (haveTag) {
+    					break;
+    				}
+    			}
+    			if (haveTag) {
+    				finalBooks.add(books.get(i));
+    			}		
+    	}
+    	books = finalBooks;
+    }
+    if (!(genres.contentEquals("genres-"))) {
+    	String[] genreList = genres.substring(7).split("&");
+    	List<Book> finalBooks = new ArrayList<>();
+    	for (int i =0;i<books.size();i++) {
+    		boolean havegenre = false;
+    			for(Genre genre:books.get(i).getGenres()) {
+    				for (int j=0;j<genreList.length;j++) {
+    					if(genreList[j].equals(genre.getGenre())) {
+    						havegenre = true;
+    						break;
+    					}
+    				}
+    				if (havegenre) {
+    					break;
+    				}
+    			}
+    			if (havegenre) {
+    				finalBooks.add(books.get(i));
+    			}		
+    	}
+    	books = finalBooks;
+    }
+    return books;
+}
+
 
     /**
      * {@code DELETE  /books/:id} : delete the "id" book.
