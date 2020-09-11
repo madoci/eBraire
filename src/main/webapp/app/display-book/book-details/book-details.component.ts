@@ -12,18 +12,14 @@ export class BookDetailsComponent implements OnInit {
   quantity = 1;
   imageBlobUrl = '';
 
-  numInCart = 0;
-
   constructor(public shoppingCartService: ShoppingCartService, private titleService: Title) {}
 
   ngOnInit(): void {
     this.imageBlobUrl = 'data:' + this.book.imageContentType + ';base64,' + this.book.image;
     this.titleService.setTitle('' + this.book.title);
-    this.numInCart = this.shoppingCartService.getItems().length;
   }
 
   addToCart(): void {
     this.shoppingCartService.addToCart(this.book, this.quantity);
-    this.numInCart = this.shoppingCartService.getItems().length;
   }
 }

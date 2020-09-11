@@ -11,19 +11,46 @@ export class ShoppingCartService {
   constructor() {}
 
   addToCart(book: IBook, quantity: number): void {
-    this.items.push(new ShoppingItem(book, quantity));
-    localStorage.setItem('ShoppingCart', JSON.stringify(this.items));
+    this.addOrUpdate(book, quantity);
+    this.saveCart();
   }
 
   clearCart(): void {
     this.items = [];
-    localStorage.setItem('ShoppingCart', JSON.stringify(this.items));
+    this.saveCart();
   }
 
   getItems(): ShoppingItem[] {
+    this.loadCart();
+    return this.items;
+  }
+
+  getNumberOfItems(): number {
+    let numberOfItems = 0;
+    for (const item of this.items) {
+      numberOfItems += item.quantity;
+    }
+    return numberOfItems;
+  }
+
+  private addOrUpdate(book: IBook, quantity: number): boolean {
+    for (const item of this.items) {
+      if (item.book.id === book.id) {
+        item.quantity += 1;
+        return true;
+      }
+    }
+    this.items.push(new ShoppingItem(book, quantity));
+    return false;
+  }
+
+  private saveCart(): void {
+    localStorage.setItem('ShoppingCart', JSON.stringify(this.items));
+  }
+
+  private loadCart(): void {
     if (localStorage.getItem('ShoppingCart')) {
       this.items = JSON.parse(localStorage.getItem('ShoppingCart')!);
     }
-    return this.items;
   }
 }
