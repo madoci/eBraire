@@ -16,7 +16,7 @@ export class ShoppingCartComponent implements OnInit {
 
   goToCart(): void {
     let message: String = 'Vous avez commandé : ';
-    for (let item of this.shoppingCartService.getItems()) {
+    for (const item of this.shoppingCartService.getItems()) {
       message += item.book.title! + ', ';
     }
     window.alert(message);
