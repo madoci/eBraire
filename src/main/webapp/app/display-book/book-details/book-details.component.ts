@@ -16,11 +16,9 @@ export class BookDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('' + this.book.title);
-    this.numInCart = this.shoppingCartService.getItems().length;
   }
 
   addToCart(): void {
     this.shoppingCartService.addToCart(this.book, this.quantity);
-    this.numInCart = this.shoppingCartService.getItems().length;
   }
 }

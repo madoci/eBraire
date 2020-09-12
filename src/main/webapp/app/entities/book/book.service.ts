@@ -45,4 +45,10 @@ export class BookService {
     const options = createRequestOption(req);
     return this.http.get<IBook[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
+
+  searchByFilterAndTitle(title: string, types: string, genres: string, tags: string): Observable<EntityArrayResponseType> {
+    return this.http.get<IBook[]>(SERVER_API_URL + 'api/booksResearch/' + title + '/' + types + '/' + genres + '/' + tags, {
+      observe: 'response',
+    });
+  }
 }

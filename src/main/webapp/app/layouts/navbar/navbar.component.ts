@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 
@@ -9,7 +9,6 @@ import { AccountService } from 'app/core/auth/account.service';
 import { LoginModalService } from 'app/core/login/login-modal.service';
 import { LoginService } from 'app/core/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { Params } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'jhi-navbar',
@@ -23,10 +22,9 @@ export class NavbarComponent implements OnInit {
   swaggerEnabled?: boolean;
   version: string;
   currentSearch!: String;
-  types!: String;
-  genres!: String;
-  tags!: String;
-
+  types: String = 'types-';
+  genres: String = 'genres-';
+  tags: String = 'tags-';
   constructor(
     private loginService: LoginService,
     private languageService: JhiLanguageService,
@@ -34,8 +32,7 @@ export class NavbarComponent implements OnInit {
     private accountService: AccountService,
     private loginModalService: LoginModalService,
     private profileService: ProfileService,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) {
     this.version = VERSION ? (VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION) : '';
   }
@@ -44,11 +41,6 @@ export class NavbarComponent implements OnInit {
     this.profileService.getProfileInfo().subscribe(profileInfo => {
       this.inProduction = profileInfo.inProduction;
       this.swaggerEnabled = profileInfo.swaggerEnabled;
-    });
-    this.route.params.subscribe((params: Params) => {
-      this.types = params['types'];
-      this.genres = params['genres'];
-      this.tags = params['tags'];
     });
   }
 
@@ -87,9 +79,9 @@ export class NavbarComponent implements OnInit {
 
   search(query: String): void {
     if (query === '' || query === undefined) {
-      this.router.navigateByUrl('/catalogue/search-/' + this.types + '/' + this.genres + '/' + this.tags);
+      this.router.navigateByUrl('/catalogue/title-/' + this.types + '/' + this.genres + '/' + this.tags);
     } else {
-      this.router.navigateByUrl('/catalogue/search-' + query + '/' + this.types + '/' + this.genres + '/' + this.tags);
+      this.router.navigateByUrl('/catalogue/title-' + query + '/' + this.types + '/' + this.genres + '/' + this.tags);
     }
     this.loadAll();
   }
