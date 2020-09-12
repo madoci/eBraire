@@ -15,6 +15,20 @@ export class ShoppingCartService {
     this.saveCart();
   }
 
+  removeFromCart(book: IBook, quantity?: number): void {
+    for (let i = 0; i < this.items.length; i++) {
+      if (this.items[i].book.id === book.id) {
+        if (quantity) {
+          this.items[i].quantity -= quantity;
+        }
+        if (!quantity || this.items[i].quantity <= 0) {
+          this.items.splice(i, 1);
+        }
+      }
+    }
+    this.saveCart();
+  }
+
   clearCart(): void {
     this.items = [];
     this.saveCart();
