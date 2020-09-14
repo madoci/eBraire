@@ -8,10 +8,11 @@ import { IBook, Book } from 'app/shared/model/book.model';
 export class BookImageComponent implements OnInit {
   @Input() book: IBook = new Book();
   @Input() imgSize = 500;
+  @Input() borderColor = '#000000';
   imageBlobUrl = '';
 
   // Style
-  border = 'solid black';
+  border = 'solid ' + this.borderColor;
   borderWidth = 0;
   borderHeight = 0;
   borderSize = '';
@@ -22,6 +23,7 @@ export class BookImageComponent implements OnInit {
 
   ngOnInit(): void {
     this.imageBlobUrl = 'data:' + this.book.imageContentType + ';base64,' + this.book.image;
+    this.border = 'solid ' + this.borderColor;
   }
 
   img(): void {

@@ -10,5 +10,6 @@ import { BookImageComponent } from './book-image/book-image.component';
 @NgModule({
   imports: [EBraireSharedModule, RouterModule.forChild([DISPLAYBOOK_ROUTE])],
   declarations: [DisplayBookComponent, BookDetailsComponent, BookImageComponent],
+  exports: [BookImageComponent],
 })
 export class EBraireDisplayBookModule {}
