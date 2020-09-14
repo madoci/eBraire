@@ -47,15 +47,16 @@ export class ShoppingCartService {
     return numberOfItems;
   }
 
-  private addOrUpdate(book: IBook, quantity: number): boolean {
-    for (const item of this.items) {
-      if (item.book.id === book.id) {
-        item.quantity += quantity;
-        return true;
+  private addOrUpdate(book: IBook, quantity: number): void {
+    if (quantity > 0) {
+      for (const item of this.items) {
+        if (item.book.id === book.id) {
+          item.quantity += quantity;
+          return;
+        }
       }
+      this.items.push(new ShoppingItem(book, quantity));
     }
-    this.items.push(new ShoppingItem(book, quantity));
-    return false;
   }
 
   private saveCart(): void {
