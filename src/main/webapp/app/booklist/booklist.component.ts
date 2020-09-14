@@ -24,19 +24,9 @@ export class BooklistComponent implements OnInit {
       this.types = params['types'];
       this.genres = params['genres'];
       this.tags = params['tags'];
-      const flag = this.currentSearch.includes('search-');
-      this.currentSearch = this.currentSearch.substring(7);
-      if (!flag || this.currentSearch === '') {
-        this.bookService
-          .query()
-          .subscribe(
-            (res: HttpResponse<IBook[]>) => ((this.books = res.body || new Book[0]()), (this.allBooks = res.body || new Book[0]()))
-          );
-      } else {
-        this.bookService
-          .searchByTitle(this.currentSearch.toString())
-          .subscribe((res: HttpResponse<IBook[]>) => (this.books = res.body || []));
-      }
+      this.bookService
+        .searchByFilterAndTitle(this.currentSearch.toString(), this.types.toString(), this.genres.toString(), this.tags.toString())
+        .subscribe((res: HttpResponse<IBook[]>) => (this.books = res.body || []));
     });
   }
 }

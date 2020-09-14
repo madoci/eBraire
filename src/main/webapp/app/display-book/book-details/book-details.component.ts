@@ -10,18 +10,24 @@ import { Title } from '@angular/platform-browser';
 export class BookDetailsComponent implements OnInit {
   @Input() book: IBook = new Book();
   quantity = 1;
-
-  numInCart = 0;
+  imageBlobUrl = '';
+  deleteQuantity = 0;
 
   constructor(public shoppingCartService: ShoppingCartService, private titleService: Title) {}
 
   ngOnInit(): void {
     this.titleService.setTitle('' + this.book.title);
-    this.numInCart = this.shoppingCartService.getItems().length;
   }
 
   addToCart(): void {
     this.shoppingCartService.addToCart(this.book, this.quantity);
-    this.numInCart = this.shoppingCartService.getItems().length;
+  }
+
+  removeFromCart(): void {
+    if (this.deleteQuantity > 0) {
+      this.shoppingCartService.removeFromCart(this.book, this.deleteQuantity);
+    } else {
+      this.shoppingCartService.removeAllFromCart(this.book);
+    }
   }
 }

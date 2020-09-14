@@ -10,14 +10,14 @@ export class ShoppingCartComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getNumberOfProducts(): number {
-    return this.shoppingCartService.getItems().length;
+  getNumberOfItems(): number {
+    return this.shoppingCartService.getNumberOfItems();
   }
 
   goToCart(): void {
     let message: String = 'Vous avez commandé : ';
     for (const item of this.shoppingCartService.getItems()) {
-      message += item.book.title! + ', ';
+      message += item.book.title! + ' (x' + item.quantity + '), ';
     }
     window.alert(message);
   }

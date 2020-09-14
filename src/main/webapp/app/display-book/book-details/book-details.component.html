@@ -8,7 +8,9 @@
     <p>{{book.description}}</p>
     <p>{{book.unitPrice}}</p>
 
+    <input type="number" name="quantity" id="quantity" [(ngModel)]="quantity" min="0" max="10">
     <button (click)="addToCart()">Ajouter au panier</button>
 
-    <p>{{numInCart}} items dans le panier</p>
+    <input type="number" name="deleteQuantity" id="deleteQuantity" [(ngModel)]="deleteQuantity" min="0">
+    <button (click)="removeFromCart()">Retirer du panier</button>
 </div>
