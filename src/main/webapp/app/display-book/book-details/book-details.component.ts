@@ -28,7 +28,7 @@ export class BookDetailsComponent implements OnInit {
     if (this.deleteQuantity > 0) {
       this.shoppingCartService.removeFromCart(this.book, this.deleteQuantity);
     } else {
-      this.shoppingCartService.removeFromCart(this.book);
+      this.shoppingCartService.removeAllFromCart(this.book);
     }
   }
 }
