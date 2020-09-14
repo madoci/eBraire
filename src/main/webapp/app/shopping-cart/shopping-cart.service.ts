@@ -15,6 +15,29 @@ export class ShoppingCartService {
     this.saveCart();
   }
 
+  removeAllFromCart(book: IBook): void {
+    for (let i = 0; i < this.items.length; i++) {
+      if (this.items[i].book.id === book.id) {
+        this.items.splice(i, 1);
+      }
+    }
+    this.saveCart();
+  }
+
+  removeFromCart(book: IBook, quantity: number): void {
+    if (quantity > 0) {
+      for (let i = 0; i < this.items.length; i++) {
+        if (this.items[i].book.id === book.id) {
+          this.items[i].quantity -= quantity;
+          if (this.items[i].quantity <= 0) {
+            this.items.splice(i, 1);
+          }
+        }
+      }
+      this.saveCart();
+    }
+  }
+
   clearCart(): void {
     this.items = [];
     this.saveCart();
@@ -33,15 +56,16 @@ export class ShoppingCartService {
     return numberOfItems;
   }
 
-  private addOrUpdate(book: IBook, quantity: number): boolean {
-    for (const item of this.items) {
-      if (item.book.id === book.id) {
-        item.quantity += quantity;
-        return true;
+  private addOrUpdate(book: IBook, quantity: number): void {
+    if (quantity > 0) {
+      for (const item of this.items) {
+        if (item.book.id === book.id) {
+          item.quantity += quantity;
+          return;
+        }
       }
+      this.items.push(new ShoppingItem(book, quantity));
     }
-    this.items.push(new ShoppingItem(book, quantity));
-    return false;
   }
 
   private saveCart(): void {
