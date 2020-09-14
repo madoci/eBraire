@@ -1,8 +1,8 @@
 <div class="row">
     <button id="jh-create-entity" class="btn btn-primary float-right m-2" (click)="research()">
-    <fa-icon icon="search"></fa-icon>
+    <fa-icon icon="plus"></fa-icon>
     <span class="hidden-sm-down" >
-        Rechercher
+        Filtrer
     </span>
 </button>
 </div>
@@ -13,15 +13,15 @@
         <label>{{typeOption.type}}</label>
     </div>
 </div>
-Genres:
 <div class="form-group">
+    Genres:
     <div *ngFor="let genreOption of genres" id="field_genre" name="genre">
         <input type="checkbox" name="genreCheckbox">
         <label>{{genreOption.genre}}</label>
     </div>
 </div>
-Thèmes:
 <div class="form-group">
+    Thèmes:
     <div *ngFor="let tagOption of tags" id="field_tag" name="tag">
         <input type="checkbox" name="tagCheckbox">
         <label>{{tagOption.tag}}</label>
