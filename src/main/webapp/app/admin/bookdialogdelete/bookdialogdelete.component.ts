@@ -18,6 +18,7 @@ export class BookdialogdeleteComponent {
 
   confirmDelete(id: number): void {
     this.bookService.delete(id).subscribe(() => {
+      window.location.reload();
       this.activeModal.close();
     });
   }
