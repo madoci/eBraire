@@ -12,33 +12,33 @@ export class BookImageComponent implements OnInit {
   imageBlobUrl = '';
 
   // Style
+  id = 'img';
   border = 'solid ' + this.borderColor;
   borderWidth = 0;
   borderHeight = 0;
   borderSize = '';
-  height = 100;
-  width = 100;
+  height = 200;
+  width = 200;
 
   constructor() {}
 
   ngOnInit(): void {
     this.imageBlobUrl = 'data:' + this.book.imageContentType + ';base64,' + this.book.image;
     this.border = 'solid ' + this.borderColor;
+    this.id = this.book.id!.toString();
   }
 
   img(): void {
-    const image = document.getElementById('img') as HTMLImageElement;
+    const image = document.getElementById(this.id.toString()) as HTMLImageElement;
     if (image.naturalHeight > image.naturalWidth) {
       const coeff = (this.imgSize * image.naturalWidth) / image.naturalHeight / this.imgSize;
-      this.height = this.imgSize;
-      image.style.width = 'auto';
       this.borderWidth = ((1 - coeff) * this.imgSize) / 2;
     } else {
       const coeff = (this.imgSize * image.naturalHeight) / image.naturalWidth / this.imgSize;
-      this.width = this.imgSize;
-      image.style.height = 'auto';
       this.borderHeight = ((1 - coeff) * this.imgSize) / 2;
     }
+    this.height = this.imgSize;
+    this.width = this.imgSize;
     this.borderSize = Math.floor(this.borderHeight) + 'px ' + Math.floor(this.borderWidth) + 'px';
   }
 }

@@ -1,8 +1,33 @@
-<div style="width: 100%;overflow:auto;" >
-    <div style="float:left; width: 10%">
-       <jhi-filter></jhi-filter>
+<style>
+    .filter {
+        position: sticky;
+        align-self: flex-start;
+        top: 0;
+        width: 10%;
+        padding-top: 60px;
+        display: flex;
+    }
+    
+    .booklist {
+        width: 90%;
+        display: flex;
+        justify-content: center
+    }
+    
+    @media screen and (max-width: 1200px) {
+        .filter {
+            display: none !important;
+        }
+        .booklist {
+            width: 100% !important;
+        }
+    }
+</style>
+<div class="d-flex flex-row">
+    <div class="filter">
+        <jhi-filter></jhi-filter>
     </div>
-    <div style="float:right;width: 90%">
+    <div class="booklist">
         <jhi-booklist></jhi-booklist>
     </div>
 </div>

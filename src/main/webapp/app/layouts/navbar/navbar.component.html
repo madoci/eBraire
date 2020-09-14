@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark navbar-expand-md" style="background-color: #a63c40">
+<nav class="navbar navbar-dark navbar-expand-md fixed-top" style="background-color: #a63c40;">
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
         <span class="logo-img"></span>
         <span jhiTranslate="global.title" class="navbar-title">EBraire</span> <span class="navbar-version">{{ version }}</span>
@@ -14,7 +14,7 @@
                 <div class="input-group w-100 mt-3">
                     <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'eBraireApp.book.home.search' | translate }}">
 
-                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)" >
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
                         <fa-icon icon="search"></fa-icon>
                     </button>
 
