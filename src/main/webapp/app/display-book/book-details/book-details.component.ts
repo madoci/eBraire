@@ -13,6 +13,7 @@ export class BookDetailsComponent implements OnInit {
 
   quantity = 1;
   numInCart = 0;
+  itemsInDatabase = 5; // valeur à modifier selon les stocks
 
   // Style
   organizedTags?: Tag[][];
