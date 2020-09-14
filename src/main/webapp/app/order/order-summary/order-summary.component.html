@@ -1,5 +1,5 @@
 <ul>
     <li *ngFor="let item of items">
-        <jhi-order-line [item]=item></jhi-order-line>
+        <jhi-order-line [parent]="this" [book]="item.book"></jhi-order-line>
     </li>
 </ul>

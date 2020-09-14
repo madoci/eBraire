@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IBook } from 'app/shared/model/book.model';
+import { IBook, Book } from 'app/shared/model/book.model';
 import { ShoppingItem } from './shopping-item.model';
 
 @Injectable({
@@ -41,6 +41,15 @@ export class ShoppingCartService {
   clearCart(): void {
     this.items = [];
     this.saveCart();
+  }
+
+  getItem(book: IBook): ShoppingItem {
+    for (const item of this.items) {
+      if (item.book.id === book.id) {
+        return item;
+      }
+    }
+    return new ShoppingItem(new Book(), 0);
   }
 
   getItems(): ShoppingItem[] {

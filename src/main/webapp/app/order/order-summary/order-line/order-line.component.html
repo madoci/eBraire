@@ -1,8 +1,7 @@
 <div>
-    <span>
-        <jhi-book-image [book]="item.book" [imgSize]=50 borderColor="'#AAAAAA'"></jhi-book-image>
-        <h1>{{item.book.title}}</h1>
-        <p>x{{item.quantity}}</p>
-        <p>{{getTotalPrice()}}</p>
-    </span>
+    <jhi-book-image [book]="item.book" [imgSize]=50 borderColor="'#AAAAAA'"></jhi-book-image>
+    <h1>{{item.book.title}}</h1>
+    <p>x{{item.quantity}}</p>
+    <button (click)="removeOne()">-</button> <p>{{getTotalPrice()}}</p> <button (click)="addOne()">+</button>
+    <button (click)="removeItem()">Supprimer</button>
 </div>
