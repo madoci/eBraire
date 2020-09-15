@@ -11,7 +11,7 @@
         cursor: pointer;
         -moz-user-select: none;
         -ms-user-select: none;
-        -webkit-user-select: none
+        -webkit-user-select: none;
     }
     
     .items {
@@ -40,43 +40,43 @@
         </span>
     </button>
     </div>
-    <div class="form-group">
-        <div class="d-flex flex-row category" (click)="cat = !cat">
+    <div class="form-group category" (click)="cat = !cat">
+        <div class="d-flex flex-row">
             Catégories&nbsp;
             <fa-icon *ngIf="!cat" class="ml-auto" icon="plus"></fa-icon>
             <fa-icon *ngIf="cat" class="ml-auto" icon="minus"></fa-icon>
         </div>
-        <div class="items" *ngIf="cat">
-            <div class="item" *ngFor="let typeOption of types" id="field_type" name="type">
-                <input type="checkbox" name="typeCheckbox">
-                <label>{{typeOption.type}}</label>
-            </div>
+    </div>
+    <div class="form-group items" [style.display]="cat ? 'flex' : 'none'">
+        <div class="item" *ngFor="let typeOption of types" id="field_type" name="type">
+            <input type="checkbox" name="typeCheckbox">
+            <label>{{typeOption.type}}</label>
         </div>
     </div>
-    <div class="form-group">
-        <div class="d-flex flex-row category" (click)="gen = !gen">
+    <div class="form-group category" (click)="gen = !gen">
+        <div class="d-flex flex-row">
             Genres
             <fa-icon *ngIf="!gen" class="ml-auto" icon="plus"></fa-icon>
             <fa-icon *ngIf="gen" class="ml-auto" icon="minus"></fa-icon>
         </div>
-        <div class="items" *ngIf="gen">
-            <div class="item" *ngFor="let genreOption of genres" id="field_genre" name="genre">
-                <input type="checkbox" name="genreCheckbox">
-                <label>{{genreOption.genre}}</label>
-            </div>
+    </div>
+    <div class="form-group items" [style.display]="gen ? 'flex' : 'none'">
+        <div class="item" *ngFor="let genreOption of genres" id="field_genre" name="genre">
+            <input type="checkbox" name="genreCheckbox">
+            <label>{{genreOption.genre}}</label>
         </div>
     </div>
-    <div class="form-group">
-        <div class="d-flex flex-row category" (click)="tag = !tag">
+    <div class="form-group category" (click)="tag = !tag">
+        <div class="d-flex flex-row">
             Thèmes
             <fa-icon *ngIf="!tag" class="ml-auto" icon="plus"></fa-icon>
             <fa-icon *ngIf="tag" class="ml-auto" icon="minus"></fa-icon>
         </div>
-        <div class="items" *ngIf="tag">
-            <div class="item" *ngFor="let tagOption of tags" id="field_tag" name="tag">
-                <input type="checkbox" name="tagCheckbox">
-                <label>{{tagOption.tag}}</label>
-            </div>
+    </div>
+    <div class="form-group items" [style.display]="tag ? 'flex' : 'none'">
+        <div class="item " *ngFor="let tagOption of tags " id="field_tag " name="tag ">
+            <input type="checkbox" name="tagCheckbox">
+            <label>{{tagOption.tag}}</label>
         </div>
     </div>
 </div>
