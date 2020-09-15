@@ -29,6 +29,7 @@ export class OrderLineComponent implements OnInit {
   }
 
   changeItemQuantity(quantity: number): void {
+    alert(quantity);
     if (quantity > 0) {
       if (quantity > this.item.quantity) {
         this.shoppingCartService.addToCart(this.item.book, quantity - this.item.quantity);
