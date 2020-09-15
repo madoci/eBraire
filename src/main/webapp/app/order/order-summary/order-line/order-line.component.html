@@ -2,14 +2,8 @@
     <jhi-book-image [book]="item.book" [imgSize]=50 borderColor="'#AAAAAA'"></jhi-book-image>
     <h1>{{item.book.title}}</h1>
     <button (click)="removeOne()">-</button>
-    <select onchange="changeItemQuantity(this.value)">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-        <option>6</option>
-        <option>7</option>
+    <select [(ngModel)]="quantity" (change)="changeItemQuantity()">
+        <option *ngFor="let i of quantities" [ngValue]="i+1">{{i+1}}</option>
     </select>
     <!--input type="number" value="{{item.quantity}}" onchange="changeItemQuantity(this.value)"-->
     <button (click)="addOne()">+</button>

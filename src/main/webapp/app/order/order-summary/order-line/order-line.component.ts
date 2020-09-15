@@ -12,11 +12,13 @@ export class OrderLineComponent implements OnInit {
   @Input() parent!: OrderSummaryComponent;
   @Input() book!: IBook;
   item!: ShoppingItem;
+  quantity = 0;
+  quantities: number[] = [];
 
   constructor(private shoppingCartService: ShoppingCartService) {}
 
   ngOnInit(): void {
-    this.item = this.shoppingCartService.getItem(this.book);
+    this.initItem();
   }
 
   getTotalPrice(): number {
@@ -28,13 +30,12 @@ export class OrderLineComponent implements OnInit {
     this.updateItem();
   }
 
-  changeItemQuantity(quantity: number): void {
-    alert(quantity);
-    if (quantity > 0) {
-      if (quantity > this.item.quantity) {
-        this.shoppingCartService.addToCart(this.item.book, quantity - this.item.quantity);
-      } else if (quantity < this.item.quantity) {
-        this.shoppingCartService.removeFromCart(this.item.book, this.item.quantity - quantity);
+  changeItemQuantity(): void {
+    if (this.quantity > 0) {
+      if (this.quantity > this.item.quantity) {
+        this.shoppingCartService.addToCart(this.item.book, this.quantity - this.item.quantity);
+      } else if (this.quantity < this.item.quantity) {
+        this.shoppingCartService.removeFromCart(this.item.book, this.item.quantity - this.quantity);
       }
     }
     this.updateItem();
@@ -52,8 +53,14 @@ export class OrderLineComponent implements OnInit {
     }
   }
 
-  private updateItem(): void {
+  private initItem(): void {
     this.item = this.shoppingCartService.getItem(this.book);
+    this.quantity = this.item.quantity;
+    this.quantities = Array.from(Array(10).keys());
+  }
+
+  private updateItem(): void {
+    this.initItem();
     this.parent.ngOnInit();
   }
 }
