@@ -28,8 +28,9 @@ export class OrderLineComponent implements OnInit {
     this.updateItem();
   }
 
-  changeItemQuantity(quantity: number): void {
-    alert(quantity);
+  changeItemQuantity(): void {
+    alert('salut');
+    /*
     if (quantity > 0) {
       if (quantity > this.item.quantity) {
         this.shoppingCartService.addToCart(this.item.book, quantity - this.item.quantity);
@@ -37,7 +38,7 @@ export class OrderLineComponent implements OnInit {
         this.shoppingCartService.removeFromCart(this.item.book, this.item.quantity - quantity);
       }
     }
-    this.updateItem();
+    this.updateItem();*/
   }
 
   addOne(): void {
