@@ -1,6 +1,7 @@
 <div>
-    <jhi-book-image [book]="item.book" [imgSize]=50 borderColor="'#AAAAAA'"></jhi-book-image>
-    <h1>{{item.book.title}}</h1>
+    <jhi-book-image [book]="item.book" [imgSize]=200 [borderColor]="'#AAAAAA'"></jhi-book-image>
+    <a href="/{{item.book.id}}"><h1>{{item.book.title}}</h1></a>
+
     <button (click)="removeOne()">-</button>
     <select [(ngModel)]="quantity" (change)="changeItemQuantity()">
         <option *ngFor="let i of quantities" [ngValue]="i+1">{{i+1}}</option>
