@@ -9,4 +9,8 @@ export class CatalogueComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  btnClic(): void {
+    // const filter = document.getElementById("filter")
+  }
 }

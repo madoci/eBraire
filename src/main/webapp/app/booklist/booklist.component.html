@@ -1,21 +1,45 @@
 <style>
-        ul {
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
-          overflow: hidden;
+    .cards {
+        overflow: hidden;
+        max-width: 1850px;
+        margin: 0 auto;
+        display: grid;
+        grid-gap: 1rem;
+    }
+    
+    @media (min-width: 600px) {
+        .cards {
+            grid-template-columns: repeat(2, 1fr);
         }
-        
-        li {
-          float: left;
+    }
+    
+    @media (min-width: 900px) {
+        .cards {
+            grid-template-columns: repeat(3, 1fr);
         }
-        
-        </style>
-        <div class="d-flex justify-content-center">
-          <p *ngIf="books.length == 0" class="h2" >Aucun livre ne correspond à votre recherche</p>
-        </div>
-<ul >
-    <li *ngFor="let book of books"> 
-            <jhi-booklistitem [myBook]=book></jhi-booklistitem>
-    </li>
-</ul>
+    }
+    
+    @media (min-width: 1200px) {
+        .cards {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+    
+    @media (min-width: 1500px) {
+        .cards {
+            grid-template-columns: repeat(5, 1fr);
+        }
+    }
+    
+    @media (min-width: 1800px) {
+        .cards {
+            grid-template-columns: repeat(6, 1fr);
+        }
+    }
+</style>
+<div class="d-flex justify-content-center">
+    <p *ngIf="books.length == 0" class="h2">Aucun livre ne correspond à votre recherche</p>
+</div>
+<div class="cards">
+    <jhi-booklistitem *ngFor="let book of books" [myBook]=book></jhi-booklistitem>
+</div>
