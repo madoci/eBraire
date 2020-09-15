@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IBook, Book } from 'app/shared/model/book.model';
+import { IBook } from 'app/shared/model/book.model';
 import { ActivatedRoute, Params } from '@angular/router';
 import { map, flatMap } from 'rxjs/operators';
 import { BookService } from 'app/entities/book/book.service';

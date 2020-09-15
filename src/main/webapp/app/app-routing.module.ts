@@ -33,6 +33,10 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           path: 'catalogue',
           loadChildren: () => import('./catalogue/catalogue.module').then(m => m.CatalogueModule),
         },
+        {
+          path: 'order',
+          loadChildren: () => import('./order/order.module').then(m => m.OrderModule),
+        },
         ...LAYOUT_ROUTES,
       ],
       { enableTracing: DEBUG_INFO_ENABLED }
