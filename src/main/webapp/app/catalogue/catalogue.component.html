@@ -4,7 +4,6 @@
         top: 0;
         width: 5%;
         display: flex;
-        border: 1px 1px 1px 1px black;
     }
     
     .booklist {
@@ -13,27 +12,27 @@
         justify-content: center
     }
     
-    .buttonSandwich {
+    .button-sandwich {
         display: none;
         position: absolute;
         top: 0px;
         left: 0px
     }
     
-    @media screen and (max-width: 1200px) {
-        .filter {
-            display: none !important;
-        }
+    @media screen and (max-width: 1300px) {
         .booklist {
             width: 100% !important;
         }
-        .buttonSandwich {
-            display: block;
+        .button-sandwich {
+            display: block !important;
+        }
+        .filter {
+            display: none !important;
         }
     }
 </style>
 <div class="d-flex flex-row">
-    <a class="buttonSandwich btn btn-secondary">
+    <a id="btnClic" class="button-sandwich btn btn-secondary">
         <fa-icon icon="bars"></fa-icon>
     </a>
     <div class="filter" id="filter">
