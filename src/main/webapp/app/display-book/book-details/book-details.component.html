@@ -1,16 +1,132 @@
-<div>
-    <h1>{{book.title}}</h1>
-    <p>Auteur(s) : {{book.authors}}</p>
-    <p *ngIf="book.type">Type : {{book.type.type}}</p>
-    <p>Genre(s) : </p> <p *ngFor="let g of book.genres">{{g.genre}}</p>
-    <p>Tag(s) : </p> <p *ngFor="let t of book.tags">{{t.tag}}</p>
-    <img [src]="imageBlobUrl"/>
-    <p>{{book.description}}</p>
-    <p>{{book.unitPrice}}</p>
-
-    <input type="number" name="quantity" id="quantity" [(ngModel)]="quantity" min="0" max="10">
-    <button (click)="addToCart()">Ajouter au panier</button>
-
-    <input type="number" name="deleteQuantity" id="deleteQuantity" [(ngModel)]="deleteQuantity" min="0">
-    <button (click)="removeFromCart()">Retirer du panier</button>
+<style>
+    .first-row {
+        margin-left: 100px;
+    }
+    
+    .spacing-right {
+        margin-right: 50px;
+    }
+    
+    .space-right-xs {
+        margin-right: 5px;
+    }
+    
+    .space-bottom-xs {
+        margin-bottom: 5px;
+    }
+    
+    .spacing-bottom {
+        margin-bottom: 20px;
+    }
+    
+    .button1 {
+        background-color: #e6af57;
+        color: #783a24;
+        border-radius: 3px;
+        border: none;
+        font-size: 50px;
+        padding: 16px 32px;
+    }
+    
+    .button2 {
+        background-color: #e6af57;
+        color: #783a24;
+        border-radius: 3px;
+        border: none;
+        font-size: 20px;
+        /*padding: 16px 32px;*/
+    }
+    
+    .button1:hover {
+        background-color: #e0aa50;
+    }
+    
+    .badgeGenre {
+        background-color: #a63c40;
+        color: white;
+    }
+    
+    .badgeTag {
+        background-color: #8384a6;
+        color: white;
+    }
+    
+    .responsive2 {
+        width: 50%;
+    }
+    
+    .responsiveImg {
+        display: flex;
+        justify-content: left;
+    }
+    
+    @media screen and (max-width: 1200px) {
+        .responsive1 {
+            flex-direction: column !important;
+            width: 100%;
+        }
+        .first-row {
+            margin-left: 0px !important;
+        }
+        .responsive2 {
+            width: 100% !important;
+        }
+        .responsiveImg {
+            display: block !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+    }
+</style>
+<div class="d-flex flex-row responsive1">
+    <div class="d-flex flex-column responsive2 first-row">
+        <div class="d-flex flex-row responsive1">
+            <div class="spacing-right responsiveImg">
+                <jhi-book-image *ngIf="book" [imgSize]="400" [book]="book" [borderColor]="'#AAAAAA'"></jhi-book-image>
+            </div>
+            <div class="d-flex flex-column">
+                <h2 class="font-weight-bold spacing-bottom">{{book.title}}</h2>
+                <h3 class="font-weight-bold">{{book.authors}}</h3>
+                <h4 class="spacing-bottom" *ngIf="book.type">{{book.type.type}}</h4>
+                <div class="d-flex flex-row spacing-bottom">
+                    <span class="badge badge-pill badgeGenre space-right-xs" *ngFor="let g of book.genres">{{g.genre}}</span>
+                </div>
+                <div class="d-flex flex-column">
+                    <div class="d-flex flex-row space-bottom-xs" *ngFor="let tab of organizedTags">
+                        <span class="badge badge-pill badgeTag space-right-xs" *ngFor="let t of tab">{{t.tag}}</span >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-3">
+            <p>{{book.description}}</p>
+        </div>
+    </div>
+    <div class="d-flex flex-column justify-content-center">
+        <div class="text-center h1">
+            <p class="font-weight-bold">{{book.unitPrice}} €</p>
+        </div>
+        <div class="text-center">
+            <input type="number" name="quantity" id="quantity" min="1" [max]="itemsInDatabase" onkeyup=imposeMinMax(this) [(ngModel)]="quantity">
+        </div>
+        <div class="text-center space-bottom-xs">
+            <button class="button1" (click)="addToCart()">Ajouter au panier</button>
+        </div>
+        <div class="text-center d-flex flex-row justify-content-center">
+            <input class="space-right-xs" type="number" name="deleteQuantity" id="deleteQuantity" [(ngModel)]="deleteQuantity" min="0">
+            <button class="button2" (click)="removeFromCart()">Retirer du panier</button>
+        </div>
+    </div>
 </div>
+<script>
+function imposeMinMax(el){
+  if(el.value != ""){
+    if(parseInt(el.value) < parseInt(el.min)){
+      el.value = el.min;
+    }
+    if(parseInt(el.value) > parseInt(el.max)){
+      el.value = el.max;
+    }
+  }
+}
+</script>

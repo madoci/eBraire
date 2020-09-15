@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IBook } from 'app/shared/model/book.model';
 import { ActivatedRoute, Params } from '@angular/router';
 import { map, flatMap } from 'rxjs/operators';
-import { BookService } from 'app/entities/book/book.service';
+import { BookService } from '../entities/book/book.service';
 import { HttpResponse } from '@angular/common/http';
 
 @Component({

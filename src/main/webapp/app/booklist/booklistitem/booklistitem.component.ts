@@ -12,7 +12,5 @@ export class BooklistitemComponent implements OnInit {
   imageBlobUrl: String = '';
   constructor(protected dataUtils: JhiDataUtils) {}
 
-  ngOnInit(): void {
-    this.imageBlobUrl = 'data:' + this.myBook.imageContentType + ';base64,' + this.myBook.image;
-  }
+  ngOnInit(): void {}
 }
