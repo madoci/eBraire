@@ -1,29 +1,75 @@
+<style>
+    .filter {
+        background-color: #a63c40;
+        color: white
+    }
+    
+    .category {
+        border: 1px solid black;
+        padding: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none
+    }
+    
+    .items {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid black;
+        padding-top: 10px;
+        padding-bottom: 2px
+    }
+    
+    .item {
+        margin-left: 10px
+    }
+</style>
 <div class="row">
-    <button id="jh-create-entity" class="btn btn-primary float-right m-2" (click)="research()">
+    <button id="jh-create-entity" class="btn filter" style="margin-left: 15px; margin-bottom: 15px" (click)="research()">
     <fa-icon icon="plus"></fa-icon>
-    <span class="hidden-sm-down" >
+    <span class="hidden-sm-down">
         Filtrer
     </span>
 </button>
 </div>
 <div class="form-group">
-    Catégories:
-    <div *ngFor="let typeOption of types" id="field_type" name="type">
-        <input type="checkbox" name="typeCheckbox">
-        <label>{{typeOption.type}}</label>
+    <div class="d-flex flex-row category" (click)="cat = !cat">
+        Catégories&nbsp;
+        <fa-icon *ngIf="!cat" class="ml-auto" icon="plus"></fa-icon>
+        <fa-icon *ngIf="cat" class="ml-auto" icon="minus"></fa-icon>
+    </div>
+    <div class="items" *ngIf="cat">
+        <div class="item" *ngFor="let typeOption of types" id="field_type" name="type">
+            <input type="checkbox" name="typeCheckbox">
+            <label>{{typeOption.type}}</label>
+        </div>
     </div>
 </div>
 <div class="form-group">
-    Genres:
-    <div *ngFor="let genreOption of genres" id="field_genre" name="genre">
-        <input type="checkbox" name="genreCheckbox">
-        <label>{{genreOption.genre}}</label>
+    <div class="d-flex flex-row category" (click)="gen = !gen">
+        Genres
+        <fa-icon *ngIf="!gen" class="ml-auto" icon="plus"></fa-icon>
+        <fa-icon *ngIf="gen" class="ml-auto" icon="minus"></fa-icon>
+    </div>
+    <div class="items" *ngIf="gen">
+        <div class="item" *ngFor="let genreOption of genres" id="field_genre" name="genre">
+            <input type="checkbox" name="genreCheckbox">
+            <label>{{genreOption.genre}}</label>
+        </div>
     </div>
 </div>
 <div class="form-group">
-    Thèmes:
-    <div *ngFor="let tagOption of tags" id="field_tag" name="tag">
-        <input type="checkbox" name="tagCheckbox">
-        <label>{{tagOption.tag}}</label>
+    <div class="d-flex flex-row category" (click)="tag = !tag">
+        Thèmes
+        <fa-icon *ngIf="!tag" class="ml-auto" icon="plus"></fa-icon>
+        <fa-icon *ngIf="tag" class="ml-auto" icon="minus"></fa-icon>
+    </div>
+    <div class="items" *ngIf="tag">
+        <div class="item" *ngFor="let tagOption of tags" id="field_tag" name="tag">
+            <input type="checkbox" name="tagCheckbox">
+            <label>{{tagOption.tag}}</label>
+        </div>
     </div>
 </div>

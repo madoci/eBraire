@@ -1,17 +1,23 @@
 <style>
     .filter {
-        position: sticky;
         align-self: flex-start;
         top: 0;
         width: 5%;
-        padding-top: 60px;
         display: flex;
+        border: 1px 1px 1px 1px black;
     }
     
     .booklist {
         width: 95%;
         display: flex;
         justify-content: center
+    }
+    
+    .buttonSandwich {
+        display: none;
+        position: absolute;
+        top: 0px;
+        left: 0px
     }
     
     @media screen and (max-width: 1200px) {
@@ -21,10 +27,16 @@
         .booklist {
             width: 100% !important;
         }
+        .buttonSandwich {
+            display: block;
+        }
     }
 </style>
 <div class="d-flex flex-row">
-    <div class="filter">
+    <a class="buttonSandwich btn btn-secondary">
+        <fa-icon icon="bars"></fa-icon>
+    </a>
+    <div class="filter" id="filter">
         <jhi-filter></jhi-filter>
     </div>
     <div class="booklist">
