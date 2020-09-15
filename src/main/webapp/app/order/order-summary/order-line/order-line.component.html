@@ -5,7 +5,6 @@
     <select [(ngModel)]="quantity" (change)="changeItemQuantity()">
         <option *ngFor="let i of quantities" [ngValue]="i+1">{{i+1}}</option>
     </select>
-    <!--input type="number" value="{{item.quantity}}" onchange="changeItemQuantity(this.value)"-->
     <button (click)="addOne()">+</button>
     <p>{{getTotalPrice()}} €</p> 
     <button (click)="removeItem()">Supprimer</button>
