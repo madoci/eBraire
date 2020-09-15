@@ -6,6 +6,6 @@
         <option *ngFor="let i of quantities" [ngValue]="i+1">{{i+1}}</option>
     </select>
     <button (click)="addOne()">+</button>
-    <p>{{getTotalPrice()}} €</p> 
+    <p>{{getTotalPrice()}} €</p>
     <button (click)="removeItem()">Supprimer</button>
 </div>
