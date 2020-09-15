@@ -26,16 +26,16 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
         },
         {
+          path: ':bookId',
+          loadChildren: () => import('./display-book/display-book.module').then(m => m.EBraireDisplayBookModule),
+        },
+        {
           path: 'catalogue',
           loadChildren: () => import('./catalogue/catalogue.module').then(m => m.CatalogueModule),
         },
         {
           path: 'order',
-          loadChildren: () => import('./order/order-summary/order-summary.module').then(m => m.OrderSummaryModule),
-        },
-        {
-          path: ':bookId',
-          loadChildren: () => import('./display-book/display-book.module').then(m => m.EBraireDisplayBookModule),
+          loadChildren: () => import('./order/order.module').then(m => m.OrderModule),
         },
         ...LAYOUT_ROUTES,
       ],

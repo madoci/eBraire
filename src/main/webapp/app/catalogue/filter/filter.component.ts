@@ -23,6 +23,11 @@ export class FilterComponent implements OnInit {
   selectedGenres: String = '';
   selectedTypes: String = '';
 
+  // Style
+  cat = false;
+  gen = false;
+  tag = false;
+
   constructor(
     private route: ActivatedRoute,
     protected bookService: BookService,

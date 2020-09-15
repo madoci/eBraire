@@ -5,9 +5,9 @@ import { EBraireSharedModule } from 'app/shared/shared.module';
 import { HOME_ROUTE } from './home.route';
 import { HomeComponent } from './home.component';
 import { CatalogueModule } from '../catalogue/catalogue.module';
-import { OrderSummaryModule } from 'app/order/order-summary/order-summary.module';
+import { OrderModule } from '../order/order.module';
 @NgModule({
-  imports: [EBraireSharedModule, RouterModule.forChild([HOME_ROUTE]), CatalogueModule, OrderSummaryModule],
+  imports: [EBraireSharedModule, RouterModule.forChild([HOME_ROUTE]), CatalogueModule, OrderModule],
   declarations: [HomeComponent],
 })
 export class EBraireHomeModule {}

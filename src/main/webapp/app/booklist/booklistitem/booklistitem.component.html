@@ -1,6 +1,22 @@
-<div>
-      <li>   <jhi-book-image *ngIf="myBook" [book]="myBook" [imgSize]=200 [borderColor]="'#AAAAAA'"></jhi-book-image> </li>
-      <li>  <a routerLink="/{{myBook.id}}"> {{myBook.title}}  </a> </li>
-      <li> de :{{myBook.authors}}  </li>
-      <li>  {{myBook.unitPrice}}€ </li>
+<style>
+    .my-border {
+        width: 200px;
+        box-shadow: 2px 2px 2px 2px grey;
+    }
+    
+    .my-border:hover {
+        box-shadow: 4px 4px 4px 4px grey;
+    }
+    
+    .clic:hover {
+        cursor: pointer;
+    }
+</style>
+<div class="d-flex flex-column my-border clic" [routerLink]="'/'+myBook.id">
+    <div style="margin-top: 5px">
+        <jhi-book-image *ngIf="myBook" [book]="myBook" [imgSize]=200 [borderColor]="'#FFFFFF'"></jhi-book-image>
+    </div>
+    <div class="font-weight-bold text-center">{{myBook.title}}</div>
+    <div class="font-italic text-center">De: {{myBook.authors}}</div>
+    <div class="text-center">{{myBook.unitPrice}}€</div>
 </div>
