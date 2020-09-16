@@ -10,7 +10,7 @@
     <div class="navbar-collapse collapse" [ngbCollapse]="isNavbarCollapsed">
         <form name="searchForm" class="form-inline my-2 my-lg-0 ml-auto">
             <div class="input-group md-form my-0 col-xs-4">
-                <input type="text" class="form-control search-bar" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'eBraireApp.book.home.search' | translate }}">
+                <input type="text" class="form-control search-bar" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="">
                 <button class="input-group-append btn" style="margin-left: 5px; color: #a63c40; background-color: white" (click)="search(currentSearch)">
                     <fa-icon icon="search"></fa-icon>
                 </button>
