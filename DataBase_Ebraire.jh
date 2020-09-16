@@ -1,0 +1,71 @@
+
+entity Customer {
+	id Long,
+	name String,
+	lastName String,
+    address String
+}
+
+entity Ordered {
+	id Long,
+    commandStart LocalDate,
+    delevryAddress String,
+    billingAddress String,
+    status Status
+}
+
+entity OrderLine {
+	id Long,
+	quantity Integer,
+    price Float
+}
+
+entity Book {
+	id Long,
+	title String,
+    authors String,
+    description String, // FILEPATH
+    unitPrice Float,
+    image Blob //FILEPATH
+}
+
+entity Genre {
+	genre String
+}
+
+entity Tag {
+	tag String
+}
+
+entity Type {
+	type String
+}
+
+enum Status{
+	ORDERED,
+    SHIPPED,
+    DELIVERED,
+    RETURNED,
+    CANCELED
+}
+
+
+relationship OneToMany{
+Customer{idOrder} to Ordered{idCustomer}, // chaque client a sa liste de commande
+Ordered{oderedBooks} to OrderLine{order} 
+}
+
+relationship ManyToMany {
+    Book{tags} to Tag{book}, // chaque livre a sa liste de categorie
+    Book{genres} to Genre{book} // chaque livre a sa liste de genre
+}
+
+relationship ManyToOne {
+	Book{type} to Type, // chaque livre a sa liste de type
+    OrderLine{orderLines} to Book
+}
+
+
+
+
+
