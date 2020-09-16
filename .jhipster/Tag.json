@@ -3,7 +3,10 @@
   "fields": [
     {
       "fieldName": "tag",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "relationships": [
@@ -16,7 +19,7 @@
       "ownerSide": false
     }
   ],
-  "changelogDate": "20200907133137",
+  "changelogDate": "20200916124438",
   "entityTableName": "tag",
   "dto": "no",
   "pagination": "no",

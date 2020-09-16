@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,36 +15,11 @@ import { GenreDeleteDialogComponent } from './genre-delete-dialog.component';
 export class GenreComponent implements OnInit, OnDestroy {
   genres?: IGenre[];
   eventSubscriber?: Subscription;
-  currentSearch: string;
 
-  constructor(
-    protected genreService: GenreService,
-    protected eventManager: JhiEventManager,
-    protected modalService: NgbModal,
-    protected activatedRoute: ActivatedRoute
-  ) {
-    this.currentSearch =
-      this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search']
-        ? this.activatedRoute.snapshot.queryParams['search']
-        : '';
-  }
+  constructor(protected genreService: GenreService, protected eventManager: JhiEventManager, protected modalService: NgbModal) {}
 
   loadAll(): void {
-    if (this.currentSearch) {
-      this.genreService
-        .search({
-          query: this.currentSearch,
-        })
-        .subscribe((res: HttpResponse<IGenre[]>) => (this.genres = res.body || []));
-      return;
-    }
-
     this.genreService.query().subscribe((res: HttpResponse<IGenre[]>) => (this.genres = res.body || []));
-  }
-
-  search(query: string): void {
-    this.currentSearch = query;
-    this.loadAll();
   }
 
   ngOnInit(): void {

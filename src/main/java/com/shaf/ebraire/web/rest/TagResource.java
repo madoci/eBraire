@@ -2,7 +2,6 @@ package com.shaf.ebraire.web.rest;
 
 import com.shaf.ebraire.domain.Tag;
 import com.shaf.ebraire.repository.TagRepository;
-import com.shaf.ebraire.repository.search.TagSearchRepository;
 import com.shaf.ebraire.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -14,14 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.shaf.ebraire.domain.Tag}.
@@ -40,11 +36,8 @@ public class TagResource {
 
     private final TagRepository tagRepository;
 
-    private final TagSearchRepository tagSearchRepository;
-
-    public TagResource(TagRepository tagRepository, TagSearchRepository tagSearchRepository) {
+    public TagResource(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
-        this.tagSearchRepository = tagSearchRepository;
     }
 
     /**
@@ -55,13 +48,12 @@ public class TagResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/tags")
-    public ResponseEntity<Tag> createTag(@RequestBody Tag tag) throws URISyntaxException {
+    public ResponseEntity<Tag> createTag(@Valid @RequestBody Tag tag) throws URISyntaxException {
         log.debug("REST request to save Tag : {}", tag);
         if (tag.getId() != null) {
             throw new BadRequestAlertException("A new tag cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Tag result = tagRepository.save(tag);
-        tagSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/tags/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -77,13 +69,12 @@ public class TagResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/tags")
-    public ResponseEntity<Tag> updateTag(@RequestBody Tag tag) throws URISyntaxException {
+    public ResponseEntity<Tag> updateTag(@Valid @RequestBody Tag tag) throws URISyntaxException {
         log.debug("REST request to update Tag : {}", tag);
         if (tag.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Tag result = tagRepository.save(tag);
-        tagSearchRepository.save(result);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, tag.getId().toString()))
             .body(result);
@@ -123,22 +114,6 @@ public class TagResource {
     public ResponseEntity<Void> deleteTag(@PathVariable Long id) {
         log.debug("REST request to delete Tag : {}", id);
         tagRepository.deleteById(id);
-        tagSearchRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/tags?query=:query} : search for the tag corresponding
-     * to the query.
-     *
-     * @param query the query of the tag search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/tags")
-    public List<Tag> searchTags(@RequestParam String query) {
-        log.debug("REST request to search Tags for query {}", query);
-        return StreamSupport
-            .stream(tagSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        .collect(Collectors.toList());
     }
 }

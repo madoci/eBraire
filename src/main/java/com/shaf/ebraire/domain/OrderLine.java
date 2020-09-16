@@ -5,9 +5,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
-import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 
 /**
@@ -16,7 +15,6 @@ import java.io.Serializable;
 @Entity
 @Table(name = "order_line")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "orderline")
 public class OrderLine implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,19 +23,21 @@ public class OrderLine implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
     @NotNull
-    @Column(name = "quantity",columnDefinition = "integer default 1")
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
+
     @NotNull
-    @Column(name = "price",nullable=false)
+    @Column(name = "price", nullable = false)
     private Float price;
-    @NotNull
+
     @ManyToOne
     @JsonIgnoreProperties(value = "orderLines", allowSetters = true)
-    private Book orderLines;
-    @NotNull
+    private Book book;
+
     @ManyToOne
-    @JsonIgnoreProperties(value = "oderedBooks", allowSetters = true)
+    @JsonIgnoreProperties(value = "orderLines", allowSetters = true)
     private Ordered order;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -75,17 +75,17 @@ public class OrderLine implements Serializable {
         this.price = price;
     }
 
-    public Book getOrderLines() {
-        return orderLines;
+    public Book getBook() {
+        return book;
     }
 
-    public OrderLine orderLines(Book book) {
-        this.orderLines = book;
+    public OrderLine book(Book book) {
+        this.book = book;
         return this;
     }
 
-    public void setOrderLines(Book book) {
-        this.orderLines = book;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     public Ordered getOrder() {

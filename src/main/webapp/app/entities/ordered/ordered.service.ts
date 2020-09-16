@@ -6,7 +6,7 @@ import * as moment from 'moment';
 
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption, Search } from 'app/shared/util/request-util';
+import { createRequestOption } from 'app/shared/util/request-util';
 import { IOrdered } from 'app/shared/model/ordered.model';
 
 type EntityResponseType = HttpResponse<IOrdered>;
@@ -15,7 +15,6 @@ type EntityArrayResponseType = HttpResponse<IOrdered[]>;
 @Injectable({ providedIn: 'root' })
 export class OrderedService {
   public resourceUrl = SERVER_API_URL + 'api/ordereds';
-  public resourceSearchUrl = SERVER_API_URL + 'api/_search/ordereds';
 
   constructor(protected http: HttpClient) {}
 
@@ -48,13 +47,6 @@ export class OrderedService {
 
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
-  }
-
-  search(req: Search): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http
-      .get<IOrdered[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   protected convertDateFromClient(ordered: IOrdered): IOrdered {

@@ -5,7 +5,6 @@
         "title": "OrderLines",
         "createLabel": "Créer un nouveau Order Line",
         "createOrEditLabel": "Créer ou éditer un Order Line",
-        "search": "Recherche pour Order Line",
         "notFound": "Aucun Order Line trouvé"
       },
       "created": "Un nouveau Order Line a été créé avec l'identifiant {{ param }}",
@@ -19,7 +18,7 @@
       },
       "quantity": "Quantity",
       "price": "Price",
-      "orderLines": "Order Lines",
+      "book": "Book",
       "order": "Order"
     }
   }

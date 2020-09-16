@@ -19,18 +19,36 @@
                             <button type="button" class="btn btn-secondary" (click)="commandStartDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
                         </span>
                     </div>
+                    <div *ngIf="editForm.get('commandStart')!.invalid && (editForm.get('commandStart')!.dirty || editForm.get('commandStart')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('commandStart')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eBraireApp.ordered.delevryAddress" for="field_delevryAddress">Delevry Address</label>
                     <input type="text" class="form-control" name="delevryAddress" id="field_delevryAddress"
                            formControlName="delevryAddress"/>
+                    <div *ngIf="editForm.get('delevryAddress')!.invalid && (editForm.get('delevryAddress')!.dirty || editForm.get('delevryAddress')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('delevryAddress')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eBraireApp.ordered.billingAddress" for="field_billingAddress">Billing Address</label>
                     <input type="text" class="form-control" name="billingAddress" id="field_billingAddress"
                            formControlName="billingAddress"/>
+                    <div *ngIf="editForm.get('billingAddress')!.invalid && (editForm.get('billingAddress')!.dirty || editForm.get('billingAddress')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('billingAddress')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -42,6 +60,12 @@
                         <option value="RETURNED">{{ 'eBraireApp.Status.RETURNED' | translate }}</option>
                         <option value="CANCELED">{{ 'eBraireApp.Status.CANCELED' | translate }}</option>
                     </select>
+                    <div *ngIf="editForm.get('status')!.invalid && (editForm.get('status')!.dirty || editForm.get('status')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('status')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
                 </div>
 
                 <div class="form-group">

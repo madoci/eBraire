@@ -3,11 +3,17 @@
   "fields": [
     {
       "fieldName": "quantity",
-      "fieldType": "Integer"
+      "fieldType": "Integer",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "price",
-      "fieldType": "Float"
+      "fieldType": "Float",
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "relationships": [
@@ -15,18 +21,18 @@
       "relationshipType": "many-to-one",
       "otherEntityName": "book",
       "otherEntityRelationshipName": "orderLine",
-      "relationshipName": "orderLines",
+      "relationshipName": "book",
       "otherEntityField": "id"
     },
     {
       "relationshipType": "many-to-one",
       "otherEntityName": "ordered",
-      "otherEntityRelationshipName": "oderedBooks",
+      "otherEntityRelationshipName": "orderLines",
       "relationshipName": "order",
       "otherEntityField": "id"
     }
   ],
-  "changelogDate": "20200907132837",
+  "changelogDate": "20200916124138",
   "entityTableName": "order_line",
   "dto": "no",
   "pagination": "no",

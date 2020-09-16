@@ -17,7 +17,7 @@ export class TagUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    tag: [],
+    tag: [null, [Validators.required]],
   });
 
   constructor(protected tagService: TagService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}

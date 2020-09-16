@@ -3,13 +3,9 @@ package com.shaf.ebraire.web.rest;
 import com.shaf.ebraire.EBraireApp;
 import com.shaf.ebraire.domain.Ordered;
 import com.shaf.ebraire.repository.OrderedRepository;
-import com.shaf.ebraire.repository.search.OrderedSearchRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,13 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -35,7 +28,6 @@ import com.shaf.ebraire.domain.enumeration.Status;
  * Integration tests for the {@link OrderedResource} REST controller.
  */
 @SpringBootTest(classes = EBraireApp.class)
-@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class OrderedResourceIT {
@@ -54,14 +46,6 @@ public class OrderedResourceIT {
 
     @Autowired
     private OrderedRepository orderedRepository;
-
-    /**
-     * This repository is mocked in the com.shaf.ebraire.repository.search test package.
-     *
-     * @see com.shaf.ebraire.repository.search.OrderedSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private OrderedSearchRepository mockOrderedSearchRepository;
 
     @Autowired
     private EntityManager em;
@@ -105,7 +89,7 @@ public class OrderedResourceIT {
         ordered = createEntity(em);
     }
 
-    //@Test
+    @Test
     @Transactional
     public void createOrdered() throws Exception {
         int databaseSizeBeforeCreate = orderedRepository.findAll().size();
@@ -123,12 +107,9 @@ public class OrderedResourceIT {
         assertThat(testOrdered.getDelevryAddress()).isEqualTo(DEFAULT_DELEVRY_ADDRESS);
         assertThat(testOrdered.getBillingAddress()).isEqualTo(DEFAULT_BILLING_ADDRESS);
         assertThat(testOrdered.getStatus()).isEqualTo(DEFAULT_STATUS);
-
-        // Validate the Ordered in Elasticsearch
-        verify(mockOrderedSearchRepository, times(1)).save(testOrdered);
     }
 
-    //@Test
+    @Test
     @Transactional
     public void createOrderedWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = orderedRepository.findAll().size();
@@ -145,13 +126,86 @@ public class OrderedResourceIT {
         // Validate the Ordered in the database
         List<Ordered> orderedList = orderedRepository.findAll();
         assertThat(orderedList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Ordered in Elasticsearch
-        verify(mockOrderedSearchRepository, times(0)).save(ordered);
     }
 
 
-    //@Test
+    @Test
+    @Transactional
+    public void checkCommandStartIsRequired() throws Exception {
+        int databaseSizeBeforeTest = orderedRepository.findAll().size();
+        // set the field null
+        ordered.setCommandStart(null);
+
+        // Create the Ordered, which fails.
+
+
+        restOrderedMockMvc.perform(post("/api/ordereds")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(ordered)))
+            .andExpect(status().isBadRequest());
+
+        List<Ordered> orderedList = orderedRepository.findAll();
+        assertThat(orderedList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkDelevryAddressIsRequired() throws Exception {
+        int databaseSizeBeforeTest = orderedRepository.findAll().size();
+        // set the field null
+        ordered.setDelevryAddress(null);
+
+        // Create the Ordered, which fails.
+
+
+        restOrderedMockMvc.perform(post("/api/ordereds")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(ordered)))
+            .andExpect(status().isBadRequest());
+
+        List<Ordered> orderedList = orderedRepository.findAll();
+        assertThat(orderedList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkBillingAddressIsRequired() throws Exception {
+        int databaseSizeBeforeTest = orderedRepository.findAll().size();
+        // set the field null
+        ordered.setBillingAddress(null);
+
+        // Create the Ordered, which fails.
+
+
+        restOrderedMockMvc.perform(post("/api/ordereds")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(ordered)))
+            .andExpect(status().isBadRequest());
+
+        List<Ordered> orderedList = orderedRepository.findAll();
+        assertThat(orderedList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkStatusIsRequired() throws Exception {
+        int databaseSizeBeforeTest = orderedRepository.findAll().size();
+        // set the field null
+        ordered.setStatus(null);
+
+        // Create the Ordered, which fails.
+
+
+        restOrderedMockMvc.perform(post("/api/ordereds")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(ordered)))
+            .andExpect(status().isBadRequest());
+
+        List<Ordered> orderedList = orderedRepository.findAll();
+        assertThat(orderedList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
     @Transactional
     public void getAllOrdereds() throws Exception {
         // Initialize the database
@@ -168,7 +222,7 @@ public class OrderedResourceIT {
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
     
-    //@Test
+    @Test
     @Transactional
     public void getOrdered() throws Exception {
         // Initialize the database
@@ -184,7 +238,7 @@ public class OrderedResourceIT {
             .andExpect(jsonPath("$.billingAddress").value(DEFAULT_BILLING_ADDRESS))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
-    //@Test
+    @Test
     @Transactional
     public void getNonExistingOrdered() throws Exception {
         // Get the ordered
@@ -192,7 +246,7 @@ public class OrderedResourceIT {
             .andExpect(status().isNotFound());
     }
 
-    //@Test
+    @Test
     @Transactional
     public void updateOrdered() throws Exception {
         // Initialize the database
@@ -223,12 +277,9 @@ public class OrderedResourceIT {
         assertThat(testOrdered.getDelevryAddress()).isEqualTo(UPDATED_DELEVRY_ADDRESS);
         assertThat(testOrdered.getBillingAddress()).isEqualTo(UPDATED_BILLING_ADDRESS);
         assertThat(testOrdered.getStatus()).isEqualTo(UPDATED_STATUS);
-
-        // Validate the Ordered in Elasticsearch
-        verify(mockOrderedSearchRepository, times(1)).save(testOrdered);
     }
 
-    //@Test
+    @Test
     @Transactional
     public void updateNonExistingOrdered() throws Exception {
         int databaseSizeBeforeUpdate = orderedRepository.findAll().size();
@@ -242,12 +293,9 @@ public class OrderedResourceIT {
         // Validate the Ordered in the database
         List<Ordered> orderedList = orderedRepository.findAll();
         assertThat(orderedList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Ordered in Elasticsearch
-        verify(mockOrderedSearchRepository, times(0)).save(ordered);
     }
 
-    //@Test
+    @Test
     @Transactional
     public void deleteOrdered() throws Exception {
         // Initialize the database
@@ -263,28 +311,5 @@ public class OrderedResourceIT {
         // Validate the database contains one less item
         List<Ordered> orderedList = orderedRepository.findAll();
         assertThat(orderedList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the Ordered in Elasticsearch
-        verify(mockOrderedSearchRepository, times(1)).deleteById(ordered.getId());
-    }
-
-    //@Test
-    @Transactional
-    public void searchOrdered() throws Exception {
-        // Configure the mock search repository
-        // Initialize the database
-        orderedRepository.saveAndFlush(ordered);
-        when(mockOrderedSearchRepository.search(queryStringQuery("id:" + ordered.getId())))
-            .thenReturn(Collections.singletonList(ordered));
-
-        // Search the ordered
-        restOrderedMockMvc.perform(get("/api/_search/ordereds?query=id:" + ordered.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(ordered.getId().intValue())))
-            .andExpect(jsonPath("$.[*].commandStart").value(hasItem(DEFAULT_COMMAND_START.toString())))
-            .andExpect(jsonPath("$.[*].delevryAddress").value(hasItem(DEFAULT_DELEVRY_ADDRESS)))
-            .andExpect(jsonPath("$.[*].billingAddress").value(hasItem(DEFAULT_BILLING_ADDRESS)))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
 }

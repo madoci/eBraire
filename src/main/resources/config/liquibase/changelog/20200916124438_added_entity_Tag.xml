@@ -10,19 +10,19 @@
     <!--
         Added the entity Tag.
     -->
-    <changeSet id="20200907133137-1" author="jhipster">
+    <changeSet id="20200916124438-1" author="jhipster">
         <createTable tableName="tag">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="tag" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
 
-    <changeSet id="20200907133137-1-relations" author="jhipster">
+    <changeSet id="20200916124438-1-relations" author="jhipster">
 
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -35,7 +35,7 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20200907133137-1-data" author="jhipster" context="faker">
+    <changeSet id="20200916124438-1-data" author="jhipster" context="faker">
         <loadData
                   file="config/liquibase/fake-data/tag.csv"
                   separator=";"

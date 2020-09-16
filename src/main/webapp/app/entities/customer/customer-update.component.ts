@@ -17,9 +17,9 @@ export class CustomerUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    name: [],
-    lastName: [],
-    address: [],
+    name: [null, [Validators.required]],
+    lastName: [null, [Validators.required]],
+    address: [null, [Validators.required]],
   });
 
   constructor(protected customerService: CustomerService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}

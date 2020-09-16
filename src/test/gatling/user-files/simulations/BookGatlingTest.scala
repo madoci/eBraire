@@ -74,7 +74,7 @@ class BookGatlingTest extends Simulation {
                 "id":null
                 , "title":"SAMPLE_TEXT"
                 , "authors":"SAMPLE_TEXT"
-                , "description":null
+                , "description":"SAMPLE_TEXT"
                 , "unitPrice":null
                 , "image":null
                 }""")).asJson

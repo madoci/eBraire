@@ -10,28 +10,28 @@
     <!--
         Added the entity Book.
     -->
-    <changeSet id="20200907132937-1" author="jhipster">
+    <changeSet id="20200916124238-1" author="jhipster">
         <createTable tableName="book">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="title" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="authors" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
-            <column name="description" type="varchar(2048)">
-                <constraints nullable="true" />
+            <column name="description" type="varchar(255)">
+                <constraints nullable="false" />
             </column>
             <column name="unit_price" type="${floatType}">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="image" type="longblob">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="image_content_type" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="type_id" type="bigint">
                 <constraints nullable="true" />
@@ -40,7 +40,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="20200907132937-1-relations" author="jhipster">
+    <changeSet id="20200916124238-1-relations" author="jhipster">
 
         <createTable tableName="book_tags">
             <column name="tags_id" type="bigint">
@@ -75,7 +75,7 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20200907132937-1-data" author="jhipster" context="faker">
+    <changeSet id="20200916124238-1-data" author="jhipster" context="faker">
         <loadData
                   file="config/liquibase/fake-data/book.csv"
                   separator=";"

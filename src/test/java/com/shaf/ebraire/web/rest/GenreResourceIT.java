@@ -3,13 +3,9 @@ package com.shaf.ebraire.web.rest;
 import com.shaf.ebraire.EBraireApp;
 import com.shaf.ebraire.domain.Genre;
 import com.shaf.ebraire.repository.GenreRepository;
-import com.shaf.ebraire.repository.search.GenreSearchRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,13 +14,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -32,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link GenreResource} REST controller.
  */
 @SpringBootTest(classes = EBraireApp.class)
-@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class GenreResourceIT {
@@ -42,14 +34,6 @@ public class GenreResourceIT {
 
     @Autowired
     private GenreRepository genreRepository;
-
-    /**
-     * This repository is mocked in the com.shaf.ebraire.repository.search test package.
-     *
-     * @see com.shaf.ebraire.repository.search.GenreSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private GenreSearchRepository mockGenreSearchRepository;
 
     @Autowired
     private EntityManager em;
@@ -102,9 +86,6 @@ public class GenreResourceIT {
         assertThat(genreList).hasSize(databaseSizeBeforeCreate + 1);
         Genre testGenre = genreList.get(genreList.size() - 1);
         assertThat(testGenre.getGenre()).isEqualTo(DEFAULT_GENRE);
-
-        // Validate the Genre in Elasticsearch
-        verify(mockGenreSearchRepository, times(1)).save(testGenre);
     }
 
     @Test
@@ -124,11 +105,27 @@ public class GenreResourceIT {
         // Validate the Genre in the database
         List<Genre> genreList = genreRepository.findAll();
         assertThat(genreList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Genre in Elasticsearch
-        verify(mockGenreSearchRepository, times(0)).save(genre);
     }
 
+
+    @Test
+    @Transactional
+    public void checkGenreIsRequired() throws Exception {
+        int databaseSizeBeforeTest = genreRepository.findAll().size();
+        // set the field null
+        genre.setGenre(null);
+
+        // Create the Genre, which fails.
+
+
+        restGenreMockMvc.perform(post("/api/genres")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(genre)))
+            .andExpect(status().isBadRequest());
+
+        List<Genre> genreList = genreRepository.findAll();
+        assertThat(genreList).hasSize(databaseSizeBeforeTest);
+    }
 
     @Test
     @Transactional
@@ -190,9 +187,6 @@ public class GenreResourceIT {
         assertThat(genreList).hasSize(databaseSizeBeforeUpdate);
         Genre testGenre = genreList.get(genreList.size() - 1);
         assertThat(testGenre.getGenre()).isEqualTo(UPDATED_GENRE);
-
-        // Validate the Genre in Elasticsearch
-        verify(mockGenreSearchRepository, times(1)).save(testGenre);
     }
 
     @Test
@@ -209,9 +203,6 @@ public class GenreResourceIT {
         // Validate the Genre in the database
         List<Genre> genreList = genreRepository.findAll();
         assertThat(genreList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Genre in Elasticsearch
-        verify(mockGenreSearchRepository, times(0)).save(genre);
     }
 
     @Test
@@ -230,25 +221,5 @@ public class GenreResourceIT {
         // Validate the database contains one less item
         List<Genre> genreList = genreRepository.findAll();
         assertThat(genreList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the Genre in Elasticsearch
-        verify(mockGenreSearchRepository, times(1)).deleteById(genre.getId());
-    }
-
-    @Test
-    @Transactional
-    public void searchGenre() throws Exception {
-        // Configure the mock search repository
-        // Initialize the database
-        genreRepository.saveAndFlush(genre);
-        when(mockGenreSearchRepository.search(queryStringQuery("id:" + genre.getId())))
-            .thenReturn(Collections.singletonList(genre));
-
-        // Search the genre
-        restGenreMockMvc.perform(get("/api/_search/genres?query=id:" + genre.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(genre.getId().intValue())))
-            .andExpect(jsonPath("$.[*].genre").value(hasItem(DEFAULT_GENRE)));
     }
 }

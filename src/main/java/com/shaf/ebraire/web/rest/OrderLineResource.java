@@ -2,7 +2,6 @@ package com.shaf.ebraire.web.rest;
 
 import com.shaf.ebraire.domain.OrderLine;
 import com.shaf.ebraire.repository.OrderLineRepository;
-import com.shaf.ebraire.repository.search.OrderLineSearchRepository;
 import com.shaf.ebraire.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -14,14 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.shaf.ebraire.domain.OrderLine}.
@@ -40,11 +36,8 @@ public class OrderLineResource {
 
     private final OrderLineRepository orderLineRepository;
 
-    private final OrderLineSearchRepository orderLineSearchRepository;
-
-    public OrderLineResource(OrderLineRepository orderLineRepository, OrderLineSearchRepository orderLineSearchRepository) {
+    public OrderLineResource(OrderLineRepository orderLineRepository) {
         this.orderLineRepository = orderLineRepository;
-        this.orderLineSearchRepository = orderLineSearchRepository;
     }
 
     /**
@@ -55,13 +48,12 @@ public class OrderLineResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/order-lines")
-    public ResponseEntity<OrderLine> createOrderLine(@RequestBody OrderLine orderLine) throws URISyntaxException {
+    public ResponseEntity<OrderLine> createOrderLine(@Valid @RequestBody OrderLine orderLine) throws URISyntaxException {
         log.debug("REST request to save OrderLine : {}", orderLine);
         if (orderLine.getId() != null) {
             throw new BadRequestAlertException("A new orderLine cannot already have an ID", ENTITY_NAME, "idexists");
         }
         OrderLine result = orderLineRepository.save(orderLine);
-        orderLineSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/order-lines/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -77,13 +69,12 @@ public class OrderLineResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/order-lines")
-    public ResponseEntity<OrderLine> updateOrderLine(@RequestBody OrderLine orderLine) throws URISyntaxException {
+    public ResponseEntity<OrderLine> updateOrderLine(@Valid @RequestBody OrderLine orderLine) throws URISyntaxException {
         log.debug("REST request to update OrderLine : {}", orderLine);
         if (orderLine.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         OrderLine result = orderLineRepository.save(orderLine);
-        orderLineSearchRepository.save(result);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, orderLine.getId().toString()))
             .body(result);
@@ -123,22 +114,6 @@ public class OrderLineResource {
     public ResponseEntity<Void> deleteOrderLine(@PathVariable Long id) {
         log.debug("REST request to delete OrderLine : {}", id);
         orderLineRepository.deleteById(id);
-        orderLineSearchRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/order-lines?query=:query} : search for the orderLine corresponding
-     * to the query.
-     *
-     * @param query the query of the orderLine search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/order-lines")
-    public List<OrderLine> searchOrderLines(@RequestParam String query) {
-        log.debug("REST request to search OrderLines for query {}", query);
-        return StreamSupport
-            .stream(orderLineSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        .collect(Collectors.toList());
     }
 }

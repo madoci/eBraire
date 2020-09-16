@@ -3,7 +3,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption, Search } from 'app/shared/util/request-util';
+import { createRequestOption } from 'app/shared/util/request-util';
 import { ICustomer } from 'app/shared/model/customer.model';
 
 type EntityResponseType = HttpResponse<ICustomer>;
@@ -12,7 +12,6 @@ type EntityArrayResponseType = HttpResponse<ICustomer[]>;
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
   public resourceUrl = SERVER_API_URL + 'api/customers';
-  public resourceSearchUrl = SERVER_API_URL + 'api/_search/customers';
 
   constructor(protected http: HttpClient) {}
 
@@ -35,10 +34,5 @@ export class CustomerService {
 
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
-  }
-
-  search(req: Search): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<ICustomer[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 }

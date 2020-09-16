@@ -6,11 +6,11 @@
     <!--
         Added the constraints for entity OrderLine.
     -->
-    <changeSet id="20200907132837-2" author="jhipster">
+    <changeSet id="20200916124138-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="order_lines_id"
+        <addForeignKeyConstraint baseColumnNames="book_id"
                                  baseTableName="order_line"
-                                 constraintName="fk_order_line_order_lines_id"
+                                 constraintName="fk_order_line_book_id"
                                  referencedColumnNames="id"
                                  referencedTableName="book"/>
 

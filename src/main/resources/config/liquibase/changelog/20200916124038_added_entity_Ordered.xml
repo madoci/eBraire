@@ -10,22 +10,22 @@
     <!--
         Added the entity Ordered.
     -->
-    <changeSet id="20200907132737-1" author="jhipster">
+    <changeSet id="20200916124038-1" author="jhipster">
         <createTable tableName="ordered">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="command_start" type="date">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="delevry_address" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="billing_address" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="status" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="id_customer_id" type="bigint">
                 <constraints nullable="true" />
@@ -34,7 +34,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="20200907132737-1-relations" author="jhipster">
+    <changeSet id="20200916124038-1-relations" author="jhipster">
 
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -47,7 +47,7 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20200907132737-1-data" author="jhipster" context="faker">
+    <changeSet id="20200916124038-1-data" author="jhipster" context="faker">
         <loadData
                   file="config/liquibase/fake-data/ordered.csv"
                   separator=";"

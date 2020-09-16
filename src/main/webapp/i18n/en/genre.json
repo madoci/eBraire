@@ -5,7 +5,6 @@
         "title": "Genres",
         "createLabel": "Create a new Genre",
         "createOrEditLabel": "Create or edit a Genre",
-        "search": "Search for Genre",
         "notFound": "No Genres found"
       },
       "created": "A new Genre is created with identifier {{ param }}",

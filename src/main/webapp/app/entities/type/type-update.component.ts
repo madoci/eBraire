@@ -17,7 +17,7 @@ export class TypeUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    type: [],
+    type: [null, [Validators.required]],
   });
 
   constructor(protected typeService: TypeService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}

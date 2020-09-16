@@ -3,11 +3,14 @@
   "fields": [
     {
       "fieldName": "type",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "relationships": [],
-  "changelogDate": "20200907133237",
+  "changelogDate": "20200916124538",
   "entityTableName": "type",
   "dto": "no",
   "pagination": "no",

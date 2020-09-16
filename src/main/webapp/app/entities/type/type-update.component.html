@@ -15,6 +15,12 @@
                     <label class="form-control-label" jhiTranslate="eBraireApp.type.type" for="field_type">Type</label>
                     <input type="text" class="form-control" name="type" id="field_type"
                            formControlName="type"/>
+                    <div *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('type')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
                 </div>
             </div>
 

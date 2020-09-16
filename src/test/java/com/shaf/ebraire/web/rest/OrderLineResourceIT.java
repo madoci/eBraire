@@ -3,13 +3,9 @@ package com.shaf.ebraire.web.rest;
 import com.shaf.ebraire.EBraireApp;
 import com.shaf.ebraire.domain.OrderLine;
 import com.shaf.ebraire.repository.OrderLineRepository;
-import com.shaf.ebraire.repository.search.OrderLineSearchRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,13 +14,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -32,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link OrderLineResource} REST controller.
  */
 @SpringBootTest(classes = EBraireApp.class)
-@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class OrderLineResourceIT {
@@ -45,14 +37,6 @@ public class OrderLineResourceIT {
 
     @Autowired
     private OrderLineRepository orderLineRepository;
-
-    /**
-     * This repository is mocked in the com.shaf.ebraire.repository.search test package.
-     *
-     * @see com.shaf.ebraire.repository.search.OrderLineSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private OrderLineSearchRepository mockOrderLineSearchRepository;
 
     @Autowired
     private EntityManager em;
@@ -92,7 +76,7 @@ public class OrderLineResourceIT {
         orderLine = createEntity(em);
     }
 
-    //@Test
+    @Test
     @Transactional
     public void createOrderLine() throws Exception {
         int databaseSizeBeforeCreate = orderLineRepository.findAll().size();
@@ -108,12 +92,9 @@ public class OrderLineResourceIT {
         OrderLine testOrderLine = orderLineList.get(orderLineList.size() - 1);
         assertThat(testOrderLine.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testOrderLine.getPrice()).isEqualTo(DEFAULT_PRICE);
-
-        // Validate the OrderLine in Elasticsearch
-        verify(mockOrderLineSearchRepository, times(1)).save(testOrderLine);
     }
 
-    //@Test
+    @Test
     @Transactional
     public void createOrderLineWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = orderLineRepository.findAll().size();
@@ -130,13 +111,48 @@ public class OrderLineResourceIT {
         // Validate the OrderLine in the database
         List<OrderLine> orderLineList = orderLineRepository.findAll();
         assertThat(orderLineList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the OrderLine in Elasticsearch
-        verify(mockOrderLineSearchRepository, times(0)).save(orderLine);
     }
 
 
-    //@Test
+    @Test
+    @Transactional
+    public void checkQuantityIsRequired() throws Exception {
+        int databaseSizeBeforeTest = orderLineRepository.findAll().size();
+        // set the field null
+        orderLine.setQuantity(null);
+
+        // Create the OrderLine, which fails.
+
+
+        restOrderLineMockMvc.perform(post("/api/order-lines")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(orderLine)))
+            .andExpect(status().isBadRequest());
+
+        List<OrderLine> orderLineList = orderLineRepository.findAll();
+        assertThat(orderLineList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkPriceIsRequired() throws Exception {
+        int databaseSizeBeforeTest = orderLineRepository.findAll().size();
+        // set the field null
+        orderLine.setPrice(null);
+
+        // Create the OrderLine, which fails.
+
+
+        restOrderLineMockMvc.perform(post("/api/order-lines")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(orderLine)))
+            .andExpect(status().isBadRequest());
+
+        List<OrderLine> orderLineList = orderLineRepository.findAll();
+        assertThat(orderLineList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
     @Transactional
     public void getAllOrderLines() throws Exception {
         // Initialize the database
@@ -151,7 +167,7 @@ public class OrderLineResourceIT {
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())));
     }
     
-    //@Test
+    @Test
     @Transactional
     public void getOrderLine() throws Exception {
         // Initialize the database
@@ -165,7 +181,7 @@ public class OrderLineResourceIT {
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.doubleValue()));
     }
-    //@Test
+    @Test
     @Transactional
     public void getNonExistingOrderLine() throws Exception {
         // Get the orderLine
@@ -173,7 +189,7 @@ public class OrderLineResourceIT {
             .andExpect(status().isNotFound());
     }
 
-    //@Test
+    @Test
     @Transactional
     public void updateOrderLine() throws Exception {
         // Initialize the database
@@ -200,12 +216,9 @@ public class OrderLineResourceIT {
         OrderLine testOrderLine = orderLineList.get(orderLineList.size() - 1);
         assertThat(testOrderLine.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testOrderLine.getPrice()).isEqualTo(UPDATED_PRICE);
-
-        // Validate the OrderLine in Elasticsearch
-        verify(mockOrderLineSearchRepository, times(1)).save(testOrderLine);
     }
 
-    //@Test
+    @Test
     @Transactional
     public void updateNonExistingOrderLine() throws Exception {
         int databaseSizeBeforeUpdate = orderLineRepository.findAll().size();
@@ -219,12 +232,9 @@ public class OrderLineResourceIT {
         // Validate the OrderLine in the database
         List<OrderLine> orderLineList = orderLineRepository.findAll();
         assertThat(orderLineList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the OrderLine in Elasticsearch
-        verify(mockOrderLineSearchRepository, times(0)).save(orderLine);
     }
 
-    //@Test
+    @Test
     @Transactional
     public void deleteOrderLine() throws Exception {
         // Initialize the database
@@ -240,26 +250,5 @@ public class OrderLineResourceIT {
         // Validate the database contains one less item
         List<OrderLine> orderLineList = orderLineRepository.findAll();
         assertThat(orderLineList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the OrderLine in Elasticsearch
-        verify(mockOrderLineSearchRepository, times(1)).deleteById(orderLine.getId());
-    }
-
-    //@Test
-    @Transactional
-    public void searchOrderLine() throws Exception {
-        // Configure the mock search repository
-        // Initialize the database
-        orderLineRepository.saveAndFlush(orderLine);
-        when(mockOrderLineSearchRepository.search(queryStringQuery("id:" + orderLine.getId())))
-            .thenReturn(Collections.singletonList(orderLine));
-
-        // Search the orderLine
-        restOrderLineMockMvc.perform(get("/api/_search/order-lines?query=id:" + orderLine.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(orderLine.getId().intValue())))
-            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
-            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())));
     }
 }

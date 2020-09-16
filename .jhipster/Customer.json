@@ -3,15 +3,24 @@
   "fields": [
     {
       "fieldName": "name",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "lastName",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "address",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "relationships": [
@@ -22,7 +31,7 @@
       "relationshipName": "idOrder"
     }
   ],
-  "changelogDate": "20200907132637",
+  "changelogDate": "20200916123938",
   "entityTableName": "customer",
   "dto": "no",
   "pagination": "no",

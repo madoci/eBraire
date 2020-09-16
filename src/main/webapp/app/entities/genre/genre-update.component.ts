@@ -17,7 +17,7 @@ export class GenreUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    genre: [],
+    genre: [null, [Validators.required]],
   });
 
   constructor(protected genreService: GenreService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}

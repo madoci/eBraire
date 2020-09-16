@@ -5,7 +5,6 @@
         "title": "Tags",
         "createLabel": "Créer un nouveau Tag",
         "createOrEditLabel": "Créer ou éditer un Tag",
-        "search": "Recherche pour Tag",
         "notFound": "Aucun Tag trouvé"
       },
       "created": "Un nouveau Tag a été créé avec l'identifiant {{ param }}",
