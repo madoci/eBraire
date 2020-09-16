@@ -54,5 +54,5 @@
     <p *ngIf="books.length == 0" class="h2">Aucun livre ne correspond à votre recherche</p>
 </div>
 <div class="cards">
-    <jhi-booklistitem [routerLink]="'/'+book.id" class="my-border clic d-flex flex-column" *ngFor="let book of books" [myBook]=book></jhi-booklistitem>
+    <jhi-booklistitem [routerLink]="'/display-book/'+book.id" class="my-border clic d-flex flex-column" *ngFor="let book of books" [myBook]=book></jhi-booklistitem>
 </div>

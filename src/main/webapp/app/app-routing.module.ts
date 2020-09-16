@@ -22,11 +22,15 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule),
         },
         {
+          path: '',
+          loadChildren: () => import('./home/home.module').then(m => m.EBraireHomeModule),
+        },
+        {
           path: 'account',
           loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
         },
         {
-          path: ':bookId',
+          path: 'display-book/:bookId',
           loadChildren: () => import('./display-book/display-book.module').then(m => m.EBraireDisplayBookModule),
         },
         {
