@@ -7,13 +7,6 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
-        "customer": "Customer",
-        "ordered": "Ordered",
-        "orderLine": "Order Line",
-        "book": "Book",
-        "genre": "Genre",
-        "tag": "Tag",
-        "type": "Type",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
@@ -36,7 +29,6 @@
         "audits": "Audits",
         "apidocs": "API",
         "database": "Database",
-        "panel": "Edit database",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
       "language": "Language"

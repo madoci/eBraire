@@ -31,7 +31,6 @@
   },
   "defaultProject": "e-braire",
   "cli": {
-    "packageManager": "npm",
-    "analytics": "b8c9a12d-e758-4dc3-b5c1-92d1acc0fc0a"
+    "packageManager": "npm"
   }
 }

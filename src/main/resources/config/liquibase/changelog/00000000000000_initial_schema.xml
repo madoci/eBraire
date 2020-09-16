@@ -16,7 +16,7 @@
     -->
     <changeSet id="00000000000001" author="jhipster">
         <createTable tableName="jhi_user">
-            <column name="id" type="bigint" autoIncrement="true" >
+            <column name="id" type="bigint" >
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="login" type="varchar(50)">
@@ -156,5 +156,4 @@
             <column name="local_date" type="date"/>
         </createTable>
     </changeSet>
-
 </databaseChangeLog>
