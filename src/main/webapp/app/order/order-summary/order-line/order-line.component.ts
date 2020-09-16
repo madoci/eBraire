@@ -63,4 +63,11 @@ export class OrderLineComponent implements OnInit {
     this.initItem();
     this.parent.ngOnInit();
   }
+
+  price(val: number | undefined): string {
+    if (val === undefined) return '0.00€';
+    let dec = ((val - Math.floor(val)) * 10).toString();
+    dec = dec.length === 1 ? dec + '0' : dec;
+    return Math.trunc(val).toString() + ',' + dec + '€';
+  }
 }

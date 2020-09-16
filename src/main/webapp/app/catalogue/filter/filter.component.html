@@ -28,7 +28,11 @@
     
     .container {
         border: 1px solid black;
-        padding-top: 10px
+        padding-top: 10px;
+    }
+    
+    .label-text {
+        margin: 0 5px;
     }
 </style>
 <div class="container">
@@ -48,9 +52,9 @@
         </div>
     </div>
     <div class="form-group items" [style.display]="cat ? 'flex' : 'none'">
-        <div class="item" *ngFor="let typeOption of types" id="field_type" name="type">
+        <div class="item d-flex flex-row" *ngFor="let typeOption of types" id="field_type" name="type">
             <input type="checkbox" name="typeCheckbox">
-            <label>{{typeOption.type}}</label>
+            <label class="label-text">{{typeOption.type}}</label>
         </div>
     </div>
     <div class="form-group category" (click)="gen = !gen">
@@ -61,9 +65,9 @@
         </div>
     </div>
     <div class="form-group items" [style.display]="gen ? 'flex' : 'none'">
-        <div class="item" *ngFor="let genreOption of genres" id="field_genre" name="genre">
+        <div class="item d-flex flex-row" *ngFor="let genreOption of genres" id="field_genre" name="genre">
             <input type="checkbox" name="genreCheckbox">
-            <label>{{genreOption.genre}}</label>
+            <label class="label-text">{{genreOption.genre}}</label>
         </div>
     </div>
     <div class="form-group category" (click)="tag = !tag">
@@ -74,9 +78,9 @@
         </div>
     </div>
     <div class="form-group items" [style.display]="tag ? 'flex' : 'none'">
-        <div class="item " *ngFor="let tagOption of tags " id="field_tag " name="tag ">
+        <div class="item d-flex flex-row" *ngFor="let tagOption of tags " id="field_tag " name="tag ">
             <input type="checkbox" name="tagCheckbox">
-            <label>{{tagOption.tag}}</label>
+            <label class="label-text">{{tagOption.tag}}</label>
         </div>
     </div>
 </div>

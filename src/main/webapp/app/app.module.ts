@@ -16,6 +16,7 @@ import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 import { ErrorComponent } from './layouts/error/error.component';
 import { BookdialogdeleteComponent } from './admin/bookdialogdelete/bookdialogdelete.component';
 import { ShoppingCartModule } from './shopping-cart/shopping-cart.module';
+import { WindowRef } from './catalogue/window/window.component';
 
 @NgModule({
   imports: [
@@ -38,5 +39,6 @@ import { ShoppingCartModule } from './shopping-cart/shopping-cart.module';
     BookdialogdeleteComponent,
   ],
   bootstrap: [MainComponent],
+  providers: [WindowRef],
 })
 export class EBraireAppModule {}

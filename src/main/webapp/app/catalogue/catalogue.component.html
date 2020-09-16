@@ -1,42 +1,54 @@
 <style>
+    .sup {
+        display: flex
+    }
+    
+    .inf {
+        position: absolute;
+        top: 60px;
+        left: 10px;
+        background-color: white
+    }
+    
+    .none {
+        display: none
+    }
+    
     .filter {
         align-self: flex-start;
         top: 0;
         width: 10%;
-        display: flex;
+        overflow: visible
     }
     
     .booklist {
-        width: 90%;
+        width: 100%;
         display: flex;
         justify-content: center
     }
     
     .button-sandwich {
+        margin-bottom: 5px;
+        width: 50px;
         display: none;
-        position: absolute;
-        top: 0px;
-        left: 0px
     }
     
     @media screen and (max-width: 1300px) {
-        .booklist {
-            width: 100% !important;
-        }
         .button-sandwich {
             display: block !important;
-        }
-        .filter {
-            display: none !important;
         }
     }
 </style>
 <div class="d-flex flex-row">
-    <a id="btnClic" class="button-sandwich btn btn-secondary">
-        <fa-icon icon="bars"></fa-icon>
-    </a>
-    <div class="filter" id="filter">
-        <jhi-filter></jhi-filter>
+    <div class="d-flex flex-column">
+        <a id="btnClic" class="button-sandwich btn btn-secondary" (click)="btnClic()">
+            <fa-icon icon="bars"></fa-icon>
+        </a>
+        <div [ngClass]="width > 1300 ? 'sup' : (deployed ? 'inf' : 'none')">
+            <div class="d-flex filter" id="filter">
+                <jhi-filter></jhi-filter>
+            </div>
+        </div>
     </div>
     <div class="booklist">
         <jhi-booklist></jhi-booklist>
