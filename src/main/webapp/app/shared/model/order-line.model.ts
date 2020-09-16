@@ -5,10 +5,10 @@ export interface IOrderLine {
   id?: number;
   quantity?: number;
   price?: number;
-  orderLines?: IBook;
+  book?: IBook;
   order?: IOrdered;
 }
 
 export class OrderLine implements IOrderLine {
-  constructor(public id?: number, public quantity?: number, public price?: number, public orderLines?: IBook, public order?: IOrdered) {}
+  constructor(public id?: number, public quantity?: number, public price?: number, public book?: IBook, public order?: IOrdered) {}
 }

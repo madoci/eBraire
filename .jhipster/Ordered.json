@@ -1,0 +1,60 @@
+{
+  "name": "Ordered",
+  "fields": [
+    {
+      "fieldName": "commandStart",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "delevryAddress",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "billingAddress",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValues": "ORDERED,SHIPPED,DELIVERED,RETURNED,CANCELED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "orderLine",
+      "otherEntityRelationshipName": "order",
+      "relationshipName": "orderLines"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "customer",
+      "otherEntityRelationshipName": "idOrder",
+      "relationshipName": "idCustomer",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200916124038",
+  "entityTableName": "ordered",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}
