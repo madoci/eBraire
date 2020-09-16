@@ -21,7 +21,10 @@ export class NavbarComponent implements OnInit {
   languages = LANGUAGES;
   swaggerEnabled?: boolean;
   version: string;
-
+  currentSearch!: String;
+  types: String = 'types-';
+  genres: String = 'genres-';
+  tags: String = 'tags-';
   constructor(
     private loginService: LoginService,
     private languageService: JhiLanguageService,
@@ -70,5 +73,16 @@ export class NavbarComponent implements OnInit {
 
   getImageUrl(): string {
     return this.isAuthenticated() ? this.accountService.getImageUrl() : '';
+  }
+
+  loadAll(): void {}
+
+  search(query: String): void {
+    if (query === '' || query === undefined) {
+      this.router.navigateByUrl('/catalogue/title-/' + this.types + '/' + this.genres + '/' + this.tags);
+    } else {
+      this.router.navigateByUrl('/catalogue/title-' + query + '/' + this.types + '/' + this.genres + '/' + this.tags);
+    }
+    this.loadAll();
   }
 }

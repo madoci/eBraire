@@ -1,0 +1,77 @@
+<h2 id="page-heading">
+    <span jhiTranslate="eBraireApp.book.home.title">Books</span>
+
+    <button id="jh-create-entity" class="btn btn-primary float-right m-2" routerLink="/admin/managebook/-1">
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"  jhiTranslate="eBraireApp.book.home.createLabel">
+        Create a new Book
+        </span>
+    </button>
+    <button id="jh-create-entity" class="btn btn-primary float-right m-2" (click)="generate()">
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down">
+        Créer {{numGenerate}} livres aléatoires
+        </span>
+    </button>
+</h2>
+<div class="table-responsive" id="entities" *ngIf="books && books.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+            <tr>
+                <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+                <th scope="col"><span jhiTranslate="eBraireApp.book.title">Title</span></th>
+                <th scope="col"><span jhiTranslate="eBraireApp.book.authors">Authors</span></th>
+                <th scope="col"><span jhiTranslate="eBraireApp.book.description">Description</span></th>
+                <th scope="col"><span jhiTranslate="eBraireApp.book.unitPrice">Unit Price</span></th>
+                <th scope="col"><span jhiTranslate="eBraireApp.book.image">Image</span></th>
+                <th scope="col"><span jhiTranslate="eBraireApp.book.type">Type</span></th>
+                <th scope="col"><span jhiTranslate="eBraireApp.book.tags">Tags</span></th>
+                <th scope="col"><span jhiTranslate="eBraireApp.book.genres">Genres</span></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let book of books ">
+                <td><a>{{ book.id }}</a></td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.authors }}</td>
+                <td>
+                    {{ limit(book.description) }}
+                </td>
+                <td>{{ book.unitPrice }}</td>
+                <td>
+                    <img [src]="'data:' + book.imageContentType + ';base64,' + book.image" width="50" height="50" />
+                </td>
+                <td>
+                    <div *ngIf="book.type">
+                        <a>{{ book.type?.type }}</a>
+                    </div>
+                </td>
+                <td>
+                    <span *ngFor="let tags of book.tags; let last = last">
+                        <a class="form-control-static" >{{ tags.tag }}</a>{{ last ? '' : ', ' }}
+                    </span>
+                </td>
+                <td>
+                    <span *ngFor="let genres of book.genres; let last = last">
+                        <a class="form-control-static" >{{ genres.genre }}</a>{{ last ? '' : ', ' }}
+                    </span>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+
+                        <button type="submit" routerLink="/admin/managebook/{{book.id}}" class="btn btn-primary btn-sm">
+                            <fa-icon icon="pencil-alt"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+
+                        <button type="submit" (click)="delete(book)" class="btn btn-danger btn-sm">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,59 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" *ngIf="book" (ngSubmit)="save()">
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="eBraireApp.book.title" for="field_title">Title</label>
+                <input type="text" class="form-control" name="title" id="field_title" [(ngModel)]="book.title" />
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="eBraireApp.book.authors" for="field_author">Author</label>
+                <input type="text" class="form-control" name="authors" id="field_author" [(ngModel)]="book.authors" />
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="eBraireApp.book.description" for="field_description">Description</label>
+                <input type="text" class="form-control" name="description" id="field_description" [(ngModel)]="book.description" />
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="eBraireApp.book.unitPrice" for="field_unitPrice">Author</label>
+                <input type="number" class="form-control" name="unitPrice" id="field_unitPrice" [(ngModel)]="book.unitPrice" />
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="eBraireApp.book.type" for="field_type">Type</label>
+                <select class="form-control" id="field_type" name="type" [(ngModel)]="book.type">
+                    <option *ngFor="let typeOption of types" [ngValue]="typeOption">{{ typeOption.type }}</option>
+                </select>
+            </div>
+            <a routerLink="/type"><button class="btn btn-primary">Ajouter un Type</button></a>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="eBraireApp.book.tags" for="field_tag">Tag</label>
+                <div *ngFor="let tagOption of tags" id="field_tag" name="tag">
+                    <input type="checkbox" name="tagCheckbox" [checked]="contain(tagOption.id || -1)">
+                    <label>{{tagOption.tag}}</label>
+                </div>
+            </div>
+            <a routerLink="/tag"><button class="btn btn-primary">Ajouter un Tag</button></a>
+            <div class="form-group ">
+                <label class="form-control-label " jhiTranslate="eBraireApp.book.genres" for="field_genres ">Genres</label>
+                <div *ngFor="let genreOption of genres" id="field_genre" name="genre">
+                    <input type="checkbox" name="genreCheckbox" [checked]="contain(genreOption.id || -1)">
+                    <label>{{genreOption.genre}}</label>
+                </div>
+            </div>
+            <a routerLink="/genre"><button class="btn btn-primary">Ajouter un Genre</button></a>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="eBraireApp.book.image" for="field_image">Image</label>
+                <img [src]="urlImage" width="100" height="100" />
+            </div>
+            <input type="file" id="file_image" (change)="setFileData($event, 'image', false)" jhiTranslate="entity.action.addblob" />
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

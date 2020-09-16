@@ -1,0 +1,44 @@
+<style>
+    .filter {
+        align-self: flex-start;
+        top: 0;
+        width: 5%;
+        display: flex;
+    }
+    
+    .booklist {
+        width: 95%;
+        display: flex;
+        justify-content: center
+    }
+    
+    .button-sandwich {
+        display: none;
+        position: absolute;
+        top: 0px;
+        left: 0px
+    }
+    
+    @media screen and (max-width: 1300px) {
+        .booklist {
+            width: 100% !important;
+        }
+        .button-sandwich {
+            display: block !important;
+        }
+        .filter {
+            display: none !important;
+        }
+    }
+</style>
+<div class="d-flex flex-row">
+    <a id="btnClic" class="button-sandwich btn btn-secondary">
+        <fa-icon icon="bars"></fa-icon>
+    </a>
+    <div class="filter" id="filter">
+        <jhi-filter></jhi-filter>
+    </div>
+    <div class="booklist">
+        <jhi-booklist></jhi-booklist>
+    </div>
+</div>
