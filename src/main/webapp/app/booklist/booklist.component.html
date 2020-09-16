@@ -1,10 +1,23 @@
 <style>
     .cards {
-        overflow: hidden;
+        overflow: visible;
         max-width: 1850px;
         margin: 0 auto;
         display: grid;
         grid-gap: 1rem;
+    }
+    
+    .my-border {
+        width: 200px;
+        box-shadow: 2px 2px 2px 2px grey;
+    }
+    
+    .my-border:hover {
+        box-shadow: 4px 4px 4px 4px grey;
+    }
+    
+    .clic:hover {
+        cursor: pointer;
     }
     
     @media (min-width: 600px) {
@@ -41,5 +54,5 @@
     <p *ngIf="books.length == 0" class="h2">Aucun livre ne correspond à votre recherche</p>
 </div>
 <div class="cards">
-    <jhi-booklistitem *ngFor="let book of books" [myBook]=book></jhi-booklistitem>
+    <jhi-booklistitem [routerLink]="'/display-book/'+book.id" class="my-border clic d-flex flex-column" *ngFor="let book of books" [myBook]=book></jhi-booklistitem>
 </div>

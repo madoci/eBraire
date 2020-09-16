@@ -5,10 +5,6 @@ import { EBraireAppModule } from './app.module';
 
 ProdConfig();
 
-if (module['hot']) {
-  module['hot'].accept();
-}
-
 platformBrowserDynamic()
   .bootstrapModule(EBraireAppModule, { preserveWhitespaces: true })
   // eslint-disable-next-line no-console
