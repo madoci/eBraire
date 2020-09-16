@@ -1,0 +1,67 @@
+<!-- Tab links -->
+  
+  <!-- Tab content -->
+  <div *ngIf="error!=''" class="alerts alert-danger" role="alert">
+      {{error}}
+  </div>
+<div id="CustomerInfo">
+    <div class="form-group">
+        <label class="form-control-label"  >Nom</label>
+        <input type="text"  [(ngModel)]="user.lastName" />
+    </div>
+    <div class="form-group">
+        <label class="form-control-label" >Prénom</label>
+        <input type="text"  [(ngModel)]="user.name" />
+    </div>
+    <div class="form-group">
+        <label for ="email">Email</label>
+          <input type="text" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" name="email" [(ngModel)]="email" #emailref="ngModel">
+          <div *ngIf="emailref.errors &&(emailref.touched || emailref.dirty)" class ="alert alert-danger" id="email">
+           <div [hidden]="!emailref.errors?.pattern">
+             Adresse email invalide
+           </div> 
+          </div> 
+    </div>
+    <div class="form-group">
+        <label class="form-control-label" >Confirmation de l'adresse email</label>
+        <input type="text" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" name="emailverif" ngModel #emailverifref="ngModel">
+        <div *ngIf="emailverifref.value != emailref.value" class ="alert alert-danger" id="emailverif">
+         <div>
+           Ne correcpond pas avec l'adresse email
+         </div> 
+        </div> 
+    </div>
+    <div class="form-group">
+        <label class="form-control-label" >Adresse de livraison</label>
+        <input type="text"   [(ngModel)]="order.delevryAddress" />
+    </div>
+</div>
+
+<div id="Payment">
+        <jhi-alert-error></jhi-alert-error>
+    <div class="form-group">
+            <label class="form-control-label" >Adresse de facturation</label>
+            <input type="text"   [(ngModel)]="order.billingAddress" />
+    </div>
+    <div class="form-group">
+       <label class="form-control-label"  >numero de carte</label>
+       <input type="text"  />
+   </div>
+</div>
+<button id="Paid" class="btn btn-primary float-right m-2"  (click)="SendOrdered()">
+        <span class="hidden-sm-down" >
+            Acheter
+        </span>
+    </button>
+<button id="Validate" class="btn btn-primary float-right m-2"  (click)="next(true)">
+    <span class="hidden-sm-down" >
+        Valider
+    </span>
+</button>
+<button id="Previous" class="btn btn-primary float-right m-2" (click)="next(false)">
+    <span class="hidden-sm-down">
+        Précédent
+    </span>
+</button>
+
+   
