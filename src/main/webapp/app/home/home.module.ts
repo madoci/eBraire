@@ -6,8 +6,10 @@ import { HOME_ROUTE } from './home.route';
 import { HomeComponent } from './home.component';
 import { CatalogueModule } from '../catalogue/catalogue.module';
 import { OrderModule } from '../order/order.module';
+import { CarrouselComponent } from './carrousel/carrousel.component';
+
 @NgModule({
   imports: [EBraireSharedModule, RouterModule.forChild([HOME_ROUTE]), CatalogueModule, OrderModule],
-  declarations: [HomeComponent],
+  declarations: [HomeComponent, CarrouselComponent],
 })
 export class EBraireHomeModule {}
