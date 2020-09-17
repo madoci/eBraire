@@ -21,8 +21,6 @@ public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
     @NotNull
@@ -42,7 +40,8 @@ public class Customer implements Serializable {
     private Set<Ordered> idOrders = new HashSet<>();
 
     @OneToOne
-    @JoinColumn(unique = true)
+    @MapsId
+    @JoinColumn(name = "id")
     private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

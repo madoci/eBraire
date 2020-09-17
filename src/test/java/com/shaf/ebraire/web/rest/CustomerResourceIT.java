@@ -2,7 +2,9 @@ package com.shaf.ebraire.web.rest;
 
 import com.shaf.ebraire.EBraireApp;
 import com.shaf.ebraire.domain.Customer;
+import com.shaf.ebraire.domain.User;
 import com.shaf.ebraire.repository.CustomerRepository;
+import com.shaf.ebraire.repository.UserRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +42,8 @@ public class CustomerResourceIT {
 
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private EntityManager em;
@@ -60,6 +64,11 @@ public class CustomerResourceIT {
             .name(DEFAULT_NAME)
             .lastName(DEFAULT_LAST_NAME)
             .address(DEFAULT_ADDRESS);
+        // Add required entity
+        User user = UserResourceIT.createEntity(em);
+        em.persist(user);
+        em.flush();
+        customer.setUser(user);
         return customer;
     }
     /**
@@ -73,6 +82,11 @@ public class CustomerResourceIT {
             .name(UPDATED_NAME)
             .lastName(UPDATED_LAST_NAME)
             .address(UPDATED_ADDRESS);
+        // Add required entity
+        User user = UserResourceIT.createEntity(em);
+        em.persist(user);
+        em.flush();
+        customer.setUser(user);
         return customer;
     }
 
@@ -98,6 +112,9 @@ public class CustomerResourceIT {
         assertThat(testCustomer.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCustomer.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
         assertThat(testCustomer.getAddress()).isEqualTo(DEFAULT_ADDRESS);
+
+        // Validate the id for MapsId, the ids must be same
+        assertThat(testCustomer.getId()).isEqualTo(testCustomer.getUser().getId());
     }
 
     @Test
@@ -119,6 +136,38 @@ public class CustomerResourceIT {
         assertThat(customerList).hasSize(databaseSizeBeforeCreate);
     }
 
+    //@Test
+    /*@Transactional
+    public void updateCustomerMapsIdAssociationWithNewId() throws Exception {
+        // Initialize the database
+        customerRepository.saveAndFlush(customer);
+        int databaseSizeBeforeCreate = customerRepository.findAll().size();
+
+
+        // Load the customer
+        Customer updatedCustomer = customerRepository.findById(customer.getId()).get();
+        // Disconnect from session so that the updates on updatedCustomer are not directly saved in db
+        em.detach(updatedCustomer);
+
+        // Update the User with new association value
+        updatedCustomer.setUser();
+
+        // Update the entity
+        restCustomerMockMvc.perform(put("/api/customers")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(updatedCustomer)))
+            .andExpect(status().isOk());
+
+        // Validate the Customer in the database
+        List<Customer> customerList = customerRepository.findAll();
+        assertThat(customerList).hasSize(databaseSizeBeforeCreate);
+        Customer testCustomer = customerList.get(customerList.size() - 1);
+
+        // Validate the id for MapsId, the ids must be same
+        // Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
+        // Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
+        // assertThat(testCustomer.getId()).isEqualTo(testCustomer.getUser().getId());
+    }*/
 
     @Test
     @Transactional

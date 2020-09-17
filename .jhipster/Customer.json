@@ -30,7 +30,7 @@
       "relationshipType": "one-to-one",
       "otherEntityField": "login",
       "ownerSide": true,
-      "useJPADerivedIdentifier": false,
+      "useJPADerivedIdentifier": true,
       "otherEntityRelationshipName": "customer"
     }
   ],
