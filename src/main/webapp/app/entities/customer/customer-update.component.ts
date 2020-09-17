@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 
 import { ICustomer, Customer } from 'app/shared/model/customer.model';
 import { CustomerService } from './customer.service';
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'jhi-customer-update',
@@ -14,19 +16,28 @@ import { CustomerService } from './customer.service';
 })
 export class CustomerUpdateComponent implements OnInit {
   isSaving = false;
+  users: IUser[] = [];
 
   editForm = this.fb.group({
     id: [],
     name: [null, [Validators.required]],
     lastName: [null, [Validators.required]],
     address: [null, [Validators.required]],
+    user: [],
   });
 
-  constructor(protected customerService: CustomerService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    protected customerService: CustomerService,
+    protected userService: UserService,
+    protected activatedRoute: ActivatedRoute,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ customer }) => {
       this.updateForm(customer);
+
+      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
     });
   }
 
@@ -36,6 +47,7 @@ export class CustomerUpdateComponent implements OnInit {
       name: customer.name,
       lastName: customer.lastName,
       address: customer.address,
+      user: customer.user,
     });
   }
 
@@ -60,6 +72,7 @@ export class CustomerUpdateComponent implements OnInit {
       name: this.editForm.get(['name'])!.value,
       lastName: this.editForm.get(['lastName'])!.value,
       address: this.editForm.get(['address'])!.value,
+      user: this.editForm.get(['user'])!.value,
     };
   }
 
@@ -77,5 +90,9 @@ export class CustomerUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
+  }
+
+  trackById(index: number, item: IUser): any {
+    return item.id;
   }
 }

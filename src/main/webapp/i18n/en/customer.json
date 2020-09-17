@@ -19,7 +19,8 @@
       "name": "Name",
       "lastName": "Last Name",
       "address": "Address",
-      "idOrder": "Id Order"
+      "idOrder": "Id Order",
+      "user": "User"
     }
   }
 }

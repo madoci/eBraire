@@ -4,23 +4,17 @@
     {
       "fieldName": "name",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "lastName",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "address",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     }
   ],
   "relationships": [
@@ -29,6 +23,15 @@
       "otherEntityName": "ordered",
       "otherEntityRelationshipName": "idCustomer",
       "relationshipName": "idOrder"
+    },
+    {
+      "relationshipName": "user",
+      "otherEntityName": "user",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "login",
+      "ownerSide": true,
+      "useJPADerivedIdentifier": false,
+      "otherEntityRelationshipName": "customer"
     }
   ],
   "changelogDate": "20200916123938",
@@ -41,5 +44,7 @@
   "readOnly": false,
   "embedded": false,
   "clientRootFolder": "",
-  "applications": "*"
+  "applications": "*",
+  "searchEngine": false,
+  "databaseType": "sql"
 }

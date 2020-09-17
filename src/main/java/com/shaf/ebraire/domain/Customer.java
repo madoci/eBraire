@@ -41,6 +41,10 @@ public class Customer implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Ordered> idOrders = new HashSet<>();
 
+    @OneToOne
+    @JoinColumn(unique = true)
+    private User user;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -112,6 +116,19 @@ public class Customer implements Serializable {
 
     public void setIdOrders(Set<Ordered> ordereds) {
         this.idOrders = ordereds;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Customer user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

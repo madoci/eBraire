@@ -25,6 +25,7 @@
     <include file="config/liquibase/changelog/20200916124038_added_entity_constraints_Ordered.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200916124138_added_entity_constraints_OrderLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200916124238_added_entity_constraints_Book.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200916123938_added_entity_constraints_Customer.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
     <!-- nos changements -->

@@ -20,6 +20,10 @@
                 <dd>
                     <span>{{ customer.address }}</span>
                 </dd>
+                <dt><span jhiTranslate="eBraireApp.customer.user">User</span></dt>
+                <dd>
+                    {{ customer.user?.login }}
+                </dd>
             </dl>
 
             <button type="submit"

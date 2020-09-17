@@ -26,6 +26,7 @@
                     <th scope="col" ><span jhiTranslate="eBraireApp.customer.name">Name</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.customer.lastName">Last Name</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.customer.address">Address</span></th>
+                    <th scope="col" ><span jhiTranslate="eBraireApp.customer.user">User</span></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -35,6 +36,9 @@
                     <td>{{ customer.name }}</td>
                     <td>{{ customer.lastName }}</td>
                     <td>{{ customer.address }}</td>
+                    <td>
+                        {{ customer.user?.login }}
+                    </td>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"
