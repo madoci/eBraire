@@ -1,6 +1,52 @@
+<style>
+    .button-confirm {
+        background-color: green;
+        color: white;
+        border-radius: 5px;
+        border: none;
+        font-size: 30px;
+        padding: 16px 32px;
+        -webkit-box-shadow: 0px 5px 0px darkgreen;
+        -moz-box-shadow: 0px 5px 0px darkgreen;
+        box-shadow: 0px 5px 0px darkgreen;
+        margin-left: 40px
+    }
+    
+    .button-confirm:hover {
+        background-color: #e0aa50;
+        -webkit-box-shadow: 0px 5px 0px #c49646;
+        -moz-box-shadow: 0px 5px 0px #c49646;
+        box-shadow: 0px 5px 0px #c49646;
+    }
+    
+    .confirm-contain {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+    
+    .final-price {
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+        font-size: 30px
+    }
+    
+    @media screen and (max-width: 1050px) {
+        .confirm-contain {
+            justify-content: center !important;
+        }
+    }
+</style>
+
 <div class="d-flex flex-column">
     <div *ngFor="let item of items">
         <jhi-order-line [parent]="this" [book]="item.book"></jhi-order-line>
     </div>
 </div>
-<button [routerLink]="'/order'">Confirmer</button>
+<div class="confirm-contain">
+    <div class="final-price font-weight-bold">
+        {{price(finalPrice)}}
+    </div>
+    <button class="button-confirm" [routerLink]="'/order'">Confirmer</button>
+</div>

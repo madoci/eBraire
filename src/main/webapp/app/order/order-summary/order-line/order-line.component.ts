@@ -14,6 +14,8 @@ export class OrderLineComponent implements OnInit {
   item!: ShoppingItem;
   quantity = 0;
   quantities: number[] = [];
+  maxquantity = 10; // TODO : calculer cette valeur
+  fixedmaxquantity = 10; // max quantity ne peux pas être superieur à cette valeur
 
   constructor(private shoppingCartService: ShoppingCartService) {}
 
@@ -42,8 +44,10 @@ export class OrderLineComponent implements OnInit {
   }
 
   addOne(): void {
-    this.shoppingCartService.addToCart(this.item.book, 1);
-    this.updateItem();
+    if (this.item.quantity < this.maxquantity) {
+      this.shoppingCartService.addToCart(this.item.book, 1);
+      this.updateItem();
+    }
   }
 
   removeOne(): void {
@@ -56,7 +60,7 @@ export class OrderLineComponent implements OnInit {
   private initItem(): void {
     this.item = this.shoppingCartService.getItem(this.book);
     this.quantity = this.item.quantity;
-    this.quantities = Array.from(Array(10).keys());
+    this.quantities = Array.from(Array(this.maxquantity).keys());
   }
 
   private updateItem(): void {
