@@ -1,0 +1,6 @@
+<div class="d-flex flex-column">
+    <div *ngFor="let item of items">
+        <jhi-order-line [parent]="this" [book]="item.book"></jhi-order-line>
+    </div>
+</div>
+<button [routerLink]="'/order'">Confirmer</button>

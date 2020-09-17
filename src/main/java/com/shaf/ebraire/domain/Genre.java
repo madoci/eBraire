@@ -5,9 +5,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
-import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +17,6 @@ import java.util.Set;
 @Entity
 @Table(name = "genre")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "genre")
 public class Genre implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,8 +25,9 @@ public class Genre implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
     @NotNull
-    @Column(name = "genre", unique = true)
+    @Column(name = "genre", nullable = false, unique = true)
     private String genre;
 
     @ManyToMany(mappedBy = "genres")

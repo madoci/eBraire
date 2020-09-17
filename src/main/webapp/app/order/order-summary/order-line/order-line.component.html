@@ -1,0 +1,32 @@
+<style>
+    .margin-bottom {
+        margin-bottom: 10px;
+    }
+    
+    .title {
+        width: 25%;
+        max-width: 25%;
+        min-width: 25%;
+        margin-left: 10px;
+    }
+    
+    hr {
+        border-top: 1px solid darkgrey;
+    }
+</style>
+
+<div class="d-flex flex-row margin-bottom">
+    <jhi-book-image [book]="item.book" [imgSize]=200 [borderColor]="'#AAAAAA'"></jhi-book-image>
+    <a class="title" href="/display-book/{{item.book.id}}">
+        <h2>{{item.book.title}}</h2>
+    </a>
+
+    <button (click)="removeOne()">-</button>
+    <select [(ngModel)]="quantity" (change)="changeItemQuantity()">
+        <option *ngFor="let i of quantities" [ngValue]="i+1">{{i+1}}</option>
+    </select>
+    <button (click)="addOne()">+</button>
+    <p>{{price(getTotalPrice())}}</p>
+    <button (click)="removeItem()">Supprimer</button>
+</div>
+<hr/>

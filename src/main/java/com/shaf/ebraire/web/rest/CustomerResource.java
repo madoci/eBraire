@@ -2,7 +2,6 @@ package com.shaf.ebraire.web.rest;
 
 import com.shaf.ebraire.domain.Customer;
 import com.shaf.ebraire.repository.CustomerRepository;
-import com.shaf.ebraire.repository.search.CustomerSearchRepository;
 import com.shaf.ebraire.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -14,14 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.shaf.ebraire.domain.Customer}.
@@ -40,11 +36,8 @@ public class CustomerResource {
 
     private final CustomerRepository customerRepository;
 
-    private final CustomerSearchRepository customerSearchRepository;
-
-    public CustomerResource(CustomerRepository customerRepository, CustomerSearchRepository customerSearchRepository) {
+    public CustomerResource(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-        this.customerSearchRepository = customerSearchRepository;
     }
 
     /**
@@ -55,13 +48,12 @@ public class CustomerResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/customers")
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) throws URISyntaxException {
+    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer customer) throws URISyntaxException {
         log.debug("REST request to save Customer : {}", customer);
         if (customer.getId() != null) {
             throw new BadRequestAlertException("A new customer cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Customer result = customerRepository.save(customer);
-        customerSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/customers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -77,13 +69,12 @@ public class CustomerResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/customers")
-    public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) throws URISyntaxException {
+    public ResponseEntity<Customer> updateCustomer(@Valid @RequestBody Customer customer) throws URISyntaxException {
         log.debug("REST request to update Customer : {}", customer);
         if (customer.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Customer result = customerRepository.save(customer);
-        customerSearchRepository.save(result);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, customer.getId().toString()))
             .body(result);
@@ -123,22 +114,6 @@ public class CustomerResource {
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
         log.debug("REST request to delete Customer : {}", id);
         customerRepository.deleteById(id);
-        customerSearchRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/customers?query=:query} : search for the customer corresponding
-     * to the query.
-     *
-     * @param query the query of the customer search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/customers")
-    public List<Customer> searchCustomers(@RequestParam String query) {
-        log.debug("REST request to search Customers for query {}", query);
-        return StreamSupport
-            .stream(customerSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        .collect(Collectors.toList());
     }
 }

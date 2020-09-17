@@ -2,7 +2,6 @@ package com.shaf.ebraire.web.rest;
 
 import com.shaf.ebraire.domain.Genre;
 import com.shaf.ebraire.repository.GenreRepository;
-import com.shaf.ebraire.repository.search.GenreSearchRepository;
 import com.shaf.ebraire.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -14,14 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.shaf.ebraire.domain.Genre}.
@@ -40,11 +36,8 @@ public class GenreResource {
 
     private final GenreRepository genreRepository;
 
-    private final GenreSearchRepository genreSearchRepository;
-
-    public GenreResource(GenreRepository genreRepository, GenreSearchRepository genreSearchRepository) {
+    public GenreResource(GenreRepository genreRepository) {
         this.genreRepository = genreRepository;
-        this.genreSearchRepository = genreSearchRepository;
     }
 
     /**
@@ -55,13 +48,12 @@ public class GenreResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/genres")
-    public ResponseEntity<Genre> createGenre(@RequestBody Genre genre) throws URISyntaxException {
+    public ResponseEntity<Genre> createGenre(@Valid @RequestBody Genre genre) throws URISyntaxException {
         log.debug("REST request to save Genre : {}", genre);
         if (genre.getId() != null) {
             throw new BadRequestAlertException("A new genre cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Genre result = genreRepository.save(genre);
-        genreSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/genres/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -77,13 +69,12 @@ public class GenreResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/genres")
-    public ResponseEntity<Genre> updateGenre(@RequestBody Genre genre) throws URISyntaxException {
+    public ResponseEntity<Genre> updateGenre(@Valid @RequestBody Genre genre) throws URISyntaxException {
         log.debug("REST request to update Genre : {}", genre);
         if (genre.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Genre result = genreRepository.save(genre);
-        genreSearchRepository.save(result);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, genre.getId().toString()))
             .body(result);
@@ -123,22 +114,6 @@ public class GenreResource {
     public ResponseEntity<Void> deleteGenre(@PathVariable Long id) {
         log.debug("REST request to delete Genre : {}", id);
         genreRepository.deleteById(id);
-        genreSearchRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/genres?query=:query} : search for the genre corresponding
-     * to the query.
-     *
-     * @param query the query of the genre search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/genres")
-    public List<Genre> searchGenres(@RequestParam String query) {
-        log.debug("REST request to search Genres for query {}", query);
-        return StreamSupport
-            .stream(genreSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        .collect(Collectors.toList());
     }
 }

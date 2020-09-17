@@ -32,11 +32,11 @@ export class BookUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    title: [],
-    authors: [],
-    description: [],
-    unitPrice: [],
-    image: [],
+    title: [null, [Validators.required]],
+    authors: [null, [Validators.required]],
+    description: [null, [Validators.required]],
+    unitPrice: [null, [Validators.required]],
+    image: [null, [Validators.required]],
     imageContentType: [],
     type: [],
     tags: [],

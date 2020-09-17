@@ -5,9 +5,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
-import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -21,7 +20,6 @@ import com.shaf.ebraire.domain.enumeration.Status;
 @Entity
 @Table(name = "ordered")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "ordered")
 public class Ordered implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,24 +28,28 @@ public class Ordered implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
     @NotNull
-    @Column(name = "command_start")
+    @Column(name = "command_start", nullable = false)
     private LocalDate commandStart;
+
     @NotNull
-    @Column(name = "delevry_address")
+    @Column(name = "delevry_address", nullable = false)
     private String delevryAddress;
+
     @NotNull
-    @Column(name = "billing_address")
+    @Column(name = "billing_address", nullable = false)
     private String billingAddress;
+
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private Status status;
-    @NotNull
+
     @OneToMany(mappedBy = "order")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<OrderLine> oderedBooks = new HashSet<>();
-    @NotNull
+    private Set<OrderLine> orderLines = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties(value = "idOrders", allowSetters = true)
     private Customer idCustomer;
@@ -113,29 +115,29 @@ public class Ordered implements Serializable {
         this.status = status;
     }
 
-    public Set<OrderLine> getOderedBooks() {
-        return oderedBooks;
+    public Set<OrderLine> getOrderLines() {
+        return orderLines;
     }
 
-    public Ordered oderedBooks(Set<OrderLine> orderLines) {
-        this.oderedBooks = orderLines;
+    public Ordered orderLines(Set<OrderLine> orderLines) {
+        this.orderLines = orderLines;
         return this;
     }
 
-    public Ordered addOderedBooks(OrderLine orderLine) {
-        this.oderedBooks.add(orderLine);
+    public Ordered addOrderLines(OrderLine orderLine) {
+        this.orderLines.add(orderLine);
         orderLine.setOrder(this);
         return this;
     }
 
-    public Ordered removeOderedBooks(OrderLine orderLine) {
-        this.oderedBooks.remove(orderLine);
+    public Ordered removeOrderLines(OrderLine orderLine) {
+        this.orderLines.remove(orderLine);
         orderLine.setOrder(null);
         return this;
     }
 
-    public void setOderedBooks(Set<OrderLine> orderLines) {
-        this.oderedBooks = orderLines;
+    public void setOrderLines(Set<OrderLine> orderLines) {
+        this.orderLines = orderLines;
     }
 
     public Customer getIdCustomer() {

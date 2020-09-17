@@ -25,9 +25,9 @@ export class OrderLineUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    quantity: [],
-    price: [],
-    orderLines: [],
+    quantity: [null, [Validators.required]],
+    price: [null, [Validators.required]],
+    book: [],
     order: [],
   });
 
@@ -54,7 +54,7 @@ export class OrderLineUpdateComponent implements OnInit {
       id: orderLine.id,
       quantity: orderLine.quantity,
       price: orderLine.price,
-      orderLines: orderLine.orderLines,
+      book: orderLine.book,
       order: orderLine.order,
     });
   }
@@ -79,7 +79,7 @@ export class OrderLineUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       quantity: this.editForm.get(['quantity'])!.value,
       price: this.editForm.get(['price'])!.value,
-      orderLines: this.editForm.get(['orderLines'])!.value,
+      book: this.editForm.get(['book'])!.value,
       order: this.editForm.get(['order'])!.value,
     };
   }

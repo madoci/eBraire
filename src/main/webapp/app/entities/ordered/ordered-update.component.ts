@@ -21,10 +21,10 @@ export class OrderedUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    commandStart: [],
-    delevryAddress: [],
-    billingAddress: [],
-    status: [],
+    commandStart: [null, [Validators.required]],
+    delevryAddress: [null, [Validators.required]],
+    billingAddress: [null, [Validators.required]],
+    status: [null, [Validators.required]],
     idCustomer: [],
   });
 

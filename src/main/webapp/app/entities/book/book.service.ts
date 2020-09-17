@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption, Search } from 'app/shared/util/request-util';
-import { IBook } from '../../shared/model/book.model';
+import { IBook } from 'app/shared/model/book.model';
 
 type EntityResponseType = HttpResponse<IBook>;
 type EntityArrayResponseType = HttpResponse<IBook[]>;
@@ -39,11 +39,6 @@ export class BookService {
 
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
-  }
-
-  search(req: Search): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<IBook[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
   searchByFilterAndTitle(title: string, types: string, genres: string, tags: string): Observable<EntityArrayResponseType> {

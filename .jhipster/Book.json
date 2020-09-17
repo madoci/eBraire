@@ -3,25 +3,39 @@
   "fields": [
     {
       "fieldName": "title",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "authors",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "description",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "any"
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "unitPrice",
-      "fieldType": "Float"
+      "fieldType": "Float",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "image",
       "fieldType": "byte[]",
-      "fieldTypeBlobContent": "any"
+      "fieldTypeBlobContent": "any",
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "relationships": [
@@ -49,7 +63,7 @@
       "ownerSide": true
     }
   ],
-  "changelogDate": "20200907132937",
+  "changelogDate": "20200916124238",
   "entityTableName": "book",
   "dto": "no",
   "pagination": "no",

@@ -26,6 +26,7 @@ export class OrderInfoComponent implements OnInit {
   order: Ordered = new Ordered();
   loading: Boolean = true;
   error: String = '';
+
   constructor(
     private shoppingCartService: ShoppingCartService,
     private orderLineService: OrderLineService,
@@ -33,7 +34,9 @@ export class OrderInfoComponent implements OnInit {
     private orderedService: OrderedService,
     private router: Router
   ) {}
+
   // public quantity?: number, public price?: number, public orderLines?: IBook, public order?: IOrdered
+
   ngOnInit(): void {
     if (this.shoppingCartService.getItems().length === 0) {
       alert("Votre panier est vide vous ne pouvez pas passez de commande ajoutez des livres dans votre panier d'abord.");
@@ -137,18 +140,18 @@ export class OrderInfoComponent implements OnInit {
           }
           this.user.idOrders.push(this.order);
           this.customerService.update(this.user);
-          this.order.oderedBooks = new Array(0);
+          this.order.orderLines = new Array(0);
           let i = 0;
           this.shoppingCartService.getItems().forEach(Item => {
             const currentOrderLine: IOrderLine = new OrderLine();
             currentOrderLine.price = Item.book.unitPrice! * Item.quantity;
             currentOrderLine.quantity = Item.quantity;
-            currentOrderLine.orderLines = Item.book;
+            currentOrderLine.book = Item.book;
             currentOrderLine.order = this.order;
             this.orderLineService.create(currentOrderLine).subscribe(Response => {
               const orderLine = Response.body;
               if (orderLine) {
-                this.order.oderedBooks!.push(orderLine);
+                this.order.orderLines!.push(orderLine);
               }
               i = i + 1;
               if (i === this.shoppingCartService.getItems().length) {

@@ -9,7 +9,7 @@ export interface IOrdered {
   delevryAddress?: string;
   billingAddress?: string;
   status?: Status;
-  oderedBooks?: IOrderLine[];
+  orderLines?: IOrderLine[];
   idCustomer?: ICustomer;
 }
 
@@ -20,7 +20,7 @@ export class Ordered implements IOrdered {
     public delevryAddress?: string,
     public billingAddress?: string,
     public status?: Status,
-    public oderedBooks?: IOrderLine[],
+    public orderLines?: IOrderLine[],
     public idCustomer?: ICustomer
   ) {}
 }

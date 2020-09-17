@@ -5,7 +5,6 @@
         "title": "Books",
         "createLabel": "Create a new Book",
         "createOrEditLabel": "Create or edit a Book",
-        "search": "Search for Book",
         "notFound": "No Books found"
       },
       "created": "A new Book is created with identifier {{ param }}",

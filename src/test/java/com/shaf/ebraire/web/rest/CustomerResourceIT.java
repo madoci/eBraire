@@ -3,13 +3,9 @@ package com.shaf.ebraire.web.rest;
 import com.shaf.ebraire.EBraireApp;
 import com.shaf.ebraire.domain.Customer;
 import com.shaf.ebraire.repository.CustomerRepository;
-import com.shaf.ebraire.repository.search.CustomerSearchRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,13 +14,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -32,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link CustomerResource} REST controller.
  */
 @SpringBootTest(classes = EBraireApp.class)
-@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class CustomerResourceIT {
@@ -48,14 +40,6 @@ public class CustomerResourceIT {
 
     @Autowired
     private CustomerRepository customerRepository;
-
-    /**
-     * This repository is mocked in the com.shaf.ebraire.repository.search test package.
-     *
-     * @see com.shaf.ebraire.repository.search.CustomerSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private CustomerSearchRepository mockCustomerSearchRepository;
 
     @Autowired
     private EntityManager em;
@@ -114,9 +98,6 @@ public class CustomerResourceIT {
         assertThat(testCustomer.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCustomer.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
         assertThat(testCustomer.getAddress()).isEqualTo(DEFAULT_ADDRESS);
-
-        // Validate the Customer in Elasticsearch
-        verify(mockCustomerSearchRepository, times(1)).save(testCustomer);
     }
 
     @Test
@@ -136,11 +117,65 @@ public class CustomerResourceIT {
         // Validate the Customer in the database
         List<Customer> customerList = customerRepository.findAll();
         assertThat(customerList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Customer in Elasticsearch
-        verify(mockCustomerSearchRepository, times(0)).save(customer);
     }
 
+
+    @Test
+    @Transactional
+    public void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = customerRepository.findAll().size();
+        // set the field null
+        customer.setName(null);
+
+        // Create the Customer, which fails.
+
+
+        restCustomerMockMvc.perform(post("/api/customers")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(customer)))
+            .andExpect(status().isBadRequest());
+
+        List<Customer> customerList = customerRepository.findAll();
+        assertThat(customerList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkLastNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = customerRepository.findAll().size();
+        // set the field null
+        customer.setLastName(null);
+
+        // Create the Customer, which fails.
+
+
+        restCustomerMockMvc.perform(post("/api/customers")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(customer)))
+            .andExpect(status().isBadRequest());
+
+        List<Customer> customerList = customerRepository.findAll();
+        assertThat(customerList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkAddressIsRequired() throws Exception {
+        int databaseSizeBeforeTest = customerRepository.findAll().size();
+        // set the field null
+        customer.setAddress(null);
+
+        // Create the Customer, which fails.
+
+
+        restCustomerMockMvc.perform(post("/api/customers")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(customer)))
+            .andExpect(status().isBadRequest());
+
+        List<Customer> customerList = customerRepository.findAll();
+        assertThat(customerList).hasSize(databaseSizeBeforeTest);
+    }
 
     @Test
     @Transactional
@@ -210,9 +245,6 @@ public class CustomerResourceIT {
         assertThat(testCustomer.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCustomer.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(testCustomer.getAddress()).isEqualTo(UPDATED_ADDRESS);
-
-        // Validate the Customer in Elasticsearch
-        verify(mockCustomerSearchRepository, times(1)).save(testCustomer);
     }
 
     @Test
@@ -229,9 +261,6 @@ public class CustomerResourceIT {
         // Validate the Customer in the database
         List<Customer> customerList = customerRepository.findAll();
         assertThat(customerList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Customer in Elasticsearch
-        verify(mockCustomerSearchRepository, times(0)).save(customer);
     }
 
     @Test
@@ -250,27 +279,5 @@ public class CustomerResourceIT {
         // Validate the database contains one less item
         List<Customer> customerList = customerRepository.findAll();
         assertThat(customerList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the Customer in Elasticsearch
-        verify(mockCustomerSearchRepository, times(1)).deleteById(customer.getId());
-    }
-
-    @Test
-    @Transactional
-    public void searchCustomer() throws Exception {
-        // Configure the mock search repository
-        // Initialize the database
-        customerRepository.saveAndFlush(customer);
-        when(mockCustomerSearchRepository.search(queryStringQuery("id:" + customer.getId())))
-            .thenReturn(Collections.singletonList(customer));
-
-        // Search the customer
-        restCustomerMockMvc.perform(get("/api/_search/customers?query=id:" + customer.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(customer.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
-            .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)));
     }
 }

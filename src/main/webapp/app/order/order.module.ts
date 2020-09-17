@@ -4,9 +4,10 @@ import { OrderInfoComponent } from './order-info/order-info.component';
 import { orderRoute } from './order.route';
 import { RouterModule } from '@angular/router';
 import { EBraireSharedModule } from 'app/shared/shared.module';
+import { OrderSummaryModule } from './order-summary/order-summary.module';
 
 @NgModule({
   declarations: [OrderInfoComponent],
-  imports: [CommonModule, EBraireSharedModule, RouterModule.forChild(orderRoute)],
+  imports: [CommonModule, EBraireSharedModule, OrderSummaryModule, RouterModule.forChild(orderRoute)],
 })
 export class OrderModule {}

@@ -5,7 +5,6 @@
         "title": "Ordereds",
         "createLabel": "Créer un nouveau Ordered",
         "createOrEditLabel": "Créer ou éditer un Ordered",
-        "search": "Recherche pour Ordered",
         "notFound": "Aucun Ordered trouvé"
       },
       "created": "Un nouveau Ordered a été créé avec l'identifiant {{ param }}",
@@ -21,7 +20,7 @@
       "delevryAddress": "Delevry Address",
       "billingAddress": "Billing Address",
       "status": "Status",
-      "oderedBooks": "Odered Books",
+      "orderLines": "Order Lines",
       "idCustomer": "Id Customer"
     }
   }

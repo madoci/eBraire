@@ -2,7 +2,6 @@ package com.shaf.ebraire.web.rest;
 
 import com.shaf.ebraire.domain.Ordered;
 import com.shaf.ebraire.repository.OrderedRepository;
-import com.shaf.ebraire.repository.search.OrderedSearchRepository;
 import com.shaf.ebraire.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -14,14 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.shaf.ebraire.domain.Ordered}.
@@ -40,11 +36,8 @@ public class OrderedResource {
 
     private final OrderedRepository orderedRepository;
 
-    private final OrderedSearchRepository orderedSearchRepository;
-
-    public OrderedResource(OrderedRepository orderedRepository, OrderedSearchRepository orderedSearchRepository) {
+    public OrderedResource(OrderedRepository orderedRepository) {
         this.orderedRepository = orderedRepository;
-        this.orderedSearchRepository = orderedSearchRepository;
     }
 
     /**
@@ -55,13 +48,12 @@ public class OrderedResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/ordereds")
-    public ResponseEntity<Ordered> createOrdered(@RequestBody Ordered ordered) throws URISyntaxException {
+    public ResponseEntity<Ordered> createOrdered(@Valid @RequestBody Ordered ordered) throws URISyntaxException {
         log.debug("REST request to save Ordered : {}", ordered);
         if (ordered.getId() != null) {
             throw new BadRequestAlertException("A new ordered cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Ordered result = orderedRepository.save(ordered);
-        orderedSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/ordereds/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -77,13 +69,12 @@ public class OrderedResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/ordereds")
-    public ResponseEntity<Ordered> updateOrdered(@RequestBody Ordered ordered) throws URISyntaxException {
+    public ResponseEntity<Ordered> updateOrdered(@Valid @RequestBody Ordered ordered) throws URISyntaxException {
         log.debug("REST request to update Ordered : {}", ordered);
         if (ordered.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Ordered result = orderedRepository.save(ordered);
-        orderedSearchRepository.save(result);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ordered.getId().toString()))
             .body(result);
@@ -123,22 +114,6 @@ public class OrderedResource {
     public ResponseEntity<Void> deleteOrdered(@PathVariable Long id) {
         log.debug("REST request to delete Ordered : {}", id);
         orderedRepository.deleteById(id);
-        orderedSearchRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/ordereds?query=:query} : search for the ordered corresponding
-     * to the query.
-     *
-     * @param query the query of the ordered search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/ordereds")
-    public List<Ordered> searchOrdereds(@RequestParam String query) {
-        log.debug("REST request to search Ordereds for query {}", query);
-        return StreamSupport
-            .stream(orderedSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        .collect(Collectors.toList());
     }
 }
