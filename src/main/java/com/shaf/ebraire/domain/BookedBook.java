@@ -8,7 +8,6 @@ import javax.persistence.*;
 
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * A BookedBook.
@@ -26,14 +25,14 @@ public class BookedBook implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "expired")
-    private Long expired;
-
     @Column(name = "quantity")
     private Integer quantity;
 
     @Column(name = "price")
     private Float price;
+
+    @Column(name = "expired")
+    private Long expired;
 
     @ManyToOne
     @JsonIgnoreProperties(value = "bookedBooks", allowSetters = true)
@@ -41,7 +40,7 @@ public class BookedBook implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties(value = "bookedBooks", allowSetters = true)
-	public Book book;
+    private Book book;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -50,19 +49,6 @@ public class BookedBook implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getExpired() {
-        return expired;
-    }
-
-    public BookedBook expired(Long expired) {
-        this.expired = expired;
-        return this;
-    }
-
-    public void setExpired(Long expired) {
-        this.expired = expired;
     }
 
     public Integer getQuantity() {
@@ -89,6 +75,19 @@ public class BookedBook implements Serializable {
 
     public void setPrice(Float price) {
         this.price = price;
+    }
+
+    public Long getExpired() {
+        return expired;
+    }
+
+    public BookedBook expired(Long expired) {
+        this.expired = expired;
+        return this;
+    }
+
+    public void setExpired(Long expired) {
+        this.expired = expired;
     }
 
     public Customer getCustomer() {
@@ -139,9 +138,9 @@ public class BookedBook implements Serializable {
     public String toString() {
         return "BookedBook{" +
             "id=" + getId() +
-            ", expired='" + getExpired() + "'" +
             ", quantity=" + getQuantity() +
             ", price=" + getPrice() +
+            ", expired=" + getExpired() +
             "}";
     }
 }

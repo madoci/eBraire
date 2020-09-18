@@ -18,9 +18,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,240 +37,240 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class BookedBookResourceIT {
 
- ////  // private static final LocalDateTime DEFAULT_EXPIRED = LocalDateTime.ofEpochDay(0L);
- ////   private static final LocalDateTime UPDATED_EXPIRED = LocalDateTime.now(ZoneId.systemDefault());
- ////
- ////   private static final Integer DEFAULT_QUANTITY = 1;
- ////   private static final Integer UPDATED_QUANTITY = 2;
- ////
- ////   private static final Float DEFAULT_PRICE = 1F;
- ////   private static final Float UPDATED_PRICE = 2F;
- ////
- ////   @Autowired
- ////   private BookedBookRepository bookedBookRepository;
- ////
- ////   /**
- ////    * This repository is mocked in the com.shaf.ebraire.repository.search test package.
- ////    *
- ////    * @see com.shaf.ebraire.repository.search.BookedBookSearchRepositoryMockConfiguration
- ////    */
- ////   @Autowired
- ////   private BookedBookSearchRepository mockBookedBookSearchRepository;
- ////
- ////   @Autowired
- ////   private EntityManager em;
- ////
- ////   @Autowired
- ////   private MockMvc restBookedBookMockMvc;
- ////
- ////   private BookedBook bookedBook;
- ////
- ////   /**
- ////    * Create an entity for this test.
- ////    *
- ////    * This is a static method, as tests for other entities might also need it,
- ////    * if they test an entity which requires the current entity.
- ////    */
-//////public static BookedBook createEntity(EntityManager em) {
-//////  BookedBook bookedBook = new BookedBook()
-//////      .expired(DEFAULT_EXPIRED)
-//////      .quantity(DEFAULT_QUANTITY)
-//////       .price(DEFAULT_PRICE);
-//////   return bookedBook;
-//////
- ////   /**
- ////    * Create an updated entity for this test.
- ////    *
- ////    * This is a static method, as tests for other entities might also need it,
- ////    * if they test an entity which requires the current entity.
- ////    */
- ////   public static BookedBook createUpdatedEntity(EntityManager em) {
- ////       BookedBook bookedBook = new BookedBook()
- ////           .expired(UPDATED_EXPIRED)
- ////           .quantity(UPDATED_QUANTITY)
- ////           .price(UPDATED_PRICE);
- ////       return bookedBook;
- ////   }
- ////
- ////   @BeforeEach
- ////   public void initTest() {
- ////       bookedBook = createEntity(em);
- ////   }
- ////
- ////   @Test
- ////   @Transactional
- ////   public void createBookedBook() throws Exception {
- ////       int databaseSizeBeforeCreate = bookedBookRepository.findAll().size();
- ////       // Create the BookedBook
- ////       restBookedBookMockMvc.perform(post("/api/booked-books")
- ////           .contentType(MediaType.APPLICATION_JSON)
- ////           .content(TestUtil.convertObjectToJsonBytes(bookedBook)))
- ////           .andExpect(status().isCreated());
- ////
- ////       // Validate the BookedBook in the database
- ////       List<BookedBook> bookedBookList = bookedBookRepository.findAll();
- ////       assertThat(bookedBookList).hasSize(databaseSizeBeforeCreate + 1);
- ////       BookedBook testBookedBook = bookedBookList.get(bookedBookList.size() - 1);
- ////       assertThat(testBookedBook.getExpired()).isEqualTo(DEFAULT_EXPIRED);
- ////       assertThat(testBookedBook.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
- ////       assertThat(testBookedBook.getPrice()).isEqualTo(DEFAULT_PRICE);
- ////
- ////       // Validate the BookedBook in Elasticsearch
- ////       verify(mockBookedBookSearchRepository, times(1)).save(testBookedBook);
- ////   }
- ////
- ////   @Test
- ////   @Transactional
- ////   public void createBookedBookWithExistingId() throws Exception {
- ////       int databaseSizeBeforeCreate = bookedBookRepository.findAll().size();
- ////
- ////       // Create the BookedBook with an existing ID
- ////       bookedBook.setId(1L);
- ////
- ////       // An entity with an existing ID cannot be created, so this API call must fail
- ////       restBookedBookMockMvc.perform(post("/api/booked-books")
- ////           .contentType(MediaType.APPLICATION_JSON)
- ////           .content(TestUtil.convertObjectToJsonBytes(bookedBook)))
- ////           .andExpect(status().isBadRequest());
- ////
- ////       // Validate the BookedBook in the database
- ////       List<BookedBook> bookedBookList = bookedBookRepository.findAll();
- ////       assertThat(bookedBookList).hasSize(databaseSizeBeforeCreate);
- ////
- ////       // Validate the BookedBook in Elasticsearch
- ////       verify(mockBookedBookSearchRepository, times(0)).save(bookedBook);
- ////   }
- ////
- ////
- ////   @Test
- ////   @Transactional
- ////   public void getAllBookedBooks() throws Exception {
- ////       // Initialize the database
- ////       bookedBookRepository.saveAndFlush(bookedBook);
- ////
- ////       // Get all the bookedBookList
- ////       restBookedBookMockMvc.perform(get("/api/booked-books?sort=id,desc"))
- ////           .andExpect(status().isOk())
- ////           .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
- ////           .andExpect(jsonPath("$.[*].id").value(hasItem(bookedBook.getId().intValue())))
- ////           .andExpect(jsonPath("$.[*].expired").value(hasItem(DEFAULT_EXPIRED.toString())))
- ////           .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
- ////           .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())));
- ////   }
- ////   
- ////   @Test
- ////   @Transactional
- ////   public void getBookedBook() throws Exception {
- ////       // Initialize the database
- ////       bookedBookRepository.saveAndFlush(bookedBook);
- ////
- ////       // Get the bookedBook
- ////       restBookedBookMockMvc.perform(get("/api/booked-books/{id}", bookedBook.getId()))
- ////           .andExpect(status().isOk())
- ////           .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
- ////           .andExpect(jsonPath("$.id").value(bookedBook.getId().intValue()))
- ////           .andExpect(jsonPath("$.expired").value(DEFAULT_EXPIRED.toString()))
- ////           .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
- ////           .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.doubleValue()));
- ////   }
- ////   @Test
- ////   @Transactional
- ////   public void getNonExistingBookedBook() throws Exception {
- ////       // Get the bookedBook
- ////       restBookedBookMockMvc.perform(get("/api/booked-books/{id}", Long.MAX_VALUE))
- ////           .andExpect(status().isNotFound());
- ////   }
- ////
- ////   @Test
- ////   @Transactional
- ////   public void updateBookedBook() throws Exception {
- ////       // Initialize the database
- ////       bookedBookRepository.saveAndFlush(bookedBook);
- ////
- ////       int databaseSizeBeforeUpdate = bookedBookRepository.findAll().size();
- ////
- ////       // Update the bookedBook
- ////       BookedBook updatedBookedBook = bookedBookRepository.findById(bookedBook.getId()).get();
- ////       // Disconnect from session so that the updates on updatedBookedBook are not directly saved in db
- ////       em.detach(updatedBookedBook);
- ////       updatedBookedBook
- ////           .expired(UPDATED_EXPIRED)
- ////           .quantity(UPDATED_QUANTITY)
- ////           .price(UPDATED_PRICE);
- ////
- ////       restBookedBookMockMvc.perform(put("/api/booked-books")
- ////           .contentType(MediaType.APPLICATION_JSON)
- ////           .content(TestUtil.convertObjectToJsonBytes(updatedBookedBook)))
- ////           .andExpect(status().isOk());
- ////
- ////       // Validate the BookedBook in the database
- ////       List<BookedBook> bookedBookList = bookedBookRepository.findAll();
- ////       assertThat(bookedBookList).hasSize(databaseSizeBeforeUpdate);
- ////       BookedBook testBookedBook = bookedBookList.get(bookedBookList.size() - 1);
- ////       assertThat(testBookedBook.getExpired()).isEqualTo(UPDATED_EXPIRED);
- ////       assertThat(testBookedBook.getQuantity()).isEqualTo(UPDATED_QUANTITY);
- ////       assertThat(testBookedBook.getPrice()).isEqualTo(UPDATED_PRICE);
- ////
- ////       // Validate the BookedBook in Elasticsearch
- ////       verify(mockBookedBookSearchRepository, times(1)).save(testBookedBook);
- ////   }
- ////
- ////   @Test
- ////   @Transactional
- ////   public void updateNonExistingBookedBook() throws Exception {
- ////       int databaseSizeBeforeUpdate = bookedBookRepository.findAll().size();
- ////
- ////       // If the entity doesn't have an ID, it will throw BadRequestAlertException
- ////       restBookedBookMockMvc.perform(put("/api/booked-books")
- ////           .contentType(MediaType.APPLICATION_JSON)
- ////           .content(TestUtil.convertObjectToJsonBytes(bookedBook)))
- ////           .andExpect(status().isBadRequest());
- ////
- ////       // Validate the BookedBook in the database
- ////       List<BookedBook> bookedBookList = bookedBookRepository.findAll();
- ////       assertThat(bookedBookList).hasSize(databaseSizeBeforeUpdate);
- ////
- ////       // Validate the BookedBook in Elasticsearch
- ////       verify(mockBookedBookSearchRepository, times(0)).save(bookedBook);
- ////   }
- ////
- ////   @Test
- ////   @Transactional
- ////   public void deleteBookedBook() throws Exception {
- ////       // Initialize the database
- ////       bookedBookRepository.saveAndFlush(bookedBook);
- ////
- ////       int databaseSizeBeforeDelete = bookedBookRepository.findAll().size();
- ////
- ////       // Delete the bookedBook
- ////       restBookedBookMockMvc.perform(delete("/api/booked-books/{id}", bookedBook.getId())
- ////           .accept(MediaType.APPLICATION_JSON))
- ////           .andExpect(status().isNoContent());
- ////
- ////       // Validate the database contains one less item
- ////       List<BookedBook> bookedBookList = bookedBookRepository.findAll();
- ////       assertThat(bookedBookList).hasSize(databaseSizeBeforeDelete - 1);
- ////
- ////       // Validate the BookedBook in Elasticsearch
- ////       verify(mockBookedBookSearchRepository, times(1)).deleteById(bookedBook.getId());
- ////   }
- ////
- ////   @Test
- ////   @Transactional
- ////   public void searchBookedBook() throws Exception {
- ////       // Configure the mock search repository
- ////       // Initialize the database
- ////       bookedBookRepository.saveAndFlush(bookedBook);
- ////       when(mockBookedBookSearchRepository.search(queryStringQuery("id:" + bookedBook.getId())))
- ////           .thenReturn(Collections.singletonList(bookedBook));
- ////
- ////       // Search the bookedBook
- ////       restBookedBookMockMvc.perform(get("/api/_search/booked-books?query=id:" + bookedBook.getId()))
- ////           .andExpect(status().isOk())
- ////           .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
- ////           .andExpect(jsonPath("$.[*].id").value(hasItem(bookedBook.getId().intValue())))
- ////           .andExpect(jsonPath("$.[*].expired").value(hasItem(DEFAULT_EXPIRED.toString())))
- ////           .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
- ////           .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())));
- ////   }
+    private static final Integer DEFAULT_QUANTITY = 1;
+    private static final Integer UPDATED_QUANTITY = 2;
+
+    private static final Float DEFAULT_PRICE = 1F;
+    private static final Float UPDATED_PRICE = 2F;
+
+    private static final Long DEFAULT_EXPIRED = 1L;
+    private static final Long UPDATED_EXPIRED = 2L;
+
+    @Autowired
+    private BookedBookRepository bookedBookRepository;
+
+    /**
+     * This repository is mocked in the com.shaf.ebraire.repository.search test package.
+     *
+     * @see com.shaf.ebraire.repository.search.BookedBookSearchRepositoryMockConfiguration
+     */
+    @Autowired
+    private BookedBookSearchRepository mockBookedBookSearchRepository;
+
+    @Autowired
+    private EntityManager em;
+
+    @Autowired
+    private MockMvc restBookedBookMockMvc;
+
+    private BookedBook bookedBook;
+
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static BookedBook createEntity(EntityManager em) {
+        BookedBook bookedBook = new BookedBook()
+            .quantity(DEFAULT_QUANTITY)
+            .price(DEFAULT_PRICE)
+            .expired(DEFAULT_EXPIRED);
+        return bookedBook;
+    }
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static BookedBook createUpdatedEntity(EntityManager em) {
+        BookedBook bookedBook = new BookedBook()
+            .quantity(UPDATED_QUANTITY)
+            .price(UPDATED_PRICE)
+            .expired(UPDATED_EXPIRED);
+        return bookedBook;
+    }
+
+    @BeforeEach
+    public void initTest() {
+        bookedBook = createEntity(em);
+    }
+
+    @Test
+    @Transactional
+    public void createBookedBook() throws Exception {
+        int databaseSizeBeforeCreate = bookedBookRepository.findAll().size();
+        // Create the BookedBook
+        restBookedBookMockMvc.perform(post("/api/booked-books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(bookedBook)))
+            .andExpect(status().isCreated());
+
+        // Validate the BookedBook in the database
+        List<BookedBook> bookedBookList = bookedBookRepository.findAll();
+        assertThat(bookedBookList).hasSize(databaseSizeBeforeCreate + 1);
+        BookedBook testBookedBook = bookedBookList.get(bookedBookList.size() - 1);
+        assertThat(testBookedBook.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
+        assertThat(testBookedBook.getPrice()).isEqualTo(DEFAULT_PRICE);
+        assertThat(testBookedBook.getExpired()).isEqualTo(DEFAULT_EXPIRED);
+
+        // Validate the BookedBook in Elasticsearch
+        verify(mockBookedBookSearchRepository, times(1)).save(testBookedBook);
+    }
+
+    @Test
+    @Transactional
+    public void createBookedBookWithExistingId() throws Exception {
+        int databaseSizeBeforeCreate = bookedBookRepository.findAll().size();
+
+        // Create the BookedBook with an existing ID
+        bookedBook.setId(1L);
+
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restBookedBookMockMvc.perform(post("/api/booked-books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(bookedBook)))
+            .andExpect(status().isBadRequest());
+
+        // Validate the BookedBook in the database
+        List<BookedBook> bookedBookList = bookedBookRepository.findAll();
+        assertThat(bookedBookList).hasSize(databaseSizeBeforeCreate);
+
+        // Validate the BookedBook in Elasticsearch
+        verify(mockBookedBookSearchRepository, times(0)).save(bookedBook);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllBookedBooks() throws Exception {
+        // Initialize the database
+        bookedBookRepository.saveAndFlush(bookedBook);
+
+        // Get all the bookedBookList
+        restBookedBookMockMvc.perform(get("/api/booked-books?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(bookedBook.getId().intValue())))
+            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
+            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
+            .andExpect(jsonPath("$.[*].expired").value(hasItem(DEFAULT_EXPIRED.intValue())));
+    }
+    
+    @Test
+    @Transactional
+    public void getBookedBook() throws Exception {
+        // Initialize the database
+        bookedBookRepository.saveAndFlush(bookedBook);
+
+        // Get the bookedBook
+        restBookedBookMockMvc.perform(get("/api/booked-books/{id}", bookedBook.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.id").value(bookedBook.getId().intValue()))
+            .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
+            .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.doubleValue()))
+            .andExpect(jsonPath("$.expired").value(DEFAULT_EXPIRED.intValue()));
+    }
+    @Test
+    @Transactional
+    public void getNonExistingBookedBook() throws Exception {
+        // Get the bookedBook
+        restBookedBookMockMvc.perform(get("/api/booked-books/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    public void updateBookedBook() throws Exception {
+        // Initialize the database
+        bookedBookRepository.saveAndFlush(bookedBook);
+
+        int databaseSizeBeforeUpdate = bookedBookRepository.findAll().size();
+
+        // Update the bookedBook
+        BookedBook updatedBookedBook = bookedBookRepository.findById(bookedBook.getId()).get();
+        // Disconnect from session so that the updates on updatedBookedBook are not directly saved in db
+        em.detach(updatedBookedBook);
+        updatedBookedBook
+            .quantity(UPDATED_QUANTITY)
+            .price(UPDATED_PRICE)
+            .expired(UPDATED_EXPIRED);
+
+        restBookedBookMockMvc.perform(put("/api/booked-books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(updatedBookedBook)))
+            .andExpect(status().isOk());
+
+        // Validate the BookedBook in the database
+        List<BookedBook> bookedBookList = bookedBookRepository.findAll();
+        assertThat(bookedBookList).hasSize(databaseSizeBeforeUpdate);
+        BookedBook testBookedBook = bookedBookList.get(bookedBookList.size() - 1);
+        assertThat(testBookedBook.getQuantity()).isEqualTo(UPDATED_QUANTITY);
+        assertThat(testBookedBook.getPrice()).isEqualTo(UPDATED_PRICE);
+        assertThat(testBookedBook.getExpired()).isEqualTo(UPDATED_EXPIRED);
+
+        // Validate the BookedBook in Elasticsearch
+        verify(mockBookedBookSearchRepository, times(1)).save(testBookedBook);
+    }
+
+    @Test
+    @Transactional
+    public void updateNonExistingBookedBook() throws Exception {
+        int databaseSizeBeforeUpdate = bookedBookRepository.findAll().size();
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restBookedBookMockMvc.perform(put("/api/booked-books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(bookedBook)))
+            .andExpect(status().isBadRequest());
+
+        // Validate the BookedBook in the database
+        List<BookedBook> bookedBookList = bookedBookRepository.findAll();
+        assertThat(bookedBookList).hasSize(databaseSizeBeforeUpdate);
+
+        // Validate the BookedBook in Elasticsearch
+        verify(mockBookedBookSearchRepository, times(0)).save(bookedBook);
+    }
+
+    @Test
+    @Transactional
+    public void deleteBookedBook() throws Exception {
+        // Initialize the database
+        bookedBookRepository.saveAndFlush(bookedBook);
+
+        int databaseSizeBeforeDelete = bookedBookRepository.findAll().size();
+
+        // Delete the bookedBook
+        restBookedBookMockMvc.perform(delete("/api/booked-books/{id}", bookedBook.getId())
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
+
+        // Validate the database contains one less item
+        List<BookedBook> bookedBookList = bookedBookRepository.findAll();
+        assertThat(bookedBookList).hasSize(databaseSizeBeforeDelete - 1);
+
+        // Validate the BookedBook in Elasticsearch
+        verify(mockBookedBookSearchRepository, times(1)).deleteById(bookedBook.getId());
+    }
+
+    @Test
+    @Transactional
+    public void searchBookedBook() throws Exception {
+        // Configure the mock search repository
+        // Initialize the database
+        bookedBookRepository.saveAndFlush(bookedBook);
+        when(mockBookedBookSearchRepository.search(queryStringQuery("id:" + bookedBook.getId())))
+            .thenReturn(Collections.singletonList(bookedBook));
+
+        // Search the bookedBook
+        restBookedBookMockMvc.perform(get("/api/_search/booked-books?query=id:" + bookedBook.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(bookedBook.getId().intValue())))
+            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
+            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
+            .andExpect(jsonPath("$.[*].expired").value(hasItem(DEFAULT_EXPIRED.intValue())));
+    }
 }

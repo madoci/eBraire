@@ -15,13 +15,13 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="expired" type="date">
-                <constraints nullable="true" />
-            </column>
             <column name="quantity" type="integer">
                 <constraints nullable="true" />
             </column>
             <column name="price" type="${floatType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="expired" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="customer_id" type="bigint">
@@ -53,9 +53,9 @@
                   separator=";"
                   tableName="booked_book">
             <column name="id" type="numeric"/>
-            <column name="expired" type="date"/>
             <column name="quantity" type="numeric"/>
             <column name="price" type="numeric"/>
+            <column name="expired" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

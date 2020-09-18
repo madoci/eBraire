@@ -12,16 +12,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="eBraireApp.bookedBook.expired" for="field_expired">Expired</label>
-                    <div class="input-group">
-                        <input id="field_expired" type="text" class="form-control" name="expired" ngbDatepicker #expiredDp="ngbDatepicker" formControlName="expired"/>
-                        <span class="input-group-append">
-                            <button type="button" class="btn btn-secondary" (click)="expiredDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eBraireApp.bookedBook.quantity" for="field_quantity">Quantity</label>
                     <input type="number" class="form-control" name="quantity" id="field_quantity"
                            formControlName="quantity"/>
@@ -31,6 +21,12 @@
                     <label class="form-control-label" jhiTranslate="eBraireApp.bookedBook.price" for="field_price">Price</label>
                     <input type="number" class="form-control" name="price" id="field_price"
                            formControlName="price"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eBraireApp.bookedBook.expired" for="field_expired">Expired</label>
+                    <input type="number" class="form-control" name="expired" id="field_expired"
+                           formControlName="expired"/>
                 </div>
 
                 <div class="form-group">

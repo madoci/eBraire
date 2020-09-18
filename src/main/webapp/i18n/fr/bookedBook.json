@@ -17,9 +17,9 @@
       "detail": {
         "title": "Booked Book"
       },
-      "expired": "Expired",
       "quantity": "Quantity",
       "price": "Price",
+      "expired": "Expired",
       "customer": "Customer",
       "book": "Book"
     }

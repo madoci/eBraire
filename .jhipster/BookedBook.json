@@ -2,16 +2,16 @@
   "name": "BookedBook",
   "fields": [
     {
-      "fieldName": "expired",
-      "fieldType": "Long"
-    },
-    {
       "fieldName": "quantity",
       "fieldType": "Integer"
     },
     {
       "fieldName": "price",
       "fieldType": "Float"
+    },
+    {
+      "fieldName": "expired",
+      "fieldType": "Long"
     }
   ],
   "relationships": [

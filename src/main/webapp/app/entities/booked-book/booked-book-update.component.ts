@@ -22,13 +22,12 @@ export class BookedBookUpdateComponent implements OnInit {
   isSaving = false;
   customers: ICustomer[] = [];
   books: IBook[] = [];
-  expiredDp: any;
 
   editForm = this.fb.group({
     id: [],
-    expired: [],
     quantity: [],
     price: [],
+    expired: [],
     customer: [],
     book: [],
   });
@@ -54,9 +53,9 @@ export class BookedBookUpdateComponent implements OnInit {
   updateForm(bookedBook: IBookedBook): void {
     this.editForm.patchValue({
       id: bookedBook.id,
-      expired: bookedBook.expired,
       quantity: bookedBook.quantity,
       price: bookedBook.price,
+      expired: bookedBook.expired,
       customer: bookedBook.customer,
       book: bookedBook.book,
     });
@@ -80,9 +79,9 @@ export class BookedBookUpdateComponent implements OnInit {
     return {
       ...new BookedBook(),
       id: this.editForm.get(['id'])!.value,
-      expired: this.editForm.get(['expired'])!.value,
       quantity: this.editForm.get(['quantity'])!.value,
       price: this.editForm.get(['price'])!.value,
+      expired: this.editForm.get(['expired'])!.value,
       customer: this.editForm.get(['customer'])!.value,
       book: this.editForm.get(['book'])!.value,
     };

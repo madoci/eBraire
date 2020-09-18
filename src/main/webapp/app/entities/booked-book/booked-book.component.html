@@ -41,9 +41,9 @@
             <thead>
                 <tr>
                     <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
-                    <th scope="col" ><span jhiTranslate="eBraireApp.bookedBook.expired">Expired</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.bookedBook.quantity">Quantity</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.bookedBook.price">Price</span></th>
+                    <th scope="col" ><span jhiTranslate="eBraireApp.bookedBook.expired">Expired</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.bookedBook.customer">Customer</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.bookedBook.book">Book</span></th>
                     <th scope="col"></th>
@@ -52,9 +52,9 @@
             <tbody>
                 <tr *ngFor="let bookedBook of bookedBooks ;trackBy: trackId">
                     <td><a [routerLink]="['/booked-book', bookedBook.id, 'view']">{{ bookedBook.id }}</a></td>
-                    <td>{{ bookedBook.expired | date:'mediumDate' }}</td>
                     <td>{{ bookedBook.quantity }}</td>
                     <td>{{ bookedBook.price }}</td>
+                    <td>{{ bookedBook.expired }}</td>
                     <td>
                         <div *ngIf="bookedBook.customer">
                             <a [routerLink]="['/customer', bookedBook.customer?.id, 'view']" >{{ bookedBook.customer?.id }}</a>

@@ -72,9 +72,9 @@ class BookedBookGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "expired":"2020-01-01T00:00:00.000Z"
                 , "quantity":"0"
                 , "price":null
+                , "expired":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_bookedBook_url"))).exitHereIfFailed

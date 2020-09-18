@@ -20,7 +20,10 @@ public interface BookedBookRepository extends JpaRepository<BookedBook, Long> {
     void deleteFromCustomer(@Param("id") Long id);
 	@Query("select book from BookedBook book WHERE customer.id =:id")
 	List<BookedBook> getFromCustomer(@Param("id") Long id);
-	@Query("select book from BookedBook book Where  expired >= :time")
+	@Query("select book from BookedBook book Where  expired < :time")
 	List<BookedBook>  getExpiredBookedBook(@Param("time") Long time);
+	@Modifying
+	@Query("DELETE from BookedBook Where  expired < :time")
+	void removeExpiredBookedBook(@Param("time") Long time);
 	
 }

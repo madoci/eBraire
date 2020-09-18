@@ -64,7 +64,7 @@ public class BookedBookResource {
     private final OrderedRepository orderedRepository;
 
     private final OrderedSearchRepository orderedSearchRepository;
-
+    private final int bookedTime = 60000;
     public BookedBookResource(OrderedRepository orderedRepository, OrderedSearchRepository orderedSearchRepository,OrderLineRepository orderLineRepository, OrderLineSearchRepository orderLineSearchRepository,BookedBookRepository bookedBookRepository, BookedBookSearchRepository bookedBookSearchRepository,BookRepository bookRepository, BookSearchRepository bookSearchRepository) {
         this.bookedBookRepository = bookedBookRepository;
         this.bookedBookSearchRepository = bookedBookSearchRepository;
@@ -90,9 +90,14 @@ public class BookedBookResource {
             throw new BadRequestAlertException("A new bookedBook cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Date date = new Date();
-        long timeMilliExp = date.getTime() + 60000;
-        log.debug("taille : {} ", bookedBookRepository.getExpiredBookedBook(timeMilliExp)); 
-        Optional<Book> currentBook = bookRepository.findOneWithEagerRelationships(bookedBook.book.getId());
+        long timeMilliExp = date.getTime();
+        for(BookedBook bookedBooktoRemove:bookedBookRepository.getExpiredBookedBook(timeMilliExp)) {
+        	bookedBooktoRemove.getBook().setQuantity(bookedBooktoRemove.getBook().getQuantity() + bookedBooktoRemove.getQuantity());
+            Book result = bookRepository.save(bookedBooktoRemove.getBook());
+            bookSearchRepository.save(result);
+        }
+        bookedBookRepository.removeExpiredBookedBook(timeMilliExp);
+        Optional<Book> currentBook = bookRepository.findOneWithEagerRelationships(bookedBook.getBook().getId());
         if (currentBook.isEmpty()) {
         	return ResponseEntity.created(new URI("/api/booked-books/" + "0"))
                     .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, "0"))
@@ -105,7 +110,7 @@ public class BookedBookResource {
             bookSearchRepository.save(result);
             //Getting the current date
             //This method returns the time in millis
-            long timeMilli = date.getTime();
+            long timeMilli = date.getTime() + bookedTime;
             bookedBook.setExpired( timeMilli);
             resultFinal = bookedBookRepository.save(bookedBook);
             bookedBookSearchRepository.save(resultFinal);
@@ -130,13 +135,13 @@ public class BookedBookResource {
      */
     @PutMapping("/booked-books")
     public ResponseEntity<BookedBook> updateBookedBook(@RequestBody BookedBook bookedBook) throws URISyntaxException {
-        log.debug("UPDATETEEEEEEEE!!!!!!! : {}", bookedBook);
+        log.debug("UPDATE : {}", bookedBook);
         if (bookedBook.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         
         BookedBook resultFinal=null;
-        Optional<Book> currentBook = bookRepository.findOneWithEagerRelationships(bookedBook.book.getId());
+        Optional<Book> currentBook = bookRepository.findOneWithEagerRelationships(bookedBook.getBook().getId());
         if (currentBook.isEmpty()) {
         	return ResponseEntity.ok()
                     .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bookedBook.getId().toString()))
@@ -151,7 +156,7 @@ public class BookedBookResource {
             //Getting the current date
             Date date = new Date();
             //This method returns the time in millis
-            long timeMilli = date.getTime();
+            long timeMilli = date.getTime() + bookedTime;
             bookedBook.setExpired(timeMilli);
             resultFinal = bookedBookRepository.save(bookedBook);
             bookedBookSearchRepository.save(resultFinal);
@@ -201,13 +206,12 @@ public class BookedBookResource {
         Optional<BookedBook> optBooked = bookedBookRepository.findById(id);
         if (!optBooked.isEmpty()) {
         BookedBook bookedbook = optBooked.get();
-        bookedbook.book.setQuantity(bookedbook.book.getQuantity() + bookedbook.getQuantity());
-        Book result = bookRepository.save(bookedbook.book);
+        bookedbook.getBook().setQuantity(bookedbook.getBook().getQuantity() + bookedbook.getQuantity());
+        Book result = bookRepository.save(bookedbook.getBook());
         bookSearchRepository.save(result);
         }else {
         	//throw err TODO
         }
-        bookedBookRepository.deleteById(id);
         bookedBookSearchRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
@@ -217,8 +221,8 @@ public class BookedBookResource {
         log.debug("REST request to delete BookedBook from Customer : {}", id);
         List<BookedBook> temp = bookedBookRepository.getFromCustomer(id);
         for (BookedBook bookedbook:temp) {
-        	bookedbook.book.setQuantity(bookedbook.book.getQuantity() + bookedbook.getQuantity());
-            Book result = bookRepository.save(bookedbook.book);
+        	bookedbook.getBook().setQuantity(bookedbook.getBook().getQuantity() + bookedbook.getQuantity());
+            Book result = bookRepository.save(bookedbook.getBook());
             bookSearchRepository.save(result);
         }
         bookedBookRepository.deleteFromCustomer(id);
@@ -276,7 +280,7 @@ public class BookedBookResource {
         if (bookedBook.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Optional<Book> currentBook = bookRepository.findOneWithEagerRelationships(bookedBook.book.getId());
+        Optional<Book> currentBook = bookRepository.findOneWithEagerRelationships(bookedBook.getBook().getId());
         if (currentBook.isEmpty()) {
         	return ResponseEntity.ok()
                     .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bookedBook.getId().toString()))
@@ -302,16 +306,17 @@ public class BookedBookResource {
 	        }
         }else {
         	BookedBook previousBookedBook = optionalPreviousBookedBook.get();
-        	log.debug("reservationt trouvé  ancien : : {}", currentBook.get());
-        	log.debug("reservationt trouvé  neuf : : {}", currentBook.get());
-        	if (previousBookedBook.book.getId().equals(bookedBook.book.getId())) {
-        		log.debug("reservationt trouvé et livre similaire : : {}", bookedBook);
+        	if (previousBookedBook.getBook().getId().equals(bookedBook.getBook().getId())) {
         		if (previousBookedBook.getQuantity() == bookedBook.getQuantity()) {
         			//majTIMER
-        			log.debug("Tous c'est bien passer : :");
+        	        Date date = new Date();
+        	        long timeMilli = date.getTime() + bookedTime;
+        	        bookedBook.setExpired(timeMilli);
+                    BookedBook result = bookedBookRepository.save(bookedBook);
+                    bookedBookSearchRepository.save(result);
         			return ResponseEntity.ok()
         		            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bookedBook.getId().toString()))
-        		            .body(bookedBook); 
+        		            .body(result); 
         		}else {
         			//majQuantity
     	            return ResponseEntity.ok()
@@ -319,10 +324,8 @@ public class BookedBookResource {
         	                    .body(previousBookedBook); 	
         		}
         	}else {
-        		log.debug("livre incohérent  : :");
         	}	
         }
-        log.debug("default : :");
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bookedBook.getId().toString()))
             .body(null); 	
