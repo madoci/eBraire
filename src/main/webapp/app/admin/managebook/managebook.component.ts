@@ -108,7 +108,7 @@ export class ManagebookComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-
+    this.book!.quantity = 0;
     // Save Tags
     const checkedListTag = document.getElementsByName('tag');
     const savingTagString: string[] = [];

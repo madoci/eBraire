@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the Book entity.
+ * Performance test for the BookedBook entity.
  */
-class BookGatlingTest extends Simulation {
+class BookedBookGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -43,7 +43,7 @@ class BookGatlingTest extends Simulation {
         "Authorization" -> "${access_token}"
     )
 
-    val scn = scenario("Test the Book entity")
+    val scn = scenario("Test the BookedBook entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -62,34 +62,31 @@ class BookGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all books")
-            .get("/api/books")
+            exec(http("Get all bookedBooks")
+            .get("/api/booked-books")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new book")
-            .post("/api/books")
+            .exec(http("Create new bookedBook")
+            .post("/api/booked-books")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "title":"SAMPLE_TEXT"
-                , "authors":"SAMPLE_TEXT"
-                , "unitPrice":null
-                , "image":null
+                , "expired":"2020-01-01T00:00:00.000Z"
                 , "quantity":"0"
-                , "description":"SAMPLE_TEXT"
+                , "price":null
                 }""")).asJson
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_book_url"))).exitHereIfFailed
+            .check(headerRegex("Location", "(.*)").saveAs("new_bookedBook_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
-                exec(http("Get created book")
-                .get("${new_book_url}")
+                exec(http("Get created bookedBook")
+                .get("${new_bookedBook_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created book")
-            .delete("${new_book_url}")
+            .exec(http("Delete created bookedBook")
+            .delete("${new_bookedBook_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }

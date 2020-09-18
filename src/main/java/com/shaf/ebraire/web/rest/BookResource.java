@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -49,6 +50,87 @@ public class BookResource {
         this.bookRepository = bookRepository;
         this.bookSearchRepository = bookSearchRepository;
     }
+    
+    /**
+ * {@code GET  /books/:title} : get the "title" book.
+ *
+ * @param title the title of the book to retrieve.
+ * @return the list of book containing the title.
+ */
+@GetMapping("/booksResearch/{title}")
+public List<Book>  getBook(@PathVariable String title) {
+    log.debug("REST request to get Book : {}", title);
+    List<Book> books = bookRepository.findBooksByTitle(title);
+    
+    return books;
+}
+/**
+* {@code GET  /books/:title} : get the "title" book.
+*
+* @param title the title of the book to retrieve.
+* @return the list of book containing the title.
+*/
+@GetMapping("/booksResearch/{title}/{types}/{genres}/{tags}")
+public List<Book>  getBook(@PathVariable String title,@PathVariable String types,@PathVariable String genres,@PathVariable String tags) {
+
+List<Book> books;
+if (title.equals("title-") && types.equals("types-")) {
+	log.debug("tous les livres");
+	 books = getAllBooks(true);
+} else if (types.equals("types-")) {
+	books = bookRepository.findBooksByTitle(title.substring(6));
+}else if (title.equals("title-")){
+	 books = bookRepository.findBooksByFilter("",types.substring(6).split("&"));
+}else{
+	 books = bookRepository.findBooksByFilter(title.substring(6),types.substring(6).split("&"));
+}
+if (!(tags.contentEquals("tags-"))) {
+	String[] tagList = tags.substring(5).split("&");
+	List<Book> finalBooks = new ArrayList<>();
+	for (int i =0;i<books.size();i++) {
+		boolean haveTag = false;
+			for(Tag tag:books.get(i).getTags()) {
+				for (int j=0;j<tagList.length;j++) {
+					if(tagList[j].equals(tag.getTag())) {
+						haveTag = true;
+						break;
+					}
+				}
+				if (haveTag) {
+					break;
+				}
+			}
+			if (haveTag) {
+				finalBooks.add(books.get(i));
+			}		
+	}
+	books = finalBooks;
+}
+if (!(genres.contentEquals("genres-"))) {
+	String[] genreList = genres.substring(7).split("&");
+	List<Book> finalBooks = new ArrayList<>();
+	for (int i =0;i<books.size();i++) {
+		boolean havegenre = false;
+			for(Genre genre:books.get(i).getGenres()) {
+				for (int j=0;j<genreList.length;j++) {
+					if(genreList[j].equals(genre.getGenre())) {
+						havegenre = true;
+						break;
+					}
+				}
+				if (havegenre) {
+					break;
+				}
+			}
+			if (havegenre) {
+				finalBooks.add(books.get(i));
+			}		
+	}
+	books = finalBooks;
+}
+return books;
+}
+
 
     /**
      * {@code POST  /books} : Create a new book.
@@ -58,7 +140,7 @@ public class BookResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/books")
-    public ResponseEntity<Book> createBook(@RequestBody Book book) throws URISyntaxException {
+    public ResponseEntity<Book> createBook(@Valid @RequestBody Book book) throws URISyntaxException {
         log.debug("REST request to save Book : {}", book);
         if (book.getId() != null) {
             throw new BadRequestAlertException("A new book cannot already have an ID", ENTITY_NAME, "idexists");
@@ -80,7 +162,7 @@ public class BookResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/books")
-    public ResponseEntity<Book> updateBook(@RequestBody Book book) throws URISyntaxException {
+    public ResponseEntity<Book> updateBook(@Valid @RequestBody Book book) throws URISyntaxException {
         log.debug("REST request to update Book : {}", book);
         if (book.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -116,88 +198,6 @@ public class BookResource {
         Optional<Book> book = bookRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(book);
     }
-
-
-        /**
-     * {@code GET  /books/:title} : get the "title" book.
-     *
-     * @param title the title of the book to retrieve.
-     * @return the list of book containing the title.
-     */
-    @GetMapping("/booksResearch/{title}")
-    public List<Book>  getBook(@PathVariable String title) {
-        log.debug("REST request to get Book : {}", title);
-        List<Book> books = bookRepository.findBooksByTitle(title);
-        
-        return books;
-    }
-    /**
- * {@code GET  /books/:title} : get the "title" book.
- *
- * @param title the title of the book to retrieve.
- * @return the list of book containing the title.
- */
-@GetMapping("/booksResearch/{title}/{types}/{genres}/{tags}")
-public List<Book>  getBook(@PathVariable String title,@PathVariable String types,@PathVariable String genres,@PathVariable String tags) {
-    
-    List<Book> books;
-    if (title.equals("title-") && types.equals("types-")) {
-    	log.debug("tous les livres");
-    	 books = getAllBooks(true);
-    } else if (types.equals("types-")) {
-    	books = bookRepository.findBooksByTitle(title.substring(6));
-    }else if (title.equals("title-")){
-    	 books = bookRepository.findBooksByFilter("",types.substring(6).split("&"));
-    }else{
-    	 books = bookRepository.findBooksByFilter(title.substring(6),types.substring(6).split("&"));
-    }
-    if (!(tags.contentEquals("tags-"))) {
-    	String[] tagList = tags.substring(5).split("&");
-    	List<Book> finalBooks = new ArrayList<>();
-    	for (int i =0;i<books.size();i++) {
-    		boolean haveTag = false;
-    			for(Tag tag:books.get(i).getTags()) {
-    				for (int j=0;j<tagList.length;j++) {
-    					if(tagList[j].equals(tag.getTag())) {
-    						haveTag = true;
-    						break;
-    					}
-    				}
-    				if (haveTag) {
-    					break;
-    				}
-    			}
-    			if (haveTag) {
-    				finalBooks.add(books.get(i));
-    			}		
-    	}
-    	books = finalBooks;
-    }
-    if (!(genres.contentEquals("genres-"))) {
-    	String[] genreList = genres.substring(7).split("&");
-    	List<Book> finalBooks = new ArrayList<>();
-    	for (int i =0;i<books.size();i++) {
-    		boolean havegenre = false;
-    			for(Genre genre:books.get(i).getGenres()) {
-    				for (int j=0;j<genreList.length;j++) {
-    					if(genreList[j].equals(genre.getGenre())) {
-    						havegenre = true;
-    						break;
-    					}
-    				}
-    				if (havegenre) {
-    					break;
-    				}
-    			}
-    			if (havegenre) {
-    				finalBooks.add(books.get(i));
-    			}		
-    	}
-    	books = finalBooks;
-    }
-    return books;
-}
-
 
     /**
      * {@code DELETE  /books/:id} : delete the "id" book.

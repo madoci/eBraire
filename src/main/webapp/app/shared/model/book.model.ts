@@ -6,10 +6,11 @@ export interface IBook {
   id?: number;
   title?: string;
   authors?: string;
-  description?: string;
   unitPrice?: number;
   imageContentType?: string;
   image?: any;
+  quantity?: number;
+  description?: string;
   type?: IType;
   tags?: ITag[];
   genres?: IGenre[];
@@ -20,10 +21,11 @@ export class Book implements IBook {
     public id?: number,
     public title?: string,
     public authors?: string,
-    public description?: string,
     public unitPrice?: number,
     public imageContentType?: string,
     public image?: any,
+    public quantity?: number,
+    public description?: string,
     public type?: IType,
     public tags?: ITag[],
     public genres?: IGenre[]

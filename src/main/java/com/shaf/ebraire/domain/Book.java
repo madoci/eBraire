@@ -5,7 +5,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
@@ -34,9 +34,7 @@ public class Book implements Serializable {
     @Column(name = "authors")
     private String authors;
     @NotNull
-    @Column(name = "description", length=2048)
-    private String description;
-    @NotNull
+    @Min(value = 0)
     @Column(name = "unit_price")
     private Float unitPrice;
     @NotNull
@@ -46,6 +44,17 @@ public class Book implements Serializable {
     @NotNull
     @Column(name = "image_content_type")
     private String imageContentType;
+
+    @NotNull
+    @Min(value = 0)
+    @Column(name = "quantity", nullable = false)
+	private Integer quantity;
+
+    @NotNull
+    @Size(max = 2048)
+    @Column(name = "description", length = 2048, nullable = false)
+    private String description;
+
     @ManyToOne
     @JsonIgnoreProperties(value = "books", allowSetters = true)
     private Type type;
@@ -56,7 +65,7 @@ public class Book implements Serializable {
                joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "tags_id", referencedColumnName = "id"))
     private Set<Tag> tags = new HashSet<>();
-    @NotNull
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(name = "book_genres",
@@ -99,19 +108,6 @@ public class Book implements Serializable {
         this.authors = authors;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public Book description(String description) {
-        this.description = description;
-        return this;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Float getUnitPrice() {
         return unitPrice;
     }
@@ -149,6 +145,32 @@ public class Book implements Serializable {
 
     public void setImageContentType(String imageContentType) {
         this.imageContentType = imageContentType;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Book quantity(Integer quantity) {
+        this.quantity = quantity;
+        return this;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Book description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Type getType() {
@@ -238,10 +260,11 @@ public class Book implements Serializable {
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
             ", authors='" + getAuthors() + "'" +
-            ", description='" + getDescription() + "'" +
             ", unitPrice=" + getUnitPrice() +
             ", image='" + getImage() + "'" +
             ", imageContentType='" + getImageContentType() + "'" +
+            ", quantity=" + getQuantity() +
+            ", description='" + getDescription() + "'" +
             "}";
     }
 }

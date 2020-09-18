@@ -47,9 +47,6 @@ public class BookResourceIT {
     private static final String DEFAULT_AUTHORS = "AAAAAAAAAA";
     private static final String UPDATED_AUTHORS = "BBBBBBBBBB";
 
-    private static final String DEFAULT_DESCRIPTION = "Desc";
-    private static final String UPDATED_DESCRIPTION = "Desc";
-
     private static final Float DEFAULT_UNIT_PRICE = 1F;
     private static final Float UPDATED_UNIT_PRICE = 2F;
 
@@ -57,6 +54,12 @@ public class BookResourceIT {
     private static final byte[] UPDATED_IMAGE = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_IMAGE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_IMAGE_CONTENT_TYPE = "image/png";
+
+    private static final Integer DEFAULT_QUANTITY = 0;
+    private static final Integer UPDATED_QUANTITY = 1;
+
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     @Autowired
     private BookRepository bookRepository;
@@ -90,10 +93,11 @@ public class BookResourceIT {
         Book book = new Book()
             .title(DEFAULT_TITLE)
             .authors(DEFAULT_AUTHORS)
-            .description(DEFAULT_DESCRIPTION)
             .unitPrice(DEFAULT_UNIT_PRICE)
             .image(DEFAULT_IMAGE)
-            .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE);
+            .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE)
+            .quantity(DEFAULT_QUANTITY)
+            .description(DEFAULT_DESCRIPTION);
         return book;
     }
     /**
@@ -106,10 +110,11 @@ public class BookResourceIT {
         Book book = new Book()
             .title(UPDATED_TITLE)
             .authors(UPDATED_AUTHORS)
-            .description(UPDATED_DESCRIPTION)
             .unitPrice(UPDATED_UNIT_PRICE)
             .image(UPDATED_IMAGE)
-            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
+            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
+            .quantity(UPDATED_QUANTITY)
+            .description(UPDATED_DESCRIPTION);
         return book;
     }
 
@@ -134,10 +139,11 @@ public class BookResourceIT {
         Book testBook = bookList.get(bookList.size() - 1);
         assertThat(testBook.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testBook.getAuthors()).isEqualTo(DEFAULT_AUTHORS);
-        assertThat(testBook.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testBook.getUnitPrice()).isEqualTo(DEFAULT_UNIT_PRICE);
         assertThat(testBook.getImage()).isEqualTo(DEFAULT_IMAGE);
         assertThat(testBook.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
+        assertThat(testBook.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
+        assertThat(testBook.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
 
         // Validate the Book in Elasticsearch
         verify(mockBookSearchRepository, times(1)).save(testBook);
@@ -168,6 +174,44 @@ public class BookResourceIT {
 
     @Test
     @Transactional
+    public void checkQuantityIsRequired() throws Exception {
+        int databaseSizeBeforeTest = bookRepository.findAll().size();
+        // set the field null
+        book.setQuantity(null);
+
+        // Create the Book, which fails.
+
+
+        restBookMockMvc.perform(post("/api/books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(book)))
+            .andExpect(status().isBadRequest());
+
+        List<Book> bookList = bookRepository.findAll();
+        assertThat(bookList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkDescriptionIsRequired() throws Exception {
+        int databaseSizeBeforeTest = bookRepository.findAll().size();
+        // set the field null
+        book.setDescription(null);
+
+        // Create the Book, which fails.
+
+
+        restBookMockMvc.perform(post("/api/books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(book)))
+            .andExpect(status().isBadRequest());
+
+        List<Book> bookList = bookRepository.findAll();
+        assertThat(bookList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllBooks() throws Exception {
         // Initialize the database
         bookRepository.saveAndFlush(book);
@@ -179,10 +223,11 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].authors").value(hasItem(DEFAULT_AUTHORS)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem((DEFAULT_DESCRIPTION))))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))));
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
+            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -218,10 +263,11 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.id").value(book.getId().intValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.authors").value(DEFAULT_AUTHORS))
-            .andExpect(jsonPath("$.description").value((DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.doubleValue()))
             .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)));
+            .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)))
+            .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
     }
     @Test
     @Transactional
@@ -246,10 +292,11 @@ public class BookResourceIT {
         updatedBook
             .title(UPDATED_TITLE)
             .authors(UPDATED_AUTHORS)
-            .description(UPDATED_DESCRIPTION)
             .unitPrice(UPDATED_UNIT_PRICE)
             .image(UPDATED_IMAGE)
-            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
+            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
+            .quantity(UPDATED_QUANTITY)
+            .description(UPDATED_DESCRIPTION);
 
         restBookMockMvc.perform(put("/api/books")
             .contentType(MediaType.APPLICATION_JSON)
@@ -262,10 +309,11 @@ public class BookResourceIT {
         Book testBook = bookList.get(bookList.size() - 1);
         assertThat(testBook.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testBook.getAuthors()).isEqualTo(UPDATED_AUTHORS);
-        assertThat(testBook.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testBook.getUnitPrice()).isEqualTo(UPDATED_UNIT_PRICE);
         assertThat(testBook.getImage()).isEqualTo(UPDATED_IMAGE);
         assertThat(testBook.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
+        assertThat(testBook.getQuantity()).isEqualTo(UPDATED_QUANTITY);
+        assertThat(testBook.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
 
         // Validate the Book in Elasticsearch
         verify(mockBookSearchRepository, times(1)).save(testBook);
@@ -327,9 +375,10 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].authors").value(hasItem(DEFAULT_AUTHORS)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem((DEFAULT_DESCRIPTION))))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))));
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
+            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
 }

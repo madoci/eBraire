@@ -16,10 +16,6 @@
                 <dd>
                     <span>{{ book.authors }}</span>
                 </dd>
-                <dt><span jhiTranslate="eBraireApp.book.description">Description</span></dt>
-                <dd>
-                    <span>{{ book.description }}  </span> 
-                </dd>
                 <dt><span jhiTranslate="eBraireApp.book.unitPrice">Unit Price</span></dt>
                 <dd>
                     <span>{{ book.unitPrice }}</span>
@@ -30,6 +26,14 @@
                         <a (click)="openFile(book.imageContentType, book.image)" jhiTranslate="entity.action.open">open</a>
                         {{ book.imageContentType }}, {{ byteSize(book.image) }}
                     </div>
+                </dd>
+                <dt><span jhiTranslate="eBraireApp.book.quantity">Quantity</span></dt>
+                <dd>
+                    <span>{{ book.quantity }}</span>
+                </dd>
+                <dt><span jhiTranslate="eBraireApp.book.description">Description</span></dt>
+                <dd>
+                    <span>{{ book.description }}</span>
                 </dd>
                 <dt><span jhiTranslate="eBraireApp.book.type">Type</span></dt>
                 <dd>

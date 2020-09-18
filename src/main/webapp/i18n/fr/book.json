@@ -2,26 +2,27 @@
   "eBraireApp": {
     "book": {
       "home": {
-        "title": "Livres",
-        "createLabel": "Créer un nouveau Livre",
-        "createOrEditLabel": "Créer ou éditer un Livre",
-        "search": "Recherche pour Livre",
-        "notFound": "Aucun Livre trouvé"
+        "title": "Books",
+        "createLabel": "Créer un nouveau Book",
+        "createOrEditLabel": "Créer ou éditer un Book",
+        "search": "Recherche pour Book",
+        "notFound": "Aucun Book trouvé"
       },
-      "created": "Un nouveau Livre a été créé avec l'identifiant {{ param }}",
-      "updated": "Le Livre avec l'identifiant {{ param }} a été mis à jour",
-      "deleted": "Le Livre avec l'identifiant {{ param }} a été supprimé",
+      "created": "Un nouveau Book a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Book avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Book avec l'identifiant {{ param }} a été supprimé",
       "delete": {
-        "question": "Etes-vous certain de vouloir supprimer le Livre {{ id }} ?"
+        "question": "Etes-vous certain de vouloir supprimer le Book {{ id }} ?"
       },
       "detail": {
-        "title": "Livre"
+        "title": "Book"
       },
       "title": "Title",
       "authors": "Authors",
-      "description": "Description",
       "unitPrice": "Unit Price",
       "image": "Image",
+      "quantity": "Quantity",
+      "description": "Description",
       "type": "Type",
       "tags": "Tags",
       "genres": "Genres"

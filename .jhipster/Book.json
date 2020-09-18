@@ -10,11 +10,6 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "description",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "any"
-    },
-    {
       "fieldName": "unitPrice",
       "fieldType": "Float"
     },
@@ -22,6 +17,18 @@
       "fieldName": "image",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "quantity",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "2048"
     }
   ],
   "relationships": [
@@ -59,5 +66,7 @@
   "readOnly": false,
   "embedded": false,
   "clientRootFolder": "",
-  "applications": "*"
+  "applications": "*",
+  "searchEngine": "elasticsearch",
+  "databaseType": "sql"
 }
