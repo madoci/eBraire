@@ -5,14 +5,14 @@
     {{error}}
 </div>
 <div id="CustomerInfo">
-    <!--div class="form-group">
+    <div class="form-group">
         <label class="form-control-label">Nom</label>
-        <input type="text" [(ngModel)]="user.lastName" />
+        <input type="text" [(ngModel)]="order.lastName" />
     </div>
     <div class="form-group">
         <label class="form-control-label">Prénom</label>
-        <input type="text" [(ngModel)]="user.name" />
-    </div-->
+        <input type="text" [(ngModel)]="order.firstName" />
+    </div>
     <div class="form-group">
         <label for="email">Email</label>
         <input type="text" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" name="email" [(ngModel)]="email" #emailref="ngModel">
