@@ -22,7 +22,7 @@ import { AccountService } from 'app/core/auth/account.service';
   styleUrls: ['./order-info.component.scss'],
 })
 export class OrderInfoComponent implements OnInit {
-  user: Customer = new Customer();
+  customer: Customer = new Customer();
   displayPayment: Boolean = true;
   email: String = '';
   order: Ordered = new Ordered();
@@ -51,6 +51,10 @@ export class OrderInfoComponent implements OnInit {
       .pipe(
         map(account => {
           if (account) {
+            this.order.firstName = account.firstName;
+            this.order.lastName = account.lastName;
+            this.email = account.email;
+
             return account.login;
           }
           return '';
@@ -60,8 +64,8 @@ export class OrderInfoComponent implements OnInit {
         }),
         map(customer => {
           if (customer.body) {
-            this.user = customer.body;
-            this.order.delevryAddress = this.user.address;
+            this.customer = customer.body;
+            this.order.delevryAddress = this.customer.address;
           }
         })
       )
@@ -76,12 +80,12 @@ export class OrderInfoComponent implements OnInit {
     const emailverifElement: HTMLElement | null = document.getElementById('emailverif');
     if (!this.loading) {
       if (
-        //this.user.name === '' ||
-        //this.user.lastName === '' ||
+        this.order.firstName === '' ||
+        this.order.lastName === '' ||
         this.order.delevryAddress === '' ||
-        //this.user.name === undefined ||
-        this.order.delevryAddress === undefined //||
-        //this.user.lastName === undefined
+        this.order.firstName === undefined ||
+        this.order.lastName === undefined ||
+        this.order.delevryAddress === undefined
       ) {
         this.error = 'champ non rempli';
         return;
@@ -146,25 +150,25 @@ export class OrderInfoComponent implements OnInit {
   }
   // constructor(public id?: number, public name?: string, public lastName?: string, public address?: string, public idOrders?: IOrdered[]) {}
   SendOrdered(): void {
-    this.user.address = this.order.billingAddress;
+    this.customer.address = this.order.billingAddress;
     this.order.status = Status.ORDERED;
     const currentTime: moment.Moment = moment();
     this.order.commandStart = currentTime;
     this.customerService
-      .create(this.user)
+      .create(this.customer)
       .pipe(
         flatMap(result => {
-          this.user = result.body || this.user;
-          this.order.idCustomer = this.user;
+          this.customer = result.body || this.customer;
+          this.order.idCustomer = this.customer;
           return this.orderedService.create(this.order);
         }),
         map(resultOrder => {
           this.order = resultOrder.body || this.order;
-          if (!this.user.idOrders) {
-            this.user.idOrders = new Array(0);
+          if (!this.customer.idOrders) {
+            this.customer.idOrders = new Array(0);
           }
-          this.user.idOrders.push(this.order);
-          this.customerService.update(this.user);
+          this.customer.idOrders.push(this.order);
+          this.customerService.update(this.customer);
           this.order.orderLines = new Array(0);
           let i = 0;
           this.shoppingCartService.getItems().forEach(Item => {
