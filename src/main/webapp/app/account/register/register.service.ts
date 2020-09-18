@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { IUser } from 'app/core/user/user.model';
-import { ICustomer } from 'app/shared/model/customer.model';
+import { IRegister } from './register.model';
 
 @Injectable({ providedIn: 'root' })
 export class RegisterService {
@@ -14,7 +14,7 @@ export class RegisterService {
     return this.http.post(SERVER_API_URL + 'api/register', account);
   }
 
-  saveCustomer(account: ICustomer): Observable<{}> {
+  saveCustomer(account: IRegister): Observable<{}> {
     return this.http.post(SERVER_API_URL + 'api/registerCustomer', account);
   }
 }

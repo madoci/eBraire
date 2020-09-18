@@ -19,7 +19,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -59,11 +58,6 @@ public class CustomerResource {
         if (customer.getId() != null) {
             throw new BadRequestAlertException("A new customer cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        if (Objects.isNull(customer.getUser())) {
-            throw new BadRequestAlertException("Invalid association value provided", ENTITY_NAME, "null");
-        }
-        Long userId = customer.getUser().getId();
-        userRepository.findById(userId).ifPresent(customer::user);
         Customer result = customerRepository.save(customer);
         return ResponseEntity.created(new URI("/api/customers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -97,7 +91,6 @@ public class CustomerResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of customers in body.
      */
     @GetMapping("/customers")
-    @Transactional(readOnly = true)
     public List<Customer> getAllCustomers() {
         log.debug("REST request to get all Customers");
         return customerRepository.findAll();
@@ -110,7 +103,6 @@ public class CustomerResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the customer, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/customers/{id}")
-    @Transactional(readOnly = true)
     public ResponseEntity<Customer> getCustomer(@PathVariable Long id) {
         log.debug("REST request to get Customer : {}", id);
         Optional<Customer> customer = customerRepository.findById(id);
@@ -147,5 +139,4 @@ public class CustomerResource {
         Optional<Customer> customer = customerRepository.findById(user.get().getId());
         return ResponseUtil.wrapOrNotFound(customer);
     }
-
 }

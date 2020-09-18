@@ -1,14 +1,14 @@
 
 entity Customer {
 	id Long,
-	name String required,
-	lastName String required,
     address String required
 }
 
 entity Ordered {
 	id Long,
     commandStart LocalDate required,
+    firstName String required,
+    lastName String required,
     delevryAddress String required,
     billingAddress String required,
     status Status required
@@ -50,7 +50,11 @@ enum Status{
 }
 
 
-relationship OneToMany{
+relationship OneToOne {
+    Customer{user} to User
+}
+
+relationship OneToMany {
     Customer{idOrder} to Ordered{idCustomer}, // chaque client a sa liste de commande
     Ordered{orderLines} to OrderLine{order} 
 }

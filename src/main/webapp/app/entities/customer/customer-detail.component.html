@@ -8,21 +8,13 @@
             <jhi-alert-error></jhi-alert-error>
 
             <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="eBraireApp.customer.name">Name</span></dt>
-                <dd>
-                    <span>{{ customer.name }}</span>
-                </dd>
-                <dt><span jhiTranslate="eBraireApp.customer.lastName">Last Name</span></dt>
-                <dd>
-                    <span>{{ customer.lastName }}</span>
-                </dd>
                 <dt><span jhiTranslate="eBraireApp.customer.address">Address</span></dt>
                 <dd>
                     <span>{{ customer.address }}</span>
                 </dd>
                 <dt><span jhiTranslate="eBraireApp.customer.user">User</span></dt>
                 <dd>
-                    {{ customer.user?.login }}
+                    {{ customer.user?.id }}
                 </dd>
             </dl>
 

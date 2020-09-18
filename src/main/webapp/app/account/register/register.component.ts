@@ -69,8 +69,6 @@ export class RegisterComponent implements AfterViewInit {
       const address = this.registerForm.get(['address'])!.value;
       this.registerService
         .saveCustomer({
-          name: '',
-          lastName: '',
           address,
           password,
           user: { login, email, langKey: this.languageService.getCurrentLanguage() },

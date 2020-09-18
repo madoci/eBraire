@@ -18,6 +18,12 @@
             <column name="command_start" type="date">
                 <constraints nullable="false" />
             </column>
+            <column name="first_name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="last_name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
             <column name="delevry_address" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
@@ -54,6 +60,8 @@
                   tableName="ordered">
             <column name="id" type="numeric"/>
             <column name="command_start" type="date"/>
+            <column name="first_name" type="string"/>
+            <column name="last_name" type="string"/>
             <column name="delevry_address" type="string"/>
             <column name="billing_address" type="string"/>
             <column name="status" type="string"/>

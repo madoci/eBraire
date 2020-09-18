@@ -34,6 +34,14 @@ public class Ordered implements Serializable {
     private LocalDate commandStart;
 
     @NotNull
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @NotNull
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
+    @NotNull
     @Column(name = "delevry_address", nullable = false)
     private String delevryAddress;
 
@@ -74,6 +82,32 @@ public class Ordered implements Serializable {
 
     public void setCommandStart(LocalDate commandStart) {
         this.commandStart = commandStart;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public Ordered firstName(String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public Ordered lastName(String lastName) {
+        this.lastName = lastName;
+        return this;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getDelevryAddress() {
@@ -176,6 +210,8 @@ public class Ordered implements Serializable {
         return "Ordered{" +
             "id=" + getId() +
             ", commandStart='" + getCommandStart() + "'" +
+            ", firstName='" + getFirstName() + "'" +
+            ", lastName='" + getLastName() + "'" +
             ", delevryAddress='" + getDelevryAddress() + "'" +
             ", billingAddress='" + getBillingAddress() + "'" +
             ", status='" + getStatus() + "'" +

@@ -6,6 +6,8 @@ import { Status } from 'app/shared/model/enumerations/status.model';
 export interface IOrdered {
   id?: number;
   commandStart?: Moment;
+  firstName?: string;
+  lastName?: string;
   delevryAddress?: string;
   billingAddress?: string;
   status?: Status;
@@ -17,6 +19,8 @@ export class Ordered implements IOrdered {
   constructor(
     public id?: number,
     public commandStart?: Moment,
+    public firstName?: string,
+    public lastName?: string,
     public delevryAddress?: string,
     public billingAddress?: string,
     public status?: Status,

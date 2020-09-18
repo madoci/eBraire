@@ -76,12 +76,12 @@ export class OrderInfoComponent implements OnInit {
     const emailverifElement: HTMLElement | null = document.getElementById('emailverif');
     if (!this.loading) {
       if (
-        this.user.name === '' ||
-        this.user.lastName === '' ||
+        //this.user.name === '' ||
+        //this.user.lastName === '' ||
         this.order.delevryAddress === '' ||
-        this.user.name === undefined ||
-        this.order.delevryAddress === undefined ||
-        this.user.lastName === undefined
+        //this.user.name === undefined ||
+        this.order.delevryAddress === undefined //||
+        //this.user.lastName === undefined
       ) {
         this.error = 'champ non rempli';
         return;

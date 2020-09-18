@@ -21,28 +21,21 @@ public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-
-    @NotNull
-    @Column(name = "name", nullable = true)
-    private String name;
-
-    @NotNull
-    @Column(name = "last_name", nullable = true)
-    private String lastName;
 
     @NotNull
     @Column(name = "address", nullable = false)
     private String address;
 
-    @OneToMany(mappedBy = "idCustomer")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<Ordered> idOrders = new HashSet<>();
-
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
     private User user;
+
+    @OneToMany(mappedBy = "idCustomer")
+    private Set<Ordered> idOrders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -51,32 +44,6 @@ public class Customer implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Customer name(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public Customer lastName(String lastName) {
-        this.lastName = lastName;
-        return this;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getAddress() {
@@ -90,6 +57,19 @@ public class Customer implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Customer user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Set<Ordered> getIdOrders() {
@@ -116,19 +96,6 @@ public class Customer implements Serializable {
     public void setIdOrders(Set<Ordered> ordereds) {
         this.idOrders = ordereds;
     }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Customer user(User user) {
-        this.user = user;
-        return this;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -152,8 +119,6 @@ public class Customer implements Serializable {
     public String toString() {
         return "Customer{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", lastName='" + getLastName() + "'" +
             ", address='" + getAddress() + "'" +
             "}";
     }

@@ -17,6 +17,8 @@
         "title": "Ordered"
       },
       "commandStart": "Command Start",
+      "firstName": "First Name",
+      "lastName": "Last Name",
       "delevryAddress": "Delevry Address",
       "billingAddress": "Billing Address",
       "status": "Status",

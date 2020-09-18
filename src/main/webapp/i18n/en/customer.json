@@ -16,11 +16,9 @@
       "detail": {
         "title": "Customer"
       },
-      "name": "Name",
-      "lastName": "Last Name",
       "address": "Address",
-      "idOrder": "Id Order",
-      "user": "User"
+      "user": "User",
+      "idOrder": "Id Order"
     }
   }
 }

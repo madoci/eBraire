@@ -73,6 +73,8 @@ class OrderedGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "commandStart":"2020-01-01T00:00:00.000Z"
+                , "firstName":"SAMPLE_TEXT"
+                , "lastName":"SAMPLE_TEXT"
                 , "delevryAddress":"SAMPLE_TEXT"
                 , "billingAddress":"SAMPLE_TEXT"
                 , "status":"ORDERED"

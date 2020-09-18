@@ -172,8 +172,6 @@ public class UserService {
         Customer customer = new Customer();
         customer.setUser(newUser);
         customer.setAddress(address);
-        customer.setName("");
-        customer.setLastName("");
         customerRepository.save(customer);
         log.debug("Created Information for Customer: {}", customer);
 
