@@ -28,7 +28,7 @@
       "relationshipName": "user",
       "otherEntityName": "user",
       "relationshipType": "one-to-one",
-      "otherEntityField": "login",
+      "otherEntityField": "id",
       "ownerSide": true,
       "useJPADerivedIdentifier": true,
       "otherEntityRelationshipName": "customer"

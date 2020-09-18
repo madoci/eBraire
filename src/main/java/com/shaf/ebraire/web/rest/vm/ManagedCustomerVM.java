@@ -1,12 +1,12 @@
 package com.shaf.ebraire.web.rest.vm;
 
-import com.shaf.ebraire.service.dto.UserDTO;
+import com.shaf.ebraire.domain.Customer;
 import javax.validation.constraints.Size;
 
 /**
  * View Model extending the UserDTO, which is meant to be used in the user management UI.
  */
-public class ManagedUserVM extends UserDTO {
+public class ManagedCustomerVM extends Customer {
 
     public static final int PASSWORD_MIN_LENGTH = 4;
 
@@ -15,7 +15,7 @@ public class ManagedUserVM extends UserDTO {
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
-    public ManagedUserVM() {
+    public ManagedCustomerVM() {
         // Empty constructor needed for Jackson.
     }
 
@@ -30,6 +30,6 @@ public class ManagedUserVM extends UserDTO {
     // prettier-ignore
     @Override
     public String toString() {
-        return "ManagedUserVM{" + super.toString() + "} ";
+        return "ManagedCustomerVM{" + super.toString() + "} ";
     }
 }

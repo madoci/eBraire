@@ -34,6 +34,7 @@ export class RegisterComponent implements AfterViewInit {
     email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
     confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
+    address: ['', [Validators.required, Validators.minLength(1)]],
   });
 
   constructor(
@@ -61,10 +62,23 @@ export class RegisterComponent implements AfterViewInit {
     } else {
       const login = this.registerForm.get(['login'])!.value;
       const email = this.registerForm.get(['email'])!.value;
-      this.registerService.save({ login, email, password, langKey: this.languageService.getCurrentLanguage() }).subscribe(
-        () => (this.success = true),
-        response => this.processError(response)
-      );
+      // this.registerService.save({ login, email, password, langKey: this.languageService.getCurrentLanguage(), address: address }).subscribe(
+      //   () => (this.success = true),
+      //   response => this.processError(response)
+      // );
+      const address = this.registerForm.get(['address'])!.value;
+      this.registerService
+        .saveCustomer({
+          name: '',
+          lastName: '',
+          address,
+          password,
+          user: { login, email, langKey: this.languageService.getCurrentLanguage() },
+        })
+        .subscribe(
+          () => (this.success = true),
+          response => this.processError(response)
+        );
     }
   }
 

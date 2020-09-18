@@ -8,6 +8,7 @@ export interface ICustomer {
   address?: string;
   idOrders?: IOrdered[];
   user?: IUser;
+  password?: string;
 }
 
 export class Customer implements ICustomer {
@@ -17,6 +18,7 @@ export class Customer implements ICustomer {
     public lastName?: string,
     public address?: string,
     public idOrders?: IOrdered[],
-    public user?: IUser
+    public user?: IUser,
+    public password?: string
   ) {}
 }

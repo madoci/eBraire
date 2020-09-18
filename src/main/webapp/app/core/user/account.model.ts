@@ -1,5 +1,3 @@
-import { Customer } from 'app/shared/model/customer.model';
-
 export class Account {
   constructor(
     public activated: boolean,
