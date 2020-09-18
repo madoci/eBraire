@@ -220,7 +220,6 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [jhipster homepage and latest documentation]: https://www.jhipster.tech
 [jhipster 6.10.1 archive]: https://www.jhipster.tech/documentation-archive/v6.10.1
 [using jhipster in development]: https://www.jhipster.tech/documentation-archive/v6.10.1/development/
-[service discovery and configuration with the jhipster-registry]: https://www.jhipster.tech/documentation-archive/v6.10.1/microservices-architecture/#jhipster-registry
 [using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v6.10.1/docker-compose
 [using jhipster in production]: https://www.jhipster.tech/documentation-archive/v6.10.1/production/
 [running tests page]: https://www.jhipster.tech/documentation-archive/v6.10.1/running-tests/
@@ -236,3 +235,49 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [protractor]: https://angular.github.io/protractor/
 [leaflet]: https://leafletjs.com/
 [definitelytyped]: https://definitelytyped.org/
+
+## Tests
+
+### Gatling
+
+Cette partie se base sur les informations trouvées sur https://www.jhipster.tech/running-tests/ et sur https://gatling.io/docs/current/.
+
+Gatling est un outil destiné à effectuer des tests de performance sur des applications web. Jhipster autogénère des tests Gatling qu'il est possible de modifier pour qu'ils correspondent à notre site de e-commerce. Ces tests sont générés dans [src/test/gatling/user-files/simulations]().
+
+Pour utiliser Gatling, il faut tout d'abord l'installer via leur [page de téléchargement](https://gatling.io/open-source/). Pour fonctionner, Gatling a besoin de OpenJDK8 ou OpenJDK11, et de Scala en version 2.12 (Gatling n'est pas compatible avec les versions 2.11 et 2.13).
+
+Une fois installé, il est possible de tester Gatling en exécutant
+
+```
+$GATLING_HOME/bin/gatling.sh
+```
+
+sur Linux/Unix et
+
+```
+%GATLING_HOME%\bin\gatling.bat
+```
+
+sur Windows. Il faut sélectionner une des simulations proposées.
+
+Par défaut, les simulations sont enregistrées dans le dossier [\$GATLING_HOME/user_files/simulations]() et les résultats dans [\$GATLING_HOME/results](). Les résultats sont présentés sous forme de fichier html.
+
+Pour exécuter des simulations se trouvant dans un autre répertoire il faut utiliser la commande _-sf <path\>_ et pour enregistrer les résultats dans un autre répertoire _-rf <path\>_.
+
+Puisqu'il semble fastidieux d'écrire du code en Scala, Gatling offre un outil permettant de record nos actions sur un site web qui génèrera lui même le code Scala : [recorder](https://gatling.io/docs/current/http/recorder/).
+
+Pour utiliser recorder, il faut exécuter
+
+```
+$GATLING_HOME/bin/recorder.sh
+```
+
+sur Linux/Unix et
+
+```
+%GATLING_HOME%\bin\recorder.bat
+```
+
+sur Windows.
+
+Pour utiliser recorder, il faut configurer le proxy du navigateur utilisé. Pour Firefox, aller dans le menu puis dans préférences. Dans paramètres avancés, aller dans paramètres réseaux et sélectionner la configuration manuelle du proxy avec comme proxy http _127.0.0.1_ et comme port _8000_, puis cocher "Utiliser également ce proxy pour ftp et https".

@@ -2,7 +2,6 @@ package com.shaf.ebraire.web.rest;
 
 import com.shaf.ebraire.domain.Type;
 import com.shaf.ebraire.repository.TypeRepository;
-import com.shaf.ebraire.repository.search.TypeSearchRepository;
 import com.shaf.ebraire.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -14,14 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.shaf.ebraire.domain.Type}.
@@ -40,11 +36,8 @@ public class TypeResource {
 
     private final TypeRepository typeRepository;
 
-    private final TypeSearchRepository typeSearchRepository;
-
-    public TypeResource(TypeRepository typeRepository, TypeSearchRepository typeSearchRepository) {
+    public TypeResource(TypeRepository typeRepository) {
         this.typeRepository = typeRepository;
-        this.typeSearchRepository = typeSearchRepository;
     }
 
     /**
@@ -55,13 +48,12 @@ public class TypeResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/types")
-    public ResponseEntity<Type> createType(@RequestBody Type type) throws URISyntaxException {
+    public ResponseEntity<Type> createType(@Valid @RequestBody Type type) throws URISyntaxException {
         log.debug("REST request to save Type : {}", type);
         if (type.getId() != null) {
             throw new BadRequestAlertException("A new type cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Type result = typeRepository.save(type);
-        typeSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -77,13 +69,12 @@ public class TypeResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/types")
-    public ResponseEntity<Type> updateType(@RequestBody Type type) throws URISyntaxException {
+    public ResponseEntity<Type> updateType(@Valid @RequestBody Type type) throws URISyntaxException {
         log.debug("REST request to update Type : {}", type);
         if (type.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Type result = typeRepository.save(type);
-        typeSearchRepository.save(result);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, type.getId().toString()))
             .body(result);
@@ -123,22 +114,6 @@ public class TypeResource {
     public ResponseEntity<Void> deleteType(@PathVariable Long id) {
         log.debug("REST request to delete Type : {}", id);
         typeRepository.deleteById(id);
-        typeSearchRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/types?query=:query} : search for the type corresponding
-     * to the query.
-     *
-     * @param query the query of the type search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/types")
-    public List<Type> searchTypes(@RequestParam String query) {
-        log.debug("REST request to search Types for query {}", query);
-        return StreamSupport
-            .stream(typeSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        .collect(Collectors.toList());
     }
 }

@@ -24,6 +24,7 @@ export class OrderInfoComponent implements OnInit {
   order: Ordered = new Ordered();
   loading: Boolean = true;
   error: String = '';
+
   constructor(
     private shoppingCartService: ShoppingCartService,
     private bookedBookService: BookedBookService,
@@ -31,13 +32,14 @@ export class OrderInfoComponent implements OnInit {
     private customerService: CustomerService,
     private router: Router
   ) {}
+
   // public quantity?: number, public price?: number, public orderLines?: IBook, public order?: IOrdered
+
   ngOnInit(): void {
     if (this.shoppingCartService.getItems().length === 0) {
       alert("Votre panier est vide vous ne pouvez pas passez de commande ajoutez des livres dans votre panier d'abord.");
       this.router.navigateByUrl('');
     }
-    this.user = this.shoppingCartService.customer!;
     this.next(false);
     this.loading = false;
   }

@@ -19,10 +19,10 @@
       },
       "title": "Title",
       "authors": "Authors",
+      "description": "Description",
       "unitPrice": "Unit Price",
       "image": "Image",
       "quantity": "Quantity",
-      "description": "Description",
       "type": "Type",
       "tags": "Tags",
       "genres": "Genres"

@@ -7,7 +7,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +17,6 @@ import java.util.Set;
 @Entity
 @Table(name = "book")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "book")
 public class Book implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,33 +25,35 @@ public class Book implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
     @NotNull
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
+
     @NotNull
-    @Column(name = "authors")
+    @Column(name = "authors", nullable = false)
     private String authors;
+
     @NotNull
-    @Min(value = 0)
-    @Column(name = "unit_price")
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @NotNull
+    @Column(name = "unit_price", nullable = false)
     private Float unitPrice;
-    @NotNull
+
+    
     @Lob
-    @Column(name = "image")
+    @Column(name = "image", nullable = false)
     private byte[] image;
-    @NotNull
-    @Column(name = "image_content_type")
+
+    @Column(name = "image_content_type", nullable = false)
     private String imageContentType;
 
     @NotNull
     @Min(value = 0)
     @Column(name = "quantity", nullable = false)
-	private Integer quantity;
-
-    @NotNull
-    @Size(max = 2048)
-    @Column(name = "description", length = 2048, nullable = false)
-    private String description;
+    private Integer quantity;
 
     @ManyToOne
     @JsonIgnoreProperties(value = "books", allowSetters = true)
@@ -108,6 +108,19 @@ public class Book implements Serializable {
         this.authors = authors;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public Book description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Float getUnitPrice() {
         return unitPrice;
     }
@@ -158,19 +171,6 @@ public class Book implements Serializable {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Book description(String description) {
-        this.description = description;
-        return this;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Type getType() {
@@ -260,11 +260,11 @@ public class Book implements Serializable {
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
             ", authors='" + getAuthors() + "'" +
+            ", description='" + getDescription() + "'" +
             ", unitPrice=" + getUnitPrice() +
             ", image='" + getImage() + "'" +
             ", imageContentType='" + getImageContentType() + "'" +
             ", quantity=" + getQuantity() +
-            ", description='" + getDescription() + "'" +
             "}";
     }
 }

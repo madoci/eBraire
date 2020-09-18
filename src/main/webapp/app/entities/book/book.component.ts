@@ -33,11 +33,7 @@ export class BookComponent implements OnInit, OnDestroy {
 
   loadAll(): void {
     if (this.currentSearch) {
-      this.bookService
-        .search({
-          query: this.currentSearch,
-        })
-        .subscribe((res: HttpResponse<IBook[]>) => (this.books = res.body || []));
+      this.bookService.query().subscribe((res: HttpResponse<IBook[]>) => (this.books = res.body || []));
       return;
     }
 

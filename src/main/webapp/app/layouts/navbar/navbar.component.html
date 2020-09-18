@@ -1,6 +1,5 @@
 <nav class="navbar navbar-dark navbar-expand-md fixed-top" style="background-color: #a63c40;">
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
-        <span class="logo-img"></span>
         <span jhiTranslate="global.title" class="navbar-title">EBraire</span> <span class="navbar-version">{{ version }}</span>
     </a>
     <a class="navbar-toggler d-lg-none" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()">
@@ -8,40 +7,22 @@
     </a>
 
     <!-- Search bar -->
-    <div class="row">
-        <div class="col-sm-12">
-            <form name="searchForm" class="form-inline">
-                <div class="input-group w-100 mt-3">
-                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'eBraireApp.book.home.search' | translate }}">
-
-                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-                        <fa-icon icon="search"></fa-icon>
-                    </button>
-
-                    <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-                        <fa-icon icon="trash-alt"></fa-icon>
-                    </button>
-                </div>
-            </form>
-        </div>
+    <div class="navbar-collapse collapse" [ngbCollapse]="isNavbarCollapsed">
+        <form name="searchForm" class="form-inline my-2 my-lg-0 ml-auto">
+            <div class="input-group md-form my-0 col-xs-4">
+                <input type="text" class="form-control search-bar" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="">
+                <button class="input-group-append btn" style="margin-left: 5px; color: #a63c40; background-color: white" (click)="search(currentSearch)">
+                    <fa-icon icon="search"></fa-icon>
+                </button>
+            </div>
+        </form>
     </div>
 
-    <div>
-        <jhi-shopping-cart></jhi-shopping-cart>
-    </div>
 
     <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
-                    <span>
-                        <fa-icon icon="home"></fa-icon>
-                        <span jhiTranslate="global.menu.home">Home</span>
-                    </span>
-                </a>
-            </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
                         <fa-icon icon="th-list"></fa-icon>
@@ -167,19 +148,6 @@
                     </li>
                 </ul>
             </li>
-            <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" *ngIf="languages && languages.length > 1">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
-                    <span>
-                        <fa-icon icon="flag"></fa-icon>
-                        <span jhiTranslate="global.menu.language">Language</span>
-                    </span>
-                </a>
-                <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
-                    <li *ngFor="let language of languages">
-                        <a class="dropdown-item" [jhiActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{ language | findLanguageFromKey }}</a>
-                    </li>
-                </ul>
-            </li>
             <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
                     <span *ngIf="!getImageUrl()">
@@ -224,6 +192,14 @@
                         </a>
                     </li>
                 </ul>
+            </li>
+            <li>
+                <a class="nav-link" routerLink="/order/summary">
+                    <span>
+                        <fa-icon icon="shopping-cart"></fa-icon>
+                        <jhi-shopping-cart></jhi-shopping-cart>
+                    </span>
+                </a>
             </li>
         </ul>
     </div>

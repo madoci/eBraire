@@ -1,10 +1,11 @@
 package com.shaf.ebraire.web.rest;
 
 import com.shaf.ebraire.domain.Book;
+import com.shaf.ebraire.domain.BookedBook;
 import com.shaf.ebraire.domain.Genre;
 import com.shaf.ebraire.domain.Tag;
 import com.shaf.ebraire.repository.BookRepository;
-import com.shaf.ebraire.repository.search.BookSearchRepository;
+import com.shaf.ebraire.repository.BookedBookRepository;
 import com.shaf.ebraire.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -20,12 +21,12 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.shaf.ebraire.domain.Book}.
@@ -44,93 +45,11 @@ public class BookResource {
 
     private final BookRepository bookRepository;
 
-    private final BookSearchRepository bookSearchRepository;
-
-    public BookResource(BookRepository bookRepository, BookSearchRepository bookSearchRepository) {
+    private final BookedBookRepository bookedBookRepository;
+    public BookResource(BookRepository bookRepository,BookedBookRepository bookedBookRepository) {
         this.bookRepository = bookRepository;
-        this.bookSearchRepository = bookSearchRepository;
+        this.bookedBookRepository = bookedBookRepository;
     }
-    
-    /**
- * {@code GET  /books/:title} : get the "title" book.
- *
- * @param title the title of the book to retrieve.
- * @return the list of book containing the title.
- */
-@GetMapping("/booksResearch/{title}")
-public List<Book>  getBook(@PathVariable String title) {
-    log.debug("REST request to get Book : {}", title);
-    List<Book> books = bookRepository.findBooksByTitle(title);
-    
-    return books;
-}
-/**
-* {@code GET  /books/:title} : get the "title" book.
-*
-* @param title the title of the book to retrieve.
-* @return the list of book containing the title.
-*/
-@GetMapping("/booksResearch/{title}/{types}/{genres}/{tags}")
-public List<Book>  getBook(@PathVariable String title,@PathVariable String types,@PathVariable String genres,@PathVariable String tags) {
-
-List<Book> books;
-if (title.equals("title-") && types.equals("types-")) {
-	log.debug("tous les livres");
-	 books = getAllBooks(true);
-} else if (types.equals("types-")) {
-	books = bookRepository.findBooksByTitle(title.substring(6));
-}else if (title.equals("title-")){
-	 books = bookRepository.findBooksByFilter("",types.substring(6).split("&"));
-}else{
-	 books = bookRepository.findBooksByFilter(title.substring(6),types.substring(6).split("&"));
-}
-if (!(tags.contentEquals("tags-"))) {
-	String[] tagList = tags.substring(5).split("&");
-	List<Book> finalBooks = new ArrayList<>();
-	for (int i =0;i<books.size();i++) {
-		boolean haveTag = false;
-			for(Tag tag:books.get(i).getTags()) {
-				for (int j=0;j<tagList.length;j++) {
-					if(tagList[j].equals(tag.getTag())) {
-						haveTag = true;
-						break;
-					}
-				}
-				if (haveTag) {
-					break;
-				}
-			}
-			if (haveTag) {
-				finalBooks.add(books.get(i));
-			}		
-	}
-	books = finalBooks;
-}
-if (!(genres.contentEquals("genres-"))) {
-	String[] genreList = genres.substring(7).split("&");
-	List<Book> finalBooks = new ArrayList<>();
-	for (int i =0;i<books.size();i++) {
-		boolean havegenre = false;
-			for(Genre genre:books.get(i).getGenres()) {
-				for (int j=0;j<genreList.length;j++) {
-					if(genreList[j].equals(genre.getGenre())) {
-						havegenre = true;
-						break;
-					}
-				}
-				if (havegenre) {
-					break;
-				}
-			}
-			if (havegenre) {
-				finalBooks.add(books.get(i));
-			}		
-	}
-	books = finalBooks;
-}
-return books;
-}
-
 
     /**
      * {@code POST  /books} : Create a new book.
@@ -146,7 +65,6 @@ return books;
             throw new BadRequestAlertException("A new book cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Book result = bookRepository.save(book);
-        bookSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/books/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -168,7 +86,6 @@ return books;
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Book result = bookRepository.save(book);
-        bookSearchRepository.save(result);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, book.getId().toString()))
             .body(result);
@@ -194,9 +111,102 @@ return books;
      */
     @GetMapping("/books/{id}")
     public ResponseEntity<Book> getBook(@PathVariable Long id) {
+        Date date = new Date();
+        long timeMilliExp = date.getTime();
+     /*   log.debug("supressing removed ");
+        List<BookedBook> bookedBooks=bookedBookRepository.getExpiredBookedBook(timeMilliExp);
+        if (bookedBooks != null) {
+        for(BookedBook bookedBooktoRemove:bookedBooks) {
+        	bookedBooktoRemove.getBook().setQuantity(bookedBooktoRemove.getBook().getQuantity() + bookedBooktoRemove.getQuantity());
+            Book result = bookRepository.save(bookedBooktoRemove.getBook());
+        }
+        log.debug("end for");
+        bookedBookRepository.removeExpiredBookedBook(timeMilliExp);
+        }*/
         log.debug("REST request to get Book : {}", id);
         Optional<Book> book = bookRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(book);
+    }
+
+     /**
+     * {@code GET  /books/:title} : get the "title" book.
+     *
+     * @param title the title of the book to retrieve.
+     * @return the list of book containing the title.
+     */
+    @GetMapping("/booksResearch/{title}")
+    public List<Book>  getBook(@PathVariable String title) {
+        log.debug("REST request to get Book : {}", title);
+        List<Book> books = bookRepository.findBooksByTitle(title);
+        
+        return books;
+    }
+
+    /**
+    * {@code GET  /books/:title} : get the "title" book.
+    *
+    * @param title the title of the book to retrieve.
+    * @return the list of book containing the title.
+    */
+    @GetMapping("/booksResearch/{title}/{types}/{genres}/{tags}")
+    public List<Book>  getBook(@PathVariable String title,@PathVariable String types,@PathVariable String genres,@PathVariable String tags) {
+        
+        List<Book> books;
+        if (title.equals("title-") && types.equals("types-")) {
+            log.debug("tous les livres");
+            books = getAllBooks(true);
+        } else if (types.equals("types-")) {
+            books = bookRepository.findBooksByTitle(title.substring(6));
+        }else if (title.equals("title-")){
+            books = bookRepository.findBooksByFilter("",types.substring(6).split("&"));
+        }else{
+            books = bookRepository.findBooksByFilter(title.substring(6),types.substring(6).split("&"));
+        }
+        if (!(tags.contentEquals("tags-"))) {
+            String[] tagList = tags.substring(5).split("&");
+            List<Book> finalBooks = new ArrayList<>();
+            for (int i =0;i<books.size();i++) {
+                boolean haveTag = false;
+                    for(Tag tag:books.get(i).getTags()) {
+                        for (int j=0;j<tagList.length;j++) {
+                            if(tagList[j].equals(tag.getTag())) {
+                                haveTag = true;
+                                break;
+                            }
+                        }
+                        if (haveTag) {
+                            break;
+                        }
+                    }
+                    if (haveTag) {
+                        finalBooks.add(books.get(i));
+                    }		
+            }
+            books = finalBooks;
+        }
+        if (!(genres.contentEquals("genres-"))) {
+            String[] genreList = genres.substring(7).split("&");
+            List<Book> finalBooks = new ArrayList<>();
+            for (int i =0;i<books.size();i++) {
+                boolean havegenre = false;
+                    for(Genre genre:books.get(i).getGenres()) {
+                        for (int j=0;j<genreList.length;j++) {
+                            if(genreList[j].equals(genre.getGenre())) {
+                                havegenre = true;
+                                break;
+                            }
+                        }
+                        if (havegenre) {
+                            break;
+                        }
+                    }
+                    if (havegenre) {
+                        finalBooks.add(books.get(i));
+                    }		
+            }
+            books = finalBooks;
+        }
+        return books;
     }
 
     /**
@@ -209,22 +219,6 @@ return books;
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         log.debug("REST request to delete Book : {}", id);
         bookRepository.deleteById(id);
-        bookSearchRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/books?query=:query} : search for the book corresponding
-     * to the query.
-     *
-     * @param query the query of the book search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/books")
-    public List<Book> searchBooks(@RequestParam String query) {
-        log.debug("REST request to search Books for query {}", query);
-        return StreamSupport
-            .stream(bookSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        .collect(Collectors.toList());
     }
 }

@@ -3,7 +3,6 @@ package com.shaf.ebraire.web.rest;
 import com.shaf.ebraire.EBraireApp;
 import com.shaf.ebraire.domain.Book;
 import com.shaf.ebraire.repository.BookRepository;
-import com.shaf.ebraire.repository.search.BookSearchRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -47,6 +45,9 @@ public class BookResourceIT {
     private static final String DEFAULT_AUTHORS = "AAAAAAAAAA";
     private static final String UPDATED_AUTHORS = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
     private static final Float DEFAULT_UNIT_PRICE = 1F;
     private static final Float UPDATED_UNIT_PRICE = 2F;
 
@@ -57,9 +58,6 @@ public class BookResourceIT {
 
     private static final Integer DEFAULT_QUANTITY = 0;
     private static final Integer UPDATED_QUANTITY = 1;
-
-    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
-    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     @Autowired
     private BookRepository bookRepository;
@@ -72,8 +70,6 @@ public class BookResourceIT {
      *
      * @see com.shaf.ebraire.repository.search.BookSearchRepositoryMockConfiguration
      */
-    @Autowired
-    private BookSearchRepository mockBookSearchRepository;
 
     @Autowired
     private EntityManager em;
@@ -93,11 +89,11 @@ public class BookResourceIT {
         Book book = new Book()
             .title(DEFAULT_TITLE)
             .authors(DEFAULT_AUTHORS)
+            .description(DEFAULT_DESCRIPTION)
             .unitPrice(DEFAULT_UNIT_PRICE)
             .image(DEFAULT_IMAGE)
             .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE)
-            .quantity(DEFAULT_QUANTITY)
-            .description(DEFAULT_DESCRIPTION);
+            .quantity(DEFAULT_QUANTITY);
         return book;
     }
     /**
@@ -110,11 +106,11 @@ public class BookResourceIT {
         Book book = new Book()
             .title(UPDATED_TITLE)
             .authors(UPDATED_AUTHORS)
+            .description(UPDATED_DESCRIPTION)
             .unitPrice(UPDATED_UNIT_PRICE)
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
-            .quantity(UPDATED_QUANTITY)
-            .description(UPDATED_DESCRIPTION);
+            .quantity(UPDATED_QUANTITY);
         return book;
     }
 
@@ -139,14 +135,12 @@ public class BookResourceIT {
         Book testBook = bookList.get(bookList.size() - 1);
         assertThat(testBook.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testBook.getAuthors()).isEqualTo(DEFAULT_AUTHORS);
+        assertThat(testBook.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testBook.getUnitPrice()).isEqualTo(DEFAULT_UNIT_PRICE);
         assertThat(testBook.getImage()).isEqualTo(DEFAULT_IMAGE);
         assertThat(testBook.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
         assertThat(testBook.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
-        assertThat(testBook.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
 
-        // Validate the Book in Elasticsearch
-        verify(mockBookSearchRepository, times(1)).save(testBook);
     }
 
     @Test
@@ -167,17 +161,34 @@ public class BookResourceIT {
         List<Book> bookList = bookRepository.findAll();
         assertThat(bookList).hasSize(databaseSizeBeforeCreate);
 
-        // Validate the Book in Elasticsearch
-        verify(mockBookSearchRepository, times(0)).save(book);
     }
 
 
     @Test
     @Transactional
-    public void checkQuantityIsRequired() throws Exception {
+    public void checkTitleIsRequired() throws Exception {
         int databaseSizeBeforeTest = bookRepository.findAll().size();
         // set the field null
-        book.setQuantity(null);
+        book.setTitle(null);
+
+        // Create the Book, which fails.
+
+
+        restBookMockMvc.perform(post("/api/books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(book)))
+            .andExpect(status().isBadRequest());
+
+        List<Book> bookList = bookRepository.findAll();
+        assertThat(bookList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkAuthorsIsRequired() throws Exception {
+        int databaseSizeBeforeTest = bookRepository.findAll().size();
+        // set the field null
+        book.setAuthors(null);
 
         // Create the Book, which fails.
 
@@ -212,6 +223,44 @@ public class BookResourceIT {
 
     @Test
     @Transactional
+    public void checkUnitPriceIsRequired() throws Exception {
+        int databaseSizeBeforeTest = bookRepository.findAll().size();
+        // set the field null
+        book.setUnitPrice(null);
+
+        // Create the Book, which fails.
+
+
+        restBookMockMvc.perform(post("/api/books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(book)))
+            .andExpect(status().isBadRequest());
+
+        List<Book> bookList = bookRepository.findAll();
+        assertThat(bookList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkQuantityIsRequired() throws Exception {
+        int databaseSizeBeforeTest = bookRepository.findAll().size();
+        // set the field null
+        book.setQuantity(null);
+
+        // Create the Book, which fails.
+
+
+        restBookMockMvc.perform(post("/api/books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(book)))
+            .andExpect(status().isBadRequest());
+
+        List<Book> bookList = bookRepository.findAll();
+        assertThat(bookList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllBooks() throws Exception {
         // Initialize the database
         bookRepository.saveAndFlush(book);
@@ -223,11 +272,11 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].authors").value(hasItem(DEFAULT_AUTHORS)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
-            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -263,11 +312,11 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.id").value(book.getId().intValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.authors").value(DEFAULT_AUTHORS))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.doubleValue()))
             .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
             .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)))
-            .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
+            .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY));
     }
     @Test
     @Transactional
@@ -292,11 +341,11 @@ public class BookResourceIT {
         updatedBook
             .title(UPDATED_TITLE)
             .authors(UPDATED_AUTHORS)
+            .description(UPDATED_DESCRIPTION)
             .unitPrice(UPDATED_UNIT_PRICE)
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
-            .quantity(UPDATED_QUANTITY)
-            .description(UPDATED_DESCRIPTION);
+            .quantity(UPDATED_QUANTITY);
 
         restBookMockMvc.perform(put("/api/books")
             .contentType(MediaType.APPLICATION_JSON)
@@ -309,14 +358,12 @@ public class BookResourceIT {
         Book testBook = bookList.get(bookList.size() - 1);
         assertThat(testBook.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testBook.getAuthors()).isEqualTo(UPDATED_AUTHORS);
+        assertThat(testBook.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testBook.getUnitPrice()).isEqualTo(UPDATED_UNIT_PRICE);
         assertThat(testBook.getImage()).isEqualTo(UPDATED_IMAGE);
         assertThat(testBook.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
         assertThat(testBook.getQuantity()).isEqualTo(UPDATED_QUANTITY);
-        assertThat(testBook.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
 
-        // Validate the Book in Elasticsearch
-        verify(mockBookSearchRepository, times(1)).save(testBook);
     }
 
     @Test
@@ -334,8 +381,6 @@ public class BookResourceIT {
         List<Book> bookList = bookRepository.findAll();
         assertThat(bookList).hasSize(databaseSizeBeforeUpdate);
 
-        // Validate the Book in Elasticsearch
-        verify(mockBookSearchRepository, times(0)).save(book);
     }
 
     @Test
@@ -355,18 +400,11 @@ public class BookResourceIT {
         List<Book> bookList = bookRepository.findAll();
         assertThat(bookList).hasSize(databaseSizeBeforeDelete - 1);
 
-        // Validate the Book in Elasticsearch
-        verify(mockBookSearchRepository, times(1)).deleteById(book.getId());
     }
 
     @Test
     @Transactional
     public void searchBook() throws Exception {
-        // Configure the mock search repository
-        // Initialize the database
-        bookRepository.saveAndFlush(book);
-        when(mockBookSearchRepository.search(queryStringQuery("id:" + book.getId())))
-            .thenReturn(Collections.singletonList(book));
 
         // Search the book
         restBookMockMvc.perform(get("/api/_search/books?query=id:" + book.getId()))
@@ -375,10 +413,10 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].authors").value(hasItem(DEFAULT_AUTHORS)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
-            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)));
     }
 }

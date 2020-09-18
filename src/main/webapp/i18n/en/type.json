@@ -5,7 +5,6 @@
         "title": "Types",
         "createLabel": "Create a new Type",
         "createOrEditLabel": "Create or edit a Type",
-        "search": "Search for Type",
         "notFound": "No Types found"
       },
       "created": "A new Type is created with identifier {{ param }}",

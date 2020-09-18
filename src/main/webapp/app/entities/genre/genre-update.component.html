@@ -15,6 +15,12 @@
                     <label class="form-control-label" jhiTranslate="eBraireApp.genre.genre" for="field_genre">Genre</label>
                     <input type="text" class="form-control" name="genre" id="field_genre"
                            formControlName="genre"/>
+                    <div *ngIf="editForm.get('genre')!.invalid && (editForm.get('genre')!.dirty || editForm.get('genre')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('genre')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
                 </div>
             </div>
 

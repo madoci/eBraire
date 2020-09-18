@@ -74,10 +74,10 @@ class BookGatlingTest extends Simulation {
                 "id":null
                 , "title":"SAMPLE_TEXT"
                 , "authors":"SAMPLE_TEXT"
+                , "description":"SAMPLE_TEXT"
                 , "unitPrice":null
                 , "image":null
                 , "quantity":"0"
-                , "description":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_book_url"))).exitHereIfFailed

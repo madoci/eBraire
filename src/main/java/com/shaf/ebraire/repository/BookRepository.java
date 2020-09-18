@@ -32,7 +32,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findBooksByTitle(@Param("title") String title);
     
     @Query("select distinct book from Book book left join fetch book.tags left join fetch book.genres where LOWER(book.title)  like LOWER(CONCAT('%',CONCAT( :title,'%' ))) and book.type.type in :types")
-    List<Book> findBooksByFilter(@Param("title") String title,@Param("types")String[] types);
-
-    
+    List<Book> findBooksByFilter(@Param("title") String title, @Param("types")String[] types);
 }

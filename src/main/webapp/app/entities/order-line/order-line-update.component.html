@@ -15,19 +15,39 @@
                     <label class="form-control-label" jhiTranslate="eBraireApp.orderLine.quantity" for="field_quantity">Quantity</label>
                     <input type="number" class="form-control" name="quantity" id="field_quantity"
                            formControlName="quantity"/>
+                    <div *ngIf="editForm.get('quantity')!.invalid && (editForm.get('quantity')!.dirty || editForm.get('quantity')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('quantity')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('quantity')?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="eBraireApp.orderLine.price" for="field_price">Price</label>
                     <input type="number" class="form-control" name="price" id="field_price"
                            formControlName="price"/>
+                    <div *ngIf="editForm.get('price')!.invalid && (editForm.get('price')!.dirty || editForm.get('price')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('price')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('price')?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="eBraireApp.orderLine.orderLines" for="field_orderLines">Order Lines</label>
-                    <select class="form-control" id="field_orderLines" name="orderLines" formControlName="orderLines">
+                    <label class="form-control-label" jhiTranslate="eBraireApp.orderLine.book" for="field_book">Book</label>
+                    <select class="form-control" id="field_book" name="book" formControlName="book">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="bookOption.id === editForm.get('orderLines')!.value?.id ? editForm.get('orderLines')!.value : bookOption" *ngFor="let bookOption of books; trackBy: trackById">{{ bookOption.id }}</option>
+                        <option [ngValue]="bookOption.id === editForm.get('book')!.value?.id ? editForm.get('book')!.value : bookOption" *ngFor="let bookOption of books; trackBy: trackById">{{ bookOption.id }}</option>
                     </select>
                 </div>
 

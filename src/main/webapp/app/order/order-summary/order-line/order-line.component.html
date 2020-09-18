@@ -1,0 +1,92 @@
+<style>
+    .container {
+        display: flex;
+        flex-direction: row;
+    }
+    
+    .margin-bottom {
+        margin-bottom: 10px;
+    }
+    
+    .price {
+        width: 100%
+    }
+    
+    .title {
+        width: 25%;
+        max-width: 25%;
+        min-width: 25%;
+        margin-left: 10px;
+    }
+    
+    hr {
+        border-top: 1px solid darkgrey;
+    }
+    
+    .button-sign {
+        background-color: #a63c40;
+        color: white;
+    }
+    
+    .scroller {
+        min-width: 80px
+    }
+    
+    .button-suppr {
+        justify-content: flex-end;
+        margin-right: 60px;
+        width: 100%
+    }
+    
+    .img {
+        justify-content: flex-start
+    }
+    
+    @media screen and (max-width: 1050px) {
+        .container {
+            flex-direction: column !important;
+            align-items: center !important;
+        }
+        .button-suppr {
+            justify-content: center !important;
+            align-items: center !important;
+            margin-right: auto !important;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            min-width: 100%;
+        }
+        .price {
+            margin-bottom: 20px
+        }
+    }
+</style>
+
+<div class="container margin-bottom">
+    <jhi-book-image *ngIf="item.book" class="img" [book]="item.book" [imgSize]=200 [borderColor]="'#AAAAAA'"></jhi-book-image>
+    <a  *ngIf="item.book" class="title" href="/display-book/{{item.book.id}}">
+        <h2 *ngIf="item.book" >  {{item.book.title}}</h2>
+    </a>
+    <div class="d-flex flex-row justify-content-center align-items-center">
+        <div>
+            <button class="btn button-sign" (click)="removeOne()">-</button>
+        </div>
+        <div>
+            <select class="custom-select scroller" [(ngModel)]="quantity" (change)="changeItemQuantity()">
+                <option *ngFor="let i of quantities" [ngValue]="i+1">{{i+1}}</option>
+            </select>
+        </div>
+        <div>
+            <button class="btn button-sign" (click)="addOne()">+</button>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-center align-items-center price" *ngIf="item.quantity && item.book">
+        {{item.quantity}} x {{price(item.book.unitPrice)}} :
+        <div class="font-weight-bold">{{price(getTotalPrice())}}</div>
+    </div>
+    <div class="d-flex flex-row justify-content-center align-items-center button-suppr">
+        <button class="btn button-sign" (click)="removeItem()">Supprimer</button>
+    </div>
+</div>
+<hr/>

@@ -3,7 +3,6 @@ package com.shaf.ebraire.web.rest;
 import com.shaf.ebraire.EBraireApp;
 import com.shaf.ebraire.domain.BookedBook;
 import com.shaf.ebraire.repository.BookedBookRepository;
-import com.shaf.ebraire.repository.search.BookedBookSearchRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -54,8 +52,6 @@ public class BookedBookResourceIT {
      *
      * @see com.shaf.ebraire.repository.search.BookedBookSearchRepositoryMockConfiguration
      */
-    @Autowired
-    private BookedBookSearchRepository mockBookedBookSearchRepository;
 
     @Autowired
     private EntityManager em;
@@ -115,8 +111,6 @@ public class BookedBookResourceIT {
         assertThat(testBookedBook.getPrice()).isEqualTo(DEFAULT_PRICE);
         assertThat(testBookedBook.getExpired()).isEqualTo(DEFAULT_EXPIRED);
 
-        // Validate the BookedBook in Elasticsearch
-        verify(mockBookedBookSearchRepository, times(1)).save(testBookedBook);
     }
 
     @Test
@@ -137,8 +131,6 @@ public class BookedBookResourceIT {
         List<BookedBook> bookedBookList = bookedBookRepository.findAll();
         assertThat(bookedBookList).hasSize(databaseSizeBeforeCreate);
 
-        // Validate the BookedBook in Elasticsearch
-        verify(mockBookedBookSearchRepository, times(0)).save(bookedBook);
     }
 
 
@@ -211,8 +203,6 @@ public class BookedBookResourceIT {
         assertThat(testBookedBook.getPrice()).isEqualTo(UPDATED_PRICE);
         assertThat(testBookedBook.getExpired()).isEqualTo(UPDATED_EXPIRED);
 
-        // Validate the BookedBook in Elasticsearch
-        verify(mockBookedBookSearchRepository, times(1)).save(testBookedBook);
     }
 
     @Test
@@ -230,8 +220,6 @@ public class BookedBookResourceIT {
         List<BookedBook> bookedBookList = bookedBookRepository.findAll();
         assertThat(bookedBookList).hasSize(databaseSizeBeforeUpdate);
 
-        // Validate the BookedBook in Elasticsearch
-        verify(mockBookedBookSearchRepository, times(0)).save(bookedBook);
     }
 
     @Test
@@ -251,18 +239,11 @@ public class BookedBookResourceIT {
         List<BookedBook> bookedBookList = bookedBookRepository.findAll();
         assertThat(bookedBookList).hasSize(databaseSizeBeforeDelete - 1);
 
-        // Validate the BookedBook in Elasticsearch
-        verify(mockBookedBookSearchRepository, times(1)).deleteById(bookedBook.getId());
     }
 
     @Test
     @Transactional
     public void searchBookedBook() throws Exception {
-        // Configure the mock search repository
-        // Initialize the database
-        bookedBookRepository.saveAndFlush(bookedBook);
-        when(mockBookedBookSearchRepository.search(queryStringQuery("id:" + bookedBook.getId())))
-            .thenReturn(Collections.singletonList(bookedBook));
 
         // Search the bookedBook
         restBookedBookMockMvc.perform(get("/api/_search/booked-books?query=id:" + bookedBook.getId()))

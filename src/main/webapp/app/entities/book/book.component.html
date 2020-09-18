@@ -43,10 +43,10 @@
                     <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.title">Title</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.authors">Authors</span></th>
+                    <th scope="col" ><span jhiTranslate="eBraireApp.book.description">Description</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.unitPrice">Unit Price</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.image">Image</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.quantity">Quantity</span></th>
-                    <th scope="col" ><span jhiTranslate="eBraireApp.book.description">Description</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.type">Type</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.tags">Tags</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.genres">Genres</span></th>
@@ -58,13 +58,13 @@
                     <td><a [routerLink]="['/book', book.id, 'view']">{{ book.id }}</a></td>
                     <td>{{ book.title }}</td>
                     <td>{{ book.authors }}</td>
+                    <td>{{ book.description }}</td>
                     <td>{{ book.unitPrice }}</td>
                     <td>
                         <a *ngIf="book.image" (click)="openFile(book.imageContentType, book.image)" jhiTranslate="entity.action.open">open</a>
                         <span *ngIf="book.image">{{ book.imageContentType }}, {{ byteSize(book.image) }}</span>
                     </td>
                     <td>{{ book.quantity }}</td>
-                    <td>{{ book.description }}</td>
                     <td>
                         <div *ngIf="book.type">
                             <a [routerLink]="['/type', book.type?.id, 'view']" >{{ book.type?.id }}</a>
