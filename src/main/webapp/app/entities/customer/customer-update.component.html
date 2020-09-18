@@ -12,12 +12,46 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="eBraireApp.customer.address" for="field_address">Address</label>
-                    <input type="text" class="form-control" name="address" id="field_address"
-                           formControlName="address"/>
-                    <div *ngIf="editForm.get('address')!.invalid && (editForm.get('address')!.dirty || editForm.get('address')!.touched)">
+                    <label class="form-control-label" jhiTranslate="eBraireApp.customer.addressLine" for="field_addressLine">Address Line</label>
+                    <input type="text" class="form-control" name="addressLine" id="field_addressLine"
+                           formControlName="addressLine"/>
+                    <div *ngIf="editForm.get('addressLine')!.invalid && (editForm.get('addressLine')!.dirty || editForm.get('addressLine')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('address')?.errors?.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('addressLine')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eBraireApp.customer.addressLine2" for="field_addressLine2">Address Line 2</label>
+                    <input type="text" class="form-control" name="addressLine2" id="field_addressLine2"
+                           formControlName="addressLine2"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eBraireApp.customer.postcode" for="field_postcode">Postcode</label>
+                    <input type="text" class="form-control" name="postcode" id="field_postcode"
+                           formControlName="postcode"/>
+                    <div *ngIf="editForm.get('postcode')!.invalid && (editForm.get('postcode')!.dirty || editForm.get('postcode')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('postcode')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('postcode')?.errors?.pattern" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: 'Postcode' }">
+                            This field should follow pattern for "Postcode".
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="eBraireApp.customer.city" for="field_city">City</label>
+                    <input type="text" class="form-control" name="city" id="field_city"
+                           formControlName="city"/>
+                    <div *ngIf="editForm.get('city')!.invalid && (editForm.get('city')!.dirty || editForm.get('city')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('city')?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                     </div>

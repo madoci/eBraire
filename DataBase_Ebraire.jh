@@ -1,7 +1,10 @@
 
 entity Customer {
 	id Long,
-    address String required
+    addressLine String required,
+    addressLine2 String,
+    postcode String required,
+    city String required
 }
 
 entity Ordered {

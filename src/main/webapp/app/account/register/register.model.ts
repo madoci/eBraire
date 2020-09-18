@@ -7,5 +7,14 @@ export interface IRegister extends ICustomer {
 }
 
 export class Register implements IRegister {
-  constructor(public id?: number, public address?: string, public user?: IUser, public idOrders?: IOrdered[], public password?: string) {}
+  constructor(
+    public id?: number,
+    public addressLine?: string,
+    public addressLine2?: string,
+    public postcode?: string,
+    public city?: string,
+    public user?: IUser,
+    public idOrders?: IOrdered[],
+    public password?: string
+  ) {}
 }

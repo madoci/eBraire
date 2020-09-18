@@ -34,7 +34,12 @@ export class RegisterComponent implements AfterViewInit {
     email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
     confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
-    address: ['', [Validators.required, Validators.minLength(1)]],
+    firstName: ['', [Validators.required]],
+    lastName: ['', [Validators.required]],
+    addressLine: ['', [Validators.required]],
+    addressLine2: ['', []],
+    postcode: ['', [Validators.required, Validators.pattern('[0-9]{5}$')]],
+    city: ['', [Validators.required]],
   });
 
   constructor(
@@ -66,12 +71,20 @@ export class RegisterComponent implements AfterViewInit {
       //   () => (this.success = true),
       //   response => this.processError(response)
       // );
-      const address = this.registerForm.get(['address'])!.value;
+      const firstName = this.registerForm.get(['firstName'])!.value;
+      const lastName = this.registerForm.get(['lastName'])!.value;
+      const addressLine = this.registerForm.get(['addressLine'])!.value;
+      const addressLine2 = this.registerForm.get(['addressLine2'])!.value;
+      const postcode = this.registerForm.get(['postcode'])!.value;
+      const city = this.registerForm.get(['city'])!.value;
       this.registerService
         .saveCustomer({
-          address,
+          addressLine,
+          addressLine2,
+          postcode,
+          city,
           password,
-          user: { login, email, langKey: this.languageService.getCurrentLanguage() },
+          user: { login, firstName, lastName, email, langKey: this.languageService.getCurrentLanguage() },
         })
         .subscribe(
           () => (this.success = true),

@@ -131,7 +131,7 @@ public class UserService {
         return newUser;
     }
 
-    public User registerUser(UserDTO userDTO, String password, String address) {
+    public User registerUser(UserDTO userDTO, String password, String addressLine, String addressLine2, String postcode, String city) {
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
@@ -168,10 +168,12 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
 
         // Create and save the customer entity
-        log.warn("ahahah :'( ladresse : " + address);
         Customer customer = new Customer();
         customer.setUser(newUser);
-        customer.setAddress(address);
+        customer.setAddressLine(addressLine);
+        customer.setAddressLine2(addressLine2);
+        customer.setPostcode(postcode);
+        customer.setCity(city);
         customerRepository.save(customer);
         log.debug("Created Information for Customer: {}", customer);
 

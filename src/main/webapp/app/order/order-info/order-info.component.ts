@@ -65,7 +65,7 @@ export class OrderInfoComponent implements OnInit {
         map(customer => {
           if (customer.body) {
             this.customer = customer.body;
-            this.order.delevryAddress = this.customer.address;
+            //this.order.delevryAddress = this.customer.address;
           }
         })
       )
@@ -150,7 +150,7 @@ export class OrderInfoComponent implements OnInit {
   }
   // constructor(public id?: number, public name?: string, public lastName?: string, public address?: string, public idOrders?: IOrdered[]) {}
   SendOrdered(): void {
-    this.customer.address = this.order.billingAddress;
+    //this.customer.address = this.order.billingAddress;
     this.order.status = Status.ORDERED;
     const currentTime: moment.Moment = moment();
     this.order.commandStart = currentTime;

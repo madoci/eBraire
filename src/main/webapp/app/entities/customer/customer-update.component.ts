@@ -20,7 +20,10 @@ export class CustomerUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    address: [null, [Validators.required]],
+    addressLine: [null, [Validators.required]],
+    addressLine2: [],
+    postcode: [null, [Validators.required, Validators.pattern('[0-9]{5}$')]],
+    city: [null, [Validators.required]],
     user: [],
   });
 
@@ -42,7 +45,10 @@ export class CustomerUpdateComponent implements OnInit {
   updateForm(customer: ICustomer): void {
     this.editForm.patchValue({
       id: customer.id,
-      address: customer.address,
+      addressLine: customer.addressLine,
+      addressLine2: customer.addressLine2,
+      postcode: customer.postcode,
+      city: customer.city,
       user: customer.user,
     });
   }
@@ -65,7 +71,10 @@ export class CustomerUpdateComponent implements OnInit {
     return {
       ...new Customer(),
       id: this.editForm.get(['id'])!.value,
-      address: this.editForm.get(['address'])!.value,
+      addressLine: this.editForm.get(['addressLine'])!.value,
+      addressLine2: this.editForm.get(['addressLine2'])!.value,
+      postcode: this.editForm.get(['postcode'])!.value,
+      city: this.editForm.get(['city'])!.value,
       user: this.editForm.get(['user'])!.value,
     };
   }
