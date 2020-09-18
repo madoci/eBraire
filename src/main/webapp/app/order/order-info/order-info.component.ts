@@ -14,6 +14,8 @@ import { IBook } from '../../shared/model/book.model';
 import * as moment from 'moment';
 import { flatMap, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { AccountService } from 'app/core/auth/account.service';
+
 @Component({
   selector: 'jhi-order-info',
   templateUrl: './order-info.component.html',
@@ -32,6 +34,7 @@ export class OrderInfoComponent implements OnInit {
     private orderLineService: OrderLineService,
     private customerService: CustomerService,
     private orderedService: OrderedService,
+    private accountService: AccountService,
     private router: Router
   ) {}
 
@@ -42,6 +45,28 @@ export class OrderInfoComponent implements OnInit {
       alert("Votre panier est vide vous ne pouvez pas passez de commande ajoutez des livres dans votre panier d'abord.");
       this.router.navigateByUrl('');
     }
+
+    this.accountService
+      .identity()
+      .pipe(
+        map(account => {
+          if (account) {
+            return account.login;
+          }
+          return '';
+        }),
+        flatMap(login => {
+          return this.customerService.findByLogin(login);
+        }),
+        map(customer => {
+          if (customer.body) {
+            this.user = customer.body;
+            this.order.delevryAddress = this.user.address;
+          }
+        })
+      )
+      .subscribe();
+
     this.next(false);
     this.loading = false;
   }
@@ -160,7 +185,7 @@ export class OrderInfoComponent implements OnInit {
             });
           });
           this.shoppingCartService.clearCart();
-          alert('Merci pour votre achat et a bientôt chez Ebraire !');
+          alert("Merci pour votre achat et à bientôt chez l'eBraire !");
           this.router.navigateByUrl('');
         })
       )
