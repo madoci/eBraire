@@ -40,38 +40,114 @@
 
         <div class="form-group">
             <label class="form-control-label" for="confirmEmail">Confirmation de l'email</label>
-            <input type="email" class="form-control" id="confirmEmail" name="confirmEmail" placeholder="Confirmation de l'adresse email" formControlName="confirmEmail">
+            <input type="email" class="form-control" id="confirmEmail" name="confirmEmail" placeholder="Confirmation de votre email" formControlName="confirmEmail">
 
             <div class="alert alert-danger" *ngIf="doNotMatch">
                 L'adresse email et sa confirmation ne correspondent pas !
             </div>
         </div>
 
-        <h5>Adresse de livraison :</h5>
+        <hr>
+
+        <p class="font-weight-bold">Adresse de livraison :</p>
+
         <div class="form-group">
-            <label class="form-control-label" for="lastName" jhiTranslate="settings.form.lastname">Last Name</label>
-            <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName">
+            <label class="form-control-label" for="lastName" jhiTranslate="order-info.form.lastname.label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="{{ 'order-info.form.lastname.placeholder' | translate }}"
+                    formControlName="lastName">
+
+            <div *ngIf="customerForm.get('lastName')!.invalid && (customerForm.get('lastName')!.dirty || customerForm.get('lastName')!.touched)">
+                <small class="form-text text-danger"
+                       *ngIf="customerForm.get('lastName')?.errors?.required">
+                    Votre nom est requis.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="customerForm.get('lastName')?.errors?.minlength">
+                    Votre nom doit comporter au moins un caractère.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="customerForm.get('lastName')?.errors?.maxlength">
+                    Votre nom ne doit pas comporter plus de 50 caractères.
+                </small>
+            </div>
         </div>
+
         <div class="form-group">
-            <label class="form-control-label" for="firstName" jhiTranslate="settings.form.firstname">First Name</label>
-            <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstName">
+            <label class="form-control-label" for="firstName" jhiTranslate="order-info.form.firstname.label">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{ 'order-info.form.firstname.placeholder' | translate }}"
+                    formControlName="firstName">
+
+            <div *ngIf="customerForm.get('firstName')!.invalid && (customerForm.get('firstName')!.dirty || customerForm.get('firstName')!.touched)">
+                <small class="form-text text-danger"
+                       *ngIf="customerForm.get('firstName')?.errors?.required">
+                    Votre prénom est requis.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="customerForm.get('firstName')?.errors?.minlength">
+                    Votre prénom doit comporter au moins un caractère.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="customerForm.get('firstName')?.errors?.maxlength">
+                    Votre prénom ne doit pas comporter plus de 50 caractères.
+                </small>
+            </div>
         </div>
+
         <div class="form-group d-flex flex-column">
-            <label class="form-control-label" for="addressLine">Adresse postale</label>
-            <input type="text" class="form-control" id="addressLine" name="addressLine" formControlName="addressLine">
+            <label class="form-control-label" for="addressLine" jhiTranslate="order-info.form.addressline.label">Adresse postale</label>
+            <input type="text" class="form-control" id="addressLine" name="addressLine" placeholder="{{ 'order-info.form.addressline.placeholder' | translate }}"
+                    formControlName="addressLine">
+
+            <div *ngIf="customerForm.get('addressLine')!.invalid && (customerForm.get('addressLine')!.dirty || customerForm.get('addressLine')!.touched)">
+                <small class="form-text text-danger"
+                        *ngIf="customerForm.get('addressLine')?.errors?.required">
+                    Votre adresse est requise.
+                </small>
+            </div>
         </div>
+
         <div class="form-group d-flex flex-column">
-            <label class="form-control-label" for="addressLine2">Complément d'adresse</label>
-            <input type="text" class="form-control" id="addressLine2" name="addressLine2" formControlName="addressLine2">
+            <label class="form-control-label" for="addressLine2" jhiTranslate="order-info.form.addressline2.label">Complément d'adresse</label>
+            <input type="text" class="form-control" id="addressLine2" name="addressLine2" placeholder="{{ 'order-info.form.addressline2.placeholder' | translate }}"
+                    formControlName="addressLine2">
         </div>
+
         <div class="form-group d-flex flex-column">
-            <label class="form-control-label" for="postcode">Code postal</label>
-            <input type="text" class="form-control" id="postcode" name="postcode" formControlName="postcode" maxlength="5">
+            <label class="form-control-label" for="postcode" jhiTranslate="order-info.form.postcode.label">Code postal</label>
+            <input type="text" class="form-control" id="postcode" name="postcode" placeholder="{{ 'order-info.form.postcode.placeholder' | translate }}"
+                    formControlName="postcode" maxlength="5">
+            
+            <div *ngIf="customerForm.get('postcode')!.invalid && (customerForm.get('postcode')!.dirty || customerForm.get('postcode')!.touched)">
+                <small class="form-text text-danger"
+                        *ngIf="customerForm.get('postcode')?.errors?.required">
+                    Votre code postal est requis.
+                </small>
+
+                <small class="form-text text-danger"
+                        *ngIf="customerForm.get('postcode')?.errors?.pattern">
+                    Votre code postal n'est pas valide.
+                </small>
+            </div>
         </div>
+
         <div class="form-group d-flex flex-column">
-            <label class="form-control-label" for="city">Ville</label>
-            <input type="text" class="form-control" id="city" name="city" formControlName="city">
+            <label class="form-control-label" for="city" jhiTranslate="order-info.form.city.label">Ville</label>
+            <input type="text" class="form-control" id="city" name="city" placeholder="{{ 'order-info.form.city.placeholder' | translate }}"
+                    formControlName="city">
+            
+            <div *ngIf="customerForm.get('city')!.invalid && (customerForm.get('city')!.dirty || customerForm.get('city')!.touched)">
+                <small class="form-text text-danger"
+                        *ngIf="customerForm.get('city')?.errors?.required">
+                    Votre ville est requise.
+                </small>
+            </div>
         </div>
+
+        <hr>
 
         <button type="submit" [disabled]="customerForm.invalid" class="btn btn-primary float-right m-2">
             <span class="hidden-sm-down">Valider</span>
@@ -83,37 +159,115 @@
     <jhi-alert-error></jhi-alert-error>
 
     <form name="form" role="form" (ngSubmit)="pay()" [formGroup]="billingForm" novalidate>
-        <h5>Adresse de facturation :</h5>
+
+        <p class="font-weight-bold">Adresse de facturation :</p>
+
         <div class="form-group">
-            <label class="form-control-label" for="lastName" jhiTranslate="settings.form.lastname">Last Name</label>
-            <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName">
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" for="firstName" jhiTranslate="settings.form.firstname">First Name</label>
-            <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstName">
-        </div>
-        <div class="form-group d-flex flex-column">
-            <label class="form-control-label" for="addressLine">Adresse postale</label>
-            <input type="text" class="form-control" id="addressLine" name="addressLine" formControlName="addressLine">
-        </div>
-        <div class="form-group d-flex flex-column">
-            <label class="form-control-label" for="addressLine2">Complément d'adresse</label>
-            <input type="text" class="form-control" id="addressLine2" name="addressLine2" formControlName="addressLine2">
-        </div>
-        <div class="form-group d-flex flex-column">
-            <label class="form-control-label" for="postcode">Code postal</label>
-            <input type="text" class="form-control" id="postcode" name="postcode" formControlName="postcode" maxlength="5">
-        </div>
-        <div class="form-group d-flex flex-column">
-            <label class="form-control-label" for="city">Ville</label>
-            <input type="text" class="form-control" id="city" name="city" formControlName="city">
+            <label class="form-control-label" for="lastName" jhiTranslate="order-info.form.lastname.label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="{{ 'order-info.form.lastname.placeholder' | translate }}"
+                    formControlName="lastName">
+
+            <div *ngIf="billingForm.get('lastName')!.invalid && (billingForm.get('lastName')!.dirty || billingForm.get('lastName')!.touched)">
+                <small class="form-text text-danger"
+                       *ngIf="billingForm.get('lastName')?.errors?.required">
+                    Votre nom est requis.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="billingForm.get('lastName')?.errors?.minlength">
+                    Votre nom doit comporter au moins un caractère.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="billingForm.get('lastName')?.errors?.maxlength">
+                    Votre nom ne doit pas comporter plus de 50 caractères.
+                </small>
+            </div>
         </div>
 
-        <h5>Informations de paiement :</h5>
-        <div class="form-group d-flex flex-column">
-            <label class="form-control-label">Numéro de carte</label>
-            <input type="text" class="form-control" id="cardNumber" name="cardNumber" formControlName="cardNumber" maxlength="4"/>
+        <div class="form-group">
+            <label class="form-control-label" for="firstName" jhiTranslate="order-info.form.firstname.label">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{ 'order-info.form.firstname.placeholder' | translate }}"
+                    formControlName="firstName">
+
+            <div *ngIf="billingForm.get('firstName')!.invalid && (billingForm.get('firstName')!.dirty || billingForm.get('firstName')!.touched)">
+                <small class="form-text text-danger"
+                       *ngIf="billingForm.get('firstName')?.errors?.required">
+                    Votre prénom est requis.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="billingForm.get('firstName')?.errors?.minlength">
+                    Votre prénom doit comporter au moins un caractère.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="billingForm.get('firstName')?.errors?.maxlength">
+                    Votre prénom ne doit pas comporter plus de 50 caractères.
+                </small>
+            </div>
         </div>
+
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label" for="addressLine" jhiTranslate="order-info.form.addressline.label">Adresse postale</label>
+            <input type="text" class="form-control" id="addressLine" name="addressLine" placeholder="{{ 'order-info.form.addressline.placeholder' | translate }}"
+                    formControlName="addressLine">
+
+            <div *ngIf="billingForm.get('addressLine')!.invalid && (billingForm.get('addressLine')!.dirty || billingForm.get('addressLine')!.touched)">
+                <small class="form-text text-danger"
+                        *ngIf="billingForm.get('addressLine')?.errors?.required">
+                    Votre adresse est requise.
+                </small>
+            </div>
+        </div>
+
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label" for="addressLine2" jhiTranslate="order-info.form.addressline2.label">Complément d'adresse</label>
+            <input type="text" class="form-control" id="addressLine2" name="addressLine2" placeholder="{{ 'order-info.form.addressline2.placeholder' | translate }}"
+                    formControlName="addressLine2">
+        </div>
+
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label" for="postcode" jhiTranslate="order-info.form.postcode.label">Code postal</label>
+            <input type="text" class="form-control" id="postcode" name="postcode" placeholder="{{ 'order-info.form.postcode.placeholder' | translate }}"
+                    formControlName="postcode" maxlength="5">
+            
+            <div *ngIf="billingForm.get('postcode')!.invalid && (billingForm.get('postcode')!.dirty || billingForm.get('postcode')!.touched)">
+                <small class="form-text text-danger"
+                        *ngIf="billingForm.get('postcode')?.errors?.required">
+                    Votre code postal est requis.
+                </small>
+
+                <small class="form-text text-danger"
+                        *ngIf="billingForm.get('postcode')?.errors?.pattern">
+                    Votre code postal n'est pas valide.
+                </small>
+            </div>
+        </div>
+
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label" for="city" jhiTranslate="order-info.form.city.label">Ville</label>
+            <input type="text" class="form-control" id="city" name="city" placeholder="{{ 'order-info.form.city.placeholder' | translate }}"
+                    formControlName="city">
+            
+            <div *ngIf="billingForm.get('city')!.invalid && (billingForm.get('city')!.dirty || billingForm.get('city')!.touched)">
+                <small class="form-text text-danger"
+                        *ngIf="billingForm.get('city')?.errors?.required">
+                    Votre ville est requise.
+                </small>
+            </div>
+        </div>
+
+        <hr>
+
+        <p class="font-weight-bold">Informations de paiement :</p>
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label" jhiTranslate="order-info.form.cardnumber.label">Numéro de carte</label>
+            <input type="text" class="form-control" id="cardNumber" name="cardNumber" placeholder="{{ 'order-info.form.cardnumber.placeholder' | translate }}"
+                    formControlName="cardNumber" maxlength="4"/>
+        </div>
+
+        <hr>
 
         <button type="submit" [disabled]="billingForm.invalid" class="btn btn-primary float-right m-2">
             <span class="hidden-sm-down">Acheter</span>

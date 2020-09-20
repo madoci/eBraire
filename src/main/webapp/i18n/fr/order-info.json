@@ -1,0 +1,20 @@
+{
+  "order-info": {
+    "form": {
+      "lastname.label": "Nom",
+      "lastname.placeholder": "Votre nom",
+      "firstname.label": "Prénom",
+      "firstname.placeholder": "Votre prénom",
+      "addressline.label": "Adresse postale",
+      "addressline.placeholder": "Votre adresse postale",
+      "addressline2.label": "Complément d'adresse",
+      "addressline2.placeholder": "Votre complément d'adresse",
+      "postcode.label": "Code postal",
+      "postcode.placeholder": "Votre code postal",
+      "city.label": "Ville",
+      "city.placeholder": "Votre ville",
+      "cardnumber.label": "Numéro de carte bancaire",
+      "cardnumber.placeholder": "Votre numéro de carte bancaire"
+    }
+  }
+}
