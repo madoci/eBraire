@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-//import { JhiLanguageService } from 'ng-jhipster';
+// import { JhiLanguageService } from 'ng-jhipster';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
@@ -31,7 +31,7 @@ export class SettingsComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private fb: FormBuilder,
-    //private languageService: JhiLanguageService,
+    // private languageService: JhiLanguageService,
     private customerService: CustomerService
   ) {}
 
@@ -75,7 +75,7 @@ export class SettingsComponent implements OnInit {
     this.account.firstName = this.settingsForm.get('firstName')!.value;
     this.account.lastName = this.settingsForm.get('lastName')!.value;
     this.account.email = this.settingsForm.get('email')!.value;
-    //this.account.langKey = this.settingsForm.get('langKey')!.value;
+    // this.account.langKey = this.settingsForm.get('langKey')!.value;
     this.customer.addressLine = this.settingsForm.get('addressLine')!.value;
     this.customer.addressLine2 = this.settingsForm.get('addressLine2')!.value;
     this.customer.postcode = this.settingsForm.get('postcode')!.value;
@@ -86,9 +86,9 @@ export class SettingsComponent implements OnInit {
 
       this.accountService.authenticate(this.account);
 
-      /*if (this.account.langKey !== this.languageService.getCurrentLanguage()) {
-        this.languageService.changeLanguage(this.account.langKey);
-      }*/
+      // if (this.account.langKey !== this.languageService.getCurrentLanguage()) {
+      //   this.languageService.changeLanguage(this.account.langKey);
+      // }
     });
     this.customerService.update(this.customer).subscribe();
   }

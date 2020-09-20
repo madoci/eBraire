@@ -10,8 +10,6 @@ entity Customer {
 entity Ordered {
 	id Long,
     commandStart LocalDate required,
-    firstName String required,
-    lastName String required,
     delevryAddress String required,
     billingAddress String required,
     status Status required

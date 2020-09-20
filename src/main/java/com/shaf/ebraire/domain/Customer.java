@@ -46,7 +46,7 @@ public class Customer implements Serializable {
     @JoinColumn(name = "id")
     private User user;
 
-    @OneToMany(mappedBy = "idCustomer")
+    @OneToMany(mappedBy = "idCustomer", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Ordered> idOrders = new HashSet<>();
 

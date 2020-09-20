@@ -35,12 +35,6 @@ public class OrderedResourceIT {
     private static final LocalDate DEFAULT_COMMAND_START = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_COMMAND_START = LocalDate.now(ZoneId.systemDefault());
 
-    private static final String DEFAULT_FIRST_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_FIRST_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_LAST_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_LAST_NAME = "BBBBBBBBBB";
-
     private static final String DEFAULT_DELEVRY_ADDRESS = "AAAAAAAAAA";
     private static final String UPDATED_DELEVRY_ADDRESS = "BBBBBBBBBB";
 
@@ -70,8 +64,6 @@ public class OrderedResourceIT {
     public static Ordered createEntity(EntityManager em) {
         Ordered ordered = new Ordered()
             .commandStart(DEFAULT_COMMAND_START)
-            .firstName(DEFAULT_FIRST_NAME)
-            .lastName(DEFAULT_LAST_NAME)
             .delevryAddress(DEFAULT_DELEVRY_ADDRESS)
             .billingAddress(DEFAULT_BILLING_ADDRESS)
             .status(DEFAULT_STATUS);
@@ -86,8 +78,6 @@ public class OrderedResourceIT {
     public static Ordered createUpdatedEntity(EntityManager em) {
         Ordered ordered = new Ordered()
             .commandStart(UPDATED_COMMAND_START)
-            .firstName(UPDATED_FIRST_NAME)
-            .lastName(UPDATED_LAST_NAME)
             .delevryAddress(UPDATED_DELEVRY_ADDRESS)
             .billingAddress(UPDATED_BILLING_ADDRESS)
             .status(UPDATED_STATUS);
@@ -114,8 +104,6 @@ public class OrderedResourceIT {
         assertThat(orderedList).hasSize(databaseSizeBeforeCreate + 1);
         Ordered testOrdered = orderedList.get(orderedList.size() - 1);
         assertThat(testOrdered.getCommandStart()).isEqualTo(DEFAULT_COMMAND_START);
-        assertThat(testOrdered.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
-        assertThat(testOrdered.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
         assertThat(testOrdered.getDelevryAddress()).isEqualTo(DEFAULT_DELEVRY_ADDRESS);
         assertThat(testOrdered.getBillingAddress()).isEqualTo(DEFAULT_BILLING_ADDRESS);
         assertThat(testOrdered.getStatus()).isEqualTo(DEFAULT_STATUS);
@@ -147,44 +135,6 @@ public class OrderedResourceIT {
         int databaseSizeBeforeTest = orderedRepository.findAll().size();
         // set the field null
         ordered.setCommandStart(null);
-
-        // Create the Ordered, which fails.
-
-
-        restOrderedMockMvc.perform(post("/api/ordereds")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(ordered)))
-            .andExpect(status().isBadRequest());
-
-        List<Ordered> orderedList = orderedRepository.findAll();
-        assertThat(orderedList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkFirstNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = orderedRepository.findAll().size();
-        // set the field null
-        ordered.setFirstName(null);
-
-        // Create the Ordered, which fails.
-
-
-        restOrderedMockMvc.perform(post("/api/ordereds")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(ordered)))
-            .andExpect(status().isBadRequest());
-
-        List<Ordered> orderedList = orderedRepository.findAll();
-        assertThat(orderedList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkLastNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = orderedRepository.findAll().size();
-        // set the field null
-        ordered.setLastName(null);
 
         // Create the Ordered, which fails.
 
@@ -267,8 +217,6 @@ public class OrderedResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(ordered.getId().intValue())))
             .andExpect(jsonPath("$.[*].commandStart").value(hasItem(DEFAULT_COMMAND_START.toString())))
-            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
             .andExpect(jsonPath("$.[*].delevryAddress").value(hasItem(DEFAULT_DELEVRY_ADDRESS)))
             .andExpect(jsonPath("$.[*].billingAddress").value(hasItem(DEFAULT_BILLING_ADDRESS)))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
@@ -286,8 +234,6 @@ public class OrderedResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(ordered.getId().intValue()))
             .andExpect(jsonPath("$.commandStart").value(DEFAULT_COMMAND_START.toString()))
-            .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME))
-            .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME))
             .andExpect(jsonPath("$.delevryAddress").value(DEFAULT_DELEVRY_ADDRESS))
             .andExpect(jsonPath("$.billingAddress").value(DEFAULT_BILLING_ADDRESS))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
@@ -314,8 +260,6 @@ public class OrderedResourceIT {
         em.detach(updatedOrdered);
         updatedOrdered
             .commandStart(UPDATED_COMMAND_START)
-            .firstName(UPDATED_FIRST_NAME)
-            .lastName(UPDATED_LAST_NAME)
             .delevryAddress(UPDATED_DELEVRY_ADDRESS)
             .billingAddress(UPDATED_BILLING_ADDRESS)
             .status(UPDATED_STATUS);
@@ -330,8 +274,6 @@ public class OrderedResourceIT {
         assertThat(orderedList).hasSize(databaseSizeBeforeUpdate);
         Ordered testOrdered = orderedList.get(orderedList.size() - 1);
         assertThat(testOrdered.getCommandStart()).isEqualTo(UPDATED_COMMAND_START);
-        assertThat(testOrdered.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
-        assertThat(testOrdered.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(testOrdered.getDelevryAddress()).isEqualTo(UPDATED_DELEVRY_ADDRESS);
         assertThat(testOrdered.getBillingAddress()).isEqualTo(UPDATED_BILLING_ADDRESS);
         assertThat(testOrdered.getStatus()).isEqualTo(UPDATED_STATUS);

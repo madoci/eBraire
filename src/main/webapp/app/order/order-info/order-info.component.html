@@ -4,62 +4,125 @@
 <div *ngIf="error!=''" class="alerts alert-danger" role="alert">
     {{error}}
 </div>
+
 <div id="CustomerInfo">
-    <div class="form-group">
-        <label class="form-control-label">Nom</label>
-        <input type="text" [(ngModel)]="order.lastName" />
-    </div>
-    <div class="form-group">
-        <label class="form-control-label">Prénom</label>
-        <input type="text" [(ngModel)]="order.firstName" />
-    </div>
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="text" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" name="email" [(ngModel)]="email" #emailref="ngModel">
-        <div *ngIf="emailref.errors &&(emailref.touched || emailref.dirty)" class="alert alert-danger" id="email">
-            <div [hidden]="!emailref.errors?.pattern">
-                Adresse email invalide
+    <form name="form" role="form" (ngSubmit)="goToPayment()" [formGroup]="customerForm" novalidate>
+        <div class="form-group">
+            <label class="form-control-label" for="email" jhiTranslate="global.form.email.label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="{{ 'global.form.email.placeholder' | translate }}" formControlName="email">
+        
+            <div *ngIf="customerForm.get('email')!.invalid && (customerForm.get('email')!.dirty || customerForm.get('email')!.touched)">
+                <small class="form-text text-danger"
+                       *ngIf="customerForm.get('email')?.errors?.required"
+                       jhiTranslate="global.messages.validate.email.required">
+                    Your email is required.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="customerForm.get('email')?.errors?.invalid"
+                       jhiTranslate="global.messages.validate.email.invalid">
+                    Your email is invalid.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="customerForm.get('email')?.errors?.minlength"
+                       jhiTranslate="global.messages.validate.email.minlength">
+                    Your email is required to be at least 5 characters.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="customerForm.get('email')?.errors?.maxlength"
+                       jhiTranslate="global.messages.validate.email.maxlength">
+                    Your email cannot be longer than 100 characters.
+                </small>
             </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label class="form-control-label">Confirmation de l'adresse email</label>
-        <input type="text" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" name="emailverif" ngModel #emailverifref="ngModel">
-        <div *ngIf="emailverifref.value != emailref.value" class="alert alert-danger" id="emailverif">
-            <div>
-                Ne correspond pas avec l'adresse email
+
+        <div class="form-group">
+            <label class="form-control-label" for="confirmEmail">Confirmation de l'email</label>
+            <input type="email" class="form-control" id="confirmEmail" name="confirmEmail" placeholder="Confirmation de l'adresse email" formControlName="confirmEmail">
+
+            <div class="alert alert-danger" *ngIf="doNotMatch">
+                L'adresse email et sa confirmation ne correspondent pas !
             </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label class="form-control-label">Adresse de livraison</label>
-        <input type="text" [(ngModel)]="order.delevryAddress" />
-    </div>
+
+        <h5>Adresse de livraison :</h5>
+        <div class="form-group">
+            <label class="form-control-label" for="lastName" jhiTranslate="settings.form.lastname">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName">
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="firstName" jhiTranslate="settings.form.firstname">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstName">
+        </div>
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label" for="addressLine">Adresse postale</label>
+            <input type="text" class="form-control" id="addressLine" name="addressLine" formControlName="addressLine">
+        </div>
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label" for="addressLine2">Complément d'adresse</label>
+            <input type="text" class="form-control" id="addressLine2" name="addressLine2" formControlName="addressLine2">
+        </div>
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label" for="postcode">Code postal</label>
+            <input type="text" class="form-control" id="postcode" name="postcode" formControlName="postcode" maxlength="5">
+        </div>
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label" for="city">Ville</label>
+            <input type="text" class="form-control" id="city" name="city" formControlName="city">
+        </div>
+
+        <button type="submit" [disabled]="customerForm.invalid" class="btn btn-primary float-right m-2">
+            <span class="hidden-sm-down">Valider</span>
+        </button>
+    </form>
 </div>
 
 <div id="Payment">
     <jhi-alert-error></jhi-alert-error>
-    <div class="form-group">
-        <label class="form-control-label">Adresse de facturation</label>
-        <input type="text" [(ngModel)]="order.billingAddress" />
-    </div>
-    <div class="form-group">
-        <label class="form-control-label">numero de carte</label>
-        <input type="text" />
-    </div>
+
+    <form name="form" role="form" (ngSubmit)="pay()" [formGroup]="billingForm" novalidate>
+        <h5>Adresse de facturation :</h5>
+        <div class="form-group">
+            <label class="form-control-label" for="lastName" jhiTranslate="settings.form.lastname">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName">
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="firstName" jhiTranslate="settings.form.firstname">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstName">
+        </div>
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label" for="addressLine">Adresse postale</label>
+            <input type="text" class="form-control" id="addressLine" name="addressLine" formControlName="addressLine">
+        </div>
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label" for="addressLine2">Complément d'adresse</label>
+            <input type="text" class="form-control" id="addressLine2" name="addressLine2" formControlName="addressLine2">
+        </div>
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label" for="postcode">Code postal</label>
+            <input type="text" class="form-control" id="postcode" name="postcode" formControlName="postcode" maxlength="5">
+        </div>
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label" for="city">Ville</label>
+            <input type="text" class="form-control" id="city" name="city" formControlName="city">
+        </div>
+
+        <h5>Informations de paiement :</h5>
+        <div class="form-group d-flex flex-column">
+            <label class="form-control-label">Numéro de carte</label>
+            <input type="text" class="form-control" id="cardNumber" name="cardNumber" formControlName="cardNumber" maxlength="4"/>
+        </div>
+
+        <button type="submit" [disabled]="billingForm.invalid" class="btn btn-primary float-right m-2">
+            <span class="hidden-sm-down">Acheter</span>
+        </button>
+
+        <button type="button" id="previous" class="btn btn-secondary float-right m-2" (click)="goToInfo()">
+            <span class="hidden-sm-down">Précédent</span>
+        </button>
+    </form>
 </div>
-<button id="Paid" class="btn btn-primary float-right m-2" (click)="SendOrdered()">
-        <span class="hidden-sm-down" >
-            Acheter
-        </span>
-    </button>
-<button id="Validate" class="btn btn-primary float-right m-2" (click)="next(true)">
-    <span class="hidden-sm-down" >
-        Valider
-    </span>
-</button>
-<button id="Previous" class="btn btn-primary float-right m-2" (click)="next(false)">
-    <span class="hidden-sm-down">
-        Précédent
-    </span>
-</button>
+
+<button (click)="debugTest()">Debug</button>

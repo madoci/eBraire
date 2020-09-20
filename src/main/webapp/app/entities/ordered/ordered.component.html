@@ -24,8 +24,6 @@
                 <tr>
                     <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.ordered.commandStart">Command Start</span></th>
-                    <th scope="col" ><span jhiTranslate="eBraireApp.ordered.firstName">First Name</span></th>
-                    <th scope="col" ><span jhiTranslate="eBraireApp.ordered.lastName">Last Name</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.ordered.delevryAddress">Delevry Address</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.ordered.billingAddress">Billing Address</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.ordered.status">Status</span></th>
@@ -37,8 +35,6 @@
                 <tr *ngFor="let ordered of ordereds ;trackBy: trackId">
                     <td><a [routerLink]="['/ordered', ordered.id, 'view']">{{ ordered.id }}</a></td>
                     <td>{{ ordered.commandStart | date:'mediumDate' }}</td>
-                    <td>{{ ordered.firstName }}</td>
-                    <td>{{ ordered.lastName }}</td>
                     <td>{{ ordered.delevryAddress }}</td>
                     <td>{{ ordered.billingAddress }}</td>
                     <td jhiTranslate="{{ 'eBraireApp.Status.' + ordered.status }}">{{ ordered.status }}</td>
