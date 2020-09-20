@@ -1,6 +1,16 @@
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+    .website-title {
+        font-family: 'Pacifico', cursive;
+    }
+</style>
+
 <nav class="navbar navbar-dark navbar-expand-md fixed-top" style="background-color: #a63c40;">
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
-        <span jhiTranslate="global.title" class="navbar-title">EBraire</span> <span class="navbar-version">{{ version }}</span>
+        <!--span jhiTranslate="global.title" class="navbar-title">EBraire</span> <span class="navbar-version">{{ version }}</span-->
+        <img src="../../../ebraire-logo-white.svg" width="30" height="30">&nbsp;
+        <span class="website-title">l'eBraire</span>
     </a>
     <a class="navbar-toggler d-lg-none" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()">
         <fa-icon icon="bars"></fa-icon>
