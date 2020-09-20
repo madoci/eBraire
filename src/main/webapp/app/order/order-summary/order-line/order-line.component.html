@@ -2,6 +2,7 @@
     .container {
         display: flex;
         flex-direction: row;
+        justify-content: space-between;
     }
     
     .margin-bottom {
@@ -9,7 +10,8 @@
     }
     
     .price {
-        width: 100%
+        margin-top: 20px;
+        text-align: end;
     }
     
     .title {
@@ -33,13 +35,29 @@
     }
     
     .button-suppr {
-        justify-content: flex-end;
-        margin-right: 60px;
-        width: 100%
+        width: 100%;
     }
-    
-    .img {
-        justify-content: flex-start
+
+    .item {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    .info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+
+    .action {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-top: 10px;
     }
     
     @media screen and (max-width: 1050px) {
@@ -50,7 +68,9 @@
         .button-suppr {
             justify-content: center !important;
             align-items: center !important;
-            margin-right: auto !important;
+            margin-left: auto !important;
+            margin-top: auto !important;
+            margin-bottom: auto !important;
         }
         .title {
             text-align: center;
@@ -58,35 +78,56 @@
             min-width: 100%;
         }
         .price {
-            margin-bottom: 20px
+            justify-content: center !important;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .item {
+            flex-direction: column !important;
+            align-items: center;
+        }
+        .info {
+            text-align: center;
+            margin: auto !important;
+        }
+        .action {
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center;
         }
     }
 </style>
 
 <div class="container margin-bottom">
-    <jhi-book-image class="img" [book]="item.book" [imgSize]=200 [borderColor]="'#AAAAAA'"></jhi-book-image>
-    <a class="title" href="/display-book/{{item.book.id}}">
-        <h2>{{item.book.title}}</h2>
-    </a>
-    <div class="d-flex flex-row justify-content-center align-items-center">
-        <div>
-            <button class="btn button-sign" (click)="removeOne()">-</button>
-        </div>
-        <div>
-            <select class="custom-select scroller" [(ngModel)]="quantity" (change)="changeItemQuantity()">
-                <option *ngFor="let i of quantities" [ngValue]="i+1">{{i+1}}</option>
-            </select>
-        </div>
-        <div>
-            <button class="btn button-sign" (click)="addOne()">+</button>
+    <div class="item">
+        <jhi-book-image [book]="item.book" [imgSize]=200 [borderColor]="'#AAAAAA'"></jhi-book-image>
+        <div class="info">
+            <a href="/display-book/{{item.book.id}}">
+                <h2>{{item.book.title}}</h2>
+            </a>
+            <div>{{price(item.book.unitPrice)}}</div>
         </div>
     </div>
-    <div class="d-flex flex-row justify-content-center align-items-center price">
-        {{item.quantity}} x {{price(item.book.unitPrice)}} :
-        <div class="font-weight-bold">{{price(getTotalPrice())}}</div>
-    </div>
-    <div class="d-flex flex-row justify-content-center align-items-center button-suppr">
-        <button class="btn button-sign" (click)="removeItem()">Supprimer</button>
+
+    <div class="action">
+        <div>
+            <div class="d-flex flex-row">
+                <div>
+                    <button class="btn button-sign" (click)="removeOne()">-</button>
+                </div>
+                <div>
+                    <select class="custom-select scroller" [(ngModel)]="quantity" (change)="changeItemQuantity()">
+                        <option *ngFor="let i of quantities" [ngValue]="i+1">{{i+1}}</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="btn button-sign" (click)="addOne()">+</button>
+                </div>
+            </div>
+            <h5 class="price font-weight-bold">{{price(getTotalPrice())}}</h5>
+        </div>
+        <button class="btn button-suppr button-sign" (click)="removeItem()">Supprimer</button>
     </div>
 </div>
 <hr/>

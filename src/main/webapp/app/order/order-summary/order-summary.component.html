@@ -49,8 +49,6 @@
     <div *ngFor="let item of items">
         <jhi-order-line [parent]="this" [book]="item.book"></jhi-order-line>
     </div>
-    
-    <button [routerLink]="'/order'" class="btn btn-primary float-right m-2">Confirmer</button>
 </div>
 <div *ngIf="items.length > 0" class="confirm-contain">
     <div class="final-price font-weight-bold">
