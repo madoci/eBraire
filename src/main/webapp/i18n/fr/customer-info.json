@@ -1,5 +1,5 @@
 {
-  "order-info": {
+  "customer-info": {
     "form": {
       "lastname.label": "Nom",
       "lastname.placeholder": "Votre nom",
