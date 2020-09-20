@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { IBook, Book } from 'app/shared/model/book.model';
 
 @Component({
   selector: 'jhi-book-image',
   templateUrl: './book-image.component.html',
 })
-export class BookImageComponent implements OnInit {
+export class BookImageComponent implements OnInit, OnChanges {
   @Input() book: IBook = new Book();
   @Input() imgSize = 500;
   @Input() borderColor = '#000000';
@@ -30,15 +30,21 @@ export class BookImageComponent implements OnInit {
 
   img(): void {
     const image = document.getElementById(this.id.toString()) as HTMLImageElement;
-    if (image.naturalHeight > image.naturalWidth) {
-      const coeff = (this.imgSize * image.naturalWidth) / image.naturalHeight / this.imgSize;
-      this.borderWidth = ((1 - coeff) * this.imgSize) / 2;
-    } else {
-      const coeff = (this.imgSize * image.naturalHeight) / image.naturalWidth / this.imgSize;
-      this.borderHeight = ((1 - coeff) * this.imgSize) / 2;
+    if (image) {
+      if (image.naturalHeight > image.naturalWidth) {
+        const coeff = (this.imgSize * image.naturalWidth) / image.naturalHeight / this.imgSize;
+        this.borderWidth = ((1 - coeff) * this.imgSize) / 2;
+      } else {
+        const coeff = (this.imgSize * image.naturalHeight) / image.naturalWidth / this.imgSize;
+        this.borderHeight = ((1 - coeff) * this.imgSize) / 2;
+      }
+      this.height = this.imgSize;
+      this.width = this.imgSize;
+      this.borderSize = Math.floor(this.borderHeight) + 'px ' + Math.floor(this.borderWidth) + 'px';
     }
-    this.height = this.imgSize;
-    this.width = this.imgSize;
-    this.borderSize = Math.floor(this.borderHeight) + 'px ' + Math.floor(this.borderWidth) + 'px';
+  }
+
+  ngOnChanges(): void {
+    this.img();
   }
 }

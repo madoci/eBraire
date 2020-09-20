@@ -40,7 +40,7 @@
     "languages": ["fr", "en"],
     "blueprints": [],
     "herokuAppName": "e-braire",
-    "herokuDeployType": "git",
+    "herokuDeployType": "jar",
     "herokuJavaVersion": "11"
   }
 }

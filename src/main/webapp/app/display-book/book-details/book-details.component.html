@@ -88,7 +88,7 @@
     <div class="d-flex flex-column responsive2 first-row">
         <div class="d-flex flex-row responsive1">
             <div class="spacing-right responsiveImg">
-                <jhi-book-image *ngIf="book" [imgSize]="400" [book]="book" [borderColor]="'#AAAAAA'"></jhi-book-image>
+                <jhi-book-image *ngIf="book" [imgSize]="width > 1200 ? 400 : 250" [book]="book" [borderColor]="'#AAAAAA'"></jhi-book-image>
             </div>
             <div class="d-flex flex-column">
                 <h2 class="font-weight-bold spacing-bottom">{{book.title}}</h2>

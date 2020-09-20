@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { HostListener, Component, OnInit, Input } from '@angular/core';
 import { IBook, Book } from 'app/shared/model/book.model';
 import { ShoppingCartService } from 'app/shopping-cart/shopping-cart.service';
 import { Title } from '@angular/platform-browser';
 import { Tag } from '../../shared/model/tag.model';
+import { WindowRef } from '../../catalogue/window/window.component';
 
 @Component({
   selector: 'jhi-book-details',
@@ -20,8 +21,13 @@ export class BookDetailsComponent implements OnInit {
   // Style
   organizedTags?: Tag[][];
   maxChar = 30;
+  width = 0;
+  window: Window;
 
-  constructor(public shoppingCartService: ShoppingCartService, private titleService: Title) {}
+  constructor(public shoppingCartService: ShoppingCartService, private titleService: Title, public winRef: WindowRef) {
+    this.width = winRef.nativeWindow.innerWidth;
+    this.window = winRef.nativeWindow;
+  }
 
   ngOnInit(): void {
     this.titleService.setTitle('' + this.book.title);
@@ -53,6 +59,11 @@ export class BookDetailsComponent implements OnInit {
     } else {
       this.shoppingCartService.removeAllFromCart(this.book);
     }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.width = event.target.innerWidth;
   }
 
   price(val: number | undefined): string {
