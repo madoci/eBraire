@@ -88,8 +88,12 @@ export class ShoppingCartService {
               this.saveCart();
             } else if (bookedBook.body.quantity === 0) {
               // cas pas assez de stock
+              alert('Votre réservation à expiré');
+              this.items.splice(i, 1);
+              this.saveCart();
+            } else if (bookedBook.body.quantity !== this.items[i].quantity) {
               alert('Pas assez de sotck pour en réserver plus');
-              this.items[i].quantity = this.items[i].quantity! - quantity;
+              this.items[i] = bookedBook.body;
               this.saveCart();
             } else {
               // cas tous vas bien

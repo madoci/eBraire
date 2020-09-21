@@ -113,7 +113,7 @@ public class BookResource {
     public ResponseEntity<Book> getBook(@PathVariable Long id) {
         Date date = new Date();
         long timeMilliExp = date.getTime();
-     /*   log.debug("supressing removed ");
+        log.debug("supressing removed ");
         List<BookedBook> bookedBooks=bookedBookRepository.getExpiredBookedBook(timeMilliExp);
         if (bookedBooks != null) {
         for(BookedBook bookedBooktoRemove:bookedBooks) {
@@ -122,7 +122,7 @@ public class BookResource {
         }
         log.debug("end for");
         bookedBookRepository.removeExpiredBookedBook(timeMilliExp);
-        }*/
+        }
         log.debug("REST request to get Book : {}", id);
         Optional<Book> book = bookRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(book);
