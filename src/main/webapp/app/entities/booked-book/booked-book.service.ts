@@ -21,7 +21,7 @@ export class BookedBookService {
   }
 
   update(bookedBook: IBookedBook): Observable<EntityResponseType> {
-    return this.http.put<IBookedBook>(this.resourceUrl, bookedBook, { observe: 'response' });
+    return this.http.post<IBookedBook>(SERVER_API_URL + 'api/booked-books-update', bookedBook, { observe: 'response' });
   }
 
   find(id: number): Observable<EntityResponseType> {

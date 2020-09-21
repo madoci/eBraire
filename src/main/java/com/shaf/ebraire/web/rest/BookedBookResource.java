@@ -1,9 +1,29 @@
 package com.shaf.ebraire.web.rest;
-import java.time.LocalDateTime;  
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.shaf.ebraire.domain.Book;
-import com.shaf.ebraire.domain.Ordered;
-import com.shaf.ebraire.domain.OrderLine;
 import com.shaf.ebraire.domain.BookedBook;
+import com.shaf.ebraire.domain.OrderLine;
+import com.shaf.ebraire.domain.Ordered;
 import com.shaf.ebraire.repository.BookRepository;
 import com.shaf.ebraire.repository.BookedBookRepository;
 import com.shaf.ebraire.repository.OrderLineRepository;
@@ -12,21 +32,6 @@ import com.shaf.ebraire.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * REST controller for managing {@link com.shaf.ebraire.domain.BookedBook}.
@@ -52,7 +57,7 @@ public class BookedBookResource {
 
     private final OrderedRepository orderedRepository;
 
-    private final int bookedTime = 60000;
+    private final int bookedTime = 10000;
     public BookedBookResource(OrderedRepository orderedRepository,OrderLineRepository orderLineRepository, BookedBookRepository bookedBookRepository, BookRepository bookRepository) {
         this.bookedBookRepository = bookedBookRepository;
         this.bookRepository = bookRepository;
@@ -112,23 +117,23 @@ public class BookedBookResource {
      * or with status {@code 500 (Internal Server Error)} if the bookedBook couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/booked-books")
+    @PostMapping("/booked-books-update")
     public ResponseEntity<BookedBook> updateBookedBook(@RequestBody BookedBook bookedBook) throws URISyntaxException {
-        log.debug("UPDATE : {}", bookedBook);
+    	try {  
         if (bookedBook.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         long timeMilli ;
         Date date = new Date();
-        long timeMilliExp = date.getTime();
-        for(BookedBook bookedBooktoRemove:bookedBookRepository.getExpiredBookedBook(timeMilliExp)) {
-        	bookedBooktoRemove.getBook().setQuantity(bookedBooktoRemove.getBook().getQuantity() + bookedBooktoRemove.getQuantity());
-            Book result = bookRepository.save(bookedBooktoRemove.getBook());
-        }
-        bookedBookRepository.removeExpiredBookedBook(timeMilliExp);
         BookedBook resultFinal=null;
         Optional<Book> currentBook = bookRepository.findOneWithEagerRelationships(bookedBook.getBook().getId());
-        if (currentBook.isEmpty()) { // cas elle a expirer on n'en recrée donc une
+        if (currentBook.isEmpty()) { // cas ou le livre n'est plus
+            long timeMilliExp = date.getTime();
+            for(BookedBook bookedBooktoRemove:bookedBookRepository.getExpiredBookedBook(timeMilliExp)) {
+            	bookedBooktoRemove.getBook().setQuantity(bookedBooktoRemove.getBook().getQuantity() + bookedBooktoRemove.getQuantity());
+                Book result = bookRepository.save(bookedBooktoRemove.getBook());
+            }
+            bookedBookRepository.removeExpiredBookedBook(timeMilliExp);
         	return ResponseEntity.created(new URI("/api/booked-books/" + "0"))
                     .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, "0"))
                     .body(bookedBook);
@@ -136,7 +141,6 @@ public class BookedBookResource {
         BookedBook newBookedBook;
         Optional<BookedBook> previousBookedBook = bookedBookRepository.findById(bookedBook.getId());
         if (previousBookedBook.isEmpty()) { // si il a été détruit
-        	log.debug("existe plus");
         	newBookedBook= new BookedBook();
         	newBookedBook.setQuantity(0);
         	newBookedBook.setBook(bookedBook.getBook());
@@ -147,7 +151,7 @@ public class BookedBookResource {
         	log.debug("existe encore");
         	newBookedBook= previousBookedBook.get();
         }
-        int quantity = bookedBook.getQuantity() -previousBookedBook.get().getQuantity();
+        int quantity = bookedBook.getQuantity() -newBookedBook.getQuantity();
         if (currentBook.get().getQuantity() - quantity >= 0 ) { //on essaye de crée 
         	log.debug("assez de quantité");
         	currentBook.get().setQuantity(currentBook.get().getQuantity() - quantity);
@@ -156,16 +160,48 @@ public class BookedBookResource {
             newBookedBook.setExpired(timeMilli);
             newBookedBook.setQuantity(bookedBook.getQuantity());
             resultFinal = bookedBookRepository.save(newBookedBook);
-            return ResponseEntity.created(new URI("/api/booked-books/" + newBookedBook.getId()))
-                    .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, newBookedBook.getId().toString()))
+            long timeMilliExp = date.getTime();
+            for(BookedBook bookedBooktoRemove:bookedBookRepository.getExpiredBookedBook(timeMilliExp)) {
+            	bookedBooktoRemove.getBook().setQuantity(bookedBooktoRemove.getBook().getQuantity() + bookedBooktoRemove.getQuantity());
+                Book result = bookRepository.save(bookedBooktoRemove.getBook());
+            }
+            bookedBookRepository.removeExpiredBookedBook(timeMilliExp);
+            return ResponseEntity.created(new URI("/api/booked-books/" + resultFinal.getId()))
+                    .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, resultFinal.getId().toString()))
                     .body(resultFinal);
-        }else {
-        	log.debug("pas assez");
+        }else  if (previousBookedBook.isEmpty()){ // cas expiré pas assez de quantitté
+            long timeMilliExp = date.getTime();
+            for(BookedBook bookedBooktoRemove:bookedBookRepository.getExpiredBookedBook(timeMilliExp)) {
+            	bookedBooktoRemove.getBook().setQuantity(bookedBooktoRemove.getBook().getQuantity() + bookedBooktoRemove.getQuantity());
+                Book result = bookRepository.save(bookedBooktoRemove.getBook());
+            }
+            bookedBookRepository.removeExpiredBookedBook(timeMilliExp);
+        	log.debug("pas assez!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         	bookedBook.setQuantity(0);
         	return ResponseEntity.created(new URI("/api/booked-books/" + "0"))
                     .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, "0"))
                     .body(bookedBook);
-        }
+        }else {    // cas pas expirer assez de quantité 
+                long timeMilliExp = date.getTime();
+                for(BookedBook bookedBooktoRemove:bookedBookRepository.getExpiredBookedBook(timeMilliExp)) {
+                	bookedBooktoRemove.getBook().setQuantity(bookedBooktoRemove.getBook().getQuantity() + bookedBooktoRemove.getQuantity());
+                    Book result = bookRepository.save(bookedBooktoRemove.getBook());
+                }
+                bookedBookRepository.removeExpiredBookedBook(timeMilliExp);
+            	log.debug("pas assez!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            	bookedBook.setQuantity(0);
+            	return ResponseEntity.created(new URI("/api/booked-books/" + previousBookedBook.get().getId()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, previousBookedBook.get().getId().toString()))
+                        .body(previousBookedBook.get());
+            }
+   	 } catch (Exception e) {
+         	log.debug("pas assez!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+         	bookedBook.setQuantity(0);
+         	return ResponseEntity.created(new URI("/api/booked-books/" + "0"))
+                     .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, "0"))
+                     .body(bookedBook);
+         
+         }
     }
 
     /**
