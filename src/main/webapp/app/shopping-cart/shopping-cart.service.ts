@@ -80,6 +80,7 @@ export class ShoppingCartService {
     if (quantity > 0) {
       for (let i = 0; i < this.items.length; i++) {
         if (this.items[i].book!.id === book.id) {
+          alert("creation")
           this.items[i].quantity = this.items[i].quantity! + quantity;
           this.bookedBookService.update(this.items[i]).subscribe(bookedBook => {
             if (bookedBook.body === null) {
@@ -107,13 +108,17 @@ export class ShoppingCartService {
       const booked = new BookedBook();
       booked.quantity = quantity;
       booked.book = book;
+
       this.bookedBookService.create(booked).subscribe(element => {
         if (element.body === null) {
           alert('désolé rupture de stoque repassé plus tad :)');
-        } else {
-          this.items.push(element.body || new BookedBook());
+            return;
+          };
+          alert(element.body.id);
+          this.items.push(element.body);
+          alert(this.items.length);
           this.saveCart();
-        }
+
       });
     }
   }
@@ -125,6 +130,7 @@ export class ShoppingCartService {
     );
   }
   private saveCart(): void {
+      alert(this.items.length);
     localStorage.setItem('ShoppingCart', JSON.stringify(this.items));
   }
 

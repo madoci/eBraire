@@ -52,7 +52,7 @@ public class BookedBookResource {
 
 
     private final BookRepository bookRepository;
-    
+
     private final OrderLineRepository orderLineRepository;
 
     private final OrderedRepository orderedRepository;
@@ -86,20 +86,20 @@ public class BookedBookResource {
         }
         bookedBookRepository.removeExpiredBookedBook(timeMilliExp);
         Optional<Book> currentBook = bookRepository.findOneWithEagerRelationships(bookedBook.getBook().getId());
-        if (currentBook.isEmpty()) {
-        	return ResponseEntity.created(new URI("/api/booked-books/" + "0"))
-                    .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, "0"))
-                    .body(null);
-        }
+if (currentBook.isEmpty()){
+  return ResponseEntity.created(new URI("/api/booked-books/" + bookedBook.getId()))
+          .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, bookedBook.getId().toString()))
+          .body(null);
+}
         BookedBook resultFinal= new BookedBook();
-        if (currentBook.get().getQuantity() - bookedBook.getQuantity() >= 0 ) {//throw err TODO
+        if (currentBook.get().getQuantity() - bookedBook.getQuantity() >= 0 ) {
         	currentBook.get().setQuantity(currentBook.get().getQuantity() - bookedBook.getQuantity());
             Book result = bookRepository.save(currentBook.get());
             long timeMilli = date.getTime() + bookedTime;
             bookedBook.setExpired( timeMilli);
             resultFinal = bookedBookRepository.save(bookedBook);
-            return ResponseEntity.created(new URI("/api/booked-books/" + bookedBook.getId()))
-                    .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, bookedBook.getId().toString()))
+            return ResponseEntity.created(new URI("/api/booked-books/" + resultFinal.getId()))
+                    .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, resultFinal.getId().toString()))
                     .body(resultFinal);
         }else {
             return ResponseEntity.created(new URI("/api/booked-books/" + "0"))
@@ -119,7 +119,7 @@ public class BookedBookResource {
      */
     @PostMapping("/booked-books-update")
     public ResponseEntity<BookedBook> updateBookedBook(@RequestBody BookedBook bookedBook) throws URISyntaxException {
-    	try {  
+    	try {
         if (bookedBook.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -152,7 +152,7 @@ public class BookedBookResource {
         	newBookedBook= previousBookedBook.get();
         }
         int quantity = bookedBook.getQuantity() -newBookedBook.getQuantity();
-        if (currentBook.get().getQuantity() - quantity >= 0 ) { //on essaye de crée 
+        if (currentBook.get().getQuantity() - quantity >= 0 ) { //on essaye de crée
         	log.debug("assez de quantité");
         	currentBook.get().setQuantity(currentBook.get().getQuantity() - quantity);
             Book resultbook = bookRepository.save(currentBook.get());
@@ -181,7 +181,7 @@ public class BookedBookResource {
         	return ResponseEntity.created(new URI("/api/booked-books/" + "0"))
                     .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, "0"))
                     .body(bookedBook);
-        }else {    // cas pas expirer assez de quantité 
+        }else {    // cas pas expirer assez de quantité
                 long timeMilliExp = date.getTime();
                 for(BookedBook bookedBooktoRemove:bookedBookRepository.getExpiredBookedBook(timeMilliExp)) {
                 	bookedBooktoRemove.getBook().setQuantity(bookedBooktoRemove.getBook().getQuantity() + bookedBooktoRemove.getQuantity());
@@ -200,7 +200,7 @@ public class BookedBookResource {
          	return ResponseEntity.created(new URI("/api/booked-books/" + "0"))
                      .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, "0"))
                      .body(bookedBook);
-         
+
          }
     }
 
@@ -244,11 +244,11 @@ public class BookedBookResource {
         Book result = bookRepository.save(bookedbook.getBook());
         bookedBookRepository.deleteById(id);
         }else {
-        	
+
         }
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
-    
+
     @DeleteMapping("/booked-books-from-customer/{id}")
     public ResponseEntity<Void> deleteBookedBookOfCustomer(@PathVariable Long id) {
         log.debug("REST request to delete BookedBook from Customer : {}", id);
@@ -260,8 +260,8 @@ public class BookedBookResource {
         bookedBookRepository.deleteFromCustomer(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
-    
-    
+
+
     @DeleteMapping("/order-booked-books-from-customer/{id}/{idOrder}")
     public ResponseEntity<Void> OrderBookedBookOfCustomer(@PathVariable Long id,@PathVariable Long idOrder ) {
         log.debug("REST request to order BookedBook from Customer : {}", idOrder);
@@ -293,8 +293,8 @@ public class BookedBookResource {
     public List<BookedBook> searchBookedBooks(@RequestParam String query ) {
         return null;
     }
-    
-    
+
+
     @PutMapping("/booked-books-check")
     public ResponseEntity<BookedBook> CheckBookedBook(@RequestBody BookedBook bookedBook){
     	log.debug("Check book : : {}", bookedBook);
@@ -312,7 +312,7 @@ public class BookedBookResource {
         if (currentBook.isEmpty()) {
         	return ResponseEntity.ok()
                     .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bookedBook.getId().toString()))
-                    .body(null); 	
+                    .body(null);
         }
         Optional<BookedBook> optionalPreviousBookedBook = bookedBookRepository.findById(bookedBook.getId());
         if(optionalPreviousBookedBook.isEmpty()) {
@@ -323,12 +323,12 @@ public class BookedBookResource {
                 log.debug("recreation  success: :");
                 return ResponseEntity.ok()
 	                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-	                    .body(result); 	
+	                    .body(result);
             }else {
             	log.debug("recreation  Failed: :");
 	        	return ResponseEntity.ok()
 	                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bookedBook.getId().toString()))
-	                    .body(null); 	
+	                    .body(null);
 	        }
         }else {
         	BookedBook previousBookedBook = optionalPreviousBookedBook.get();
@@ -340,20 +340,20 @@ public class BookedBookResource {
                     BookedBook result = bookedBookRepository.save(bookedBook);
         			return ResponseEntity.ok()
         		            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bookedBook.getId().toString()))
-        		            .body(result); 
+        		            .body(result);
         		}else {
         			//majQuantity
     	            return ResponseEntity.ok()
         	                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, previousBookedBook.getId().toString()))
-        	                    .body(previousBookedBook); 	
+        	                    .body(previousBookedBook);
         		}
         	}else {
-        	}	
+        	}
         }
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bookedBook.getId().toString()))
-            .body(null); 	
+            .body(null);
     }
 
-    
+
 }
