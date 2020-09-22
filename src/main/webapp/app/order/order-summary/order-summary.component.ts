@@ -9,11 +9,14 @@ import { ShoppingItem } from 'app/shopping-cart/shopping-item.model';
 export class OrderSummaryComponent implements OnInit {
   items: ShoppingItem[] = [];
   finalPrice = 0;
+  numberOfItems = 0;
 
   constructor(private shoppingCartService: ShoppingCartService) {}
 
   ngOnInit(): void {
+    document.bgColor = '#AAAAAA';
     this.items = this.shoppingCartService.getItems();
+    this.numberOfItems = this.shoppingCartService.getNumberOfItems();
     this.calcFinalPrice();
   }
 

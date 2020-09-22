@@ -6,22 +6,24 @@
     }
     
     .button-confirm {
-        background-color: green;
+        background-color: #ecb613;
         color: white;
         border-radius: 5px;
         border: none;
         font-size: 30px;
         padding: 16px 32px;
-        -webkit-box-shadow: 0px 5px 0px darkgreen;
-        -moz-box-shadow: 0px 5px 0px darkgreen;
-        box-shadow: 0px 5px 0px darkgreen;
+        -webkit-box-shadow: 0px 5px 0px #cc9900;
+        -moz-box-shadow: 0px 5px 0px #cc9900;
+        box-shadow: 0px 5px 0px #cc9900;
+        font-size: 1.1em;
+        margin-top: 40px;
     }
     
     .button-confirm:hover {
-        background-color: #e0aa50;
-        -webkit-box-shadow: 0px 5px 0px #c49646;
-        -moz-box-shadow: 0px 5px 0px #c49646;
-        box-shadow: 0px 5px 0px #c49646;
+        background-color: #ffc61a;
+        -webkit-box-shadow: 0px 5px 0px #e6ac00;
+        -moz-box-shadow: 0px 5px 0px #e6ac00;
+        box-shadow: 0px 5px 0px #e6ac00;
     }
     
     .confirm-contain {
@@ -34,22 +36,29 @@
         background-color: lightgrey;
         padding: 30px 30px;
         height: 300px;
+        width: 300px;
+        min-width: 300px;
     }
     
     .final-price {
         text-align: end;
-        font-size: 30px
+        font-size: 30px;
+        letter-spacing: 0.05em;
     }
     
     .shopping-list {
         flex-grow: 1;
-        /*margin-right: 330px;*/
     }
     
     .total {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        flex-grow: 1;
+    }
+
+    .hr {
+        border-color: black;
     }
     
     @media screen and (max-width: 1050px) {
@@ -62,16 +71,16 @@
             bottom: 0;
             right: 0;
             left: 0;
-            background-color: #a63c40;
             margin-left: auto !important;
-            padding: 0 !important;
+            padding: 0.6em 2em !important;
             height: auto !important;
+            width: auto !important;
+            min-width: auto !important;
         }
         .button-confirm {
             margin-bottom: 10px;
+            margin-top: 5px !important;
             padding: 8px 16px !important;
-            margin-left: 10px !important;
-            margin-right: 10px;
         }
         .shopping-cart {
             flex-direction: column !important;
@@ -81,16 +90,16 @@
             margin-right: 0px;
         }
         .total {
-            /*flex-direction: row;*/
+            flex-direction: row;
             align-items: center;
-            /*padding-left: 30px;*/
-            justify-content: flex-start;
+            justify-content: space-between;
+            margin-left: 5px;
+            margin-right: 5px;
         }
         .final-price {
-            text-align: center;
             flex-grow: 1;
         }
-        .totallabel {
+        .hr {
             display: none;
         }
     }
@@ -104,14 +113,15 @@
     </div>
     <div class="confirm-contain">
         <div class="total">
-            <h5 class="totallabel">
-                TOTAL
-            </h5>
+            <div class="flex-grow-1" style="font-size: 1.25em">
+                TOTAL ({{numberOfItems}} PRODUITS)
+                <hr class="hr"> 
+            </div>
             <div class="final-price font-weight-bold">
                 {{price(finalPrice)}}
             </div>
         </div>
-        <button class="button-confirm" [routerLink]="'/order'">Confirmer</button>
+        <button class="btn button-confirm" [routerLink]="'/order'">Confirmer votre panier</button>
     </div>
 </div>
 <div *ngIf="items.length === 0">
