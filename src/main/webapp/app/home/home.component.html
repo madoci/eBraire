@@ -3,29 +3,31 @@
         width: 100%;
         box-shadow: 2px 2px 2px 2px grey;
         margin-bottom: 10px;
+        word-wrap: break-word;
     }
-
+    
     .my-border:hover {
         box-shadow: 4px 4px 4px 4px grey;
     }
-
+    
     .clic:hover {
         cursor: pointer;
     }
-
+    
     .disp {
         display: flex;
     }
-    @media (max-width: 768px){
+    
+    @media (max-width: 768px) {
         .disp {
             display: none;
         }
     }
 </style>
 
-<h1 class="font-weight-bold">Bienvenu sur eBraire !</h1>
+<h1 class="font-weight-bold">Bienvenue sur eBraire !</h1>
 <h2>Best sellers</h2>
-<div class="d-flex flex-column" >
+<div class="d-flex flex-column">
     <div *ngFor="let book of bestSellers" class="my-border clic d-flex flex-row" [routerLink]="'/display-book/'+book.id">
         <div style="margin: 5px">
             <jhi-book-image *ngIf="book" [book]="book" [imgSize]="200" [borderColor]="'#FFFFFF'"></jhi-book-image>
