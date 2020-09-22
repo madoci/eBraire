@@ -188,6 +188,13 @@ export class OrderInfoComponent implements OnInit {
               alert('End');
               this.orderedService.update(this.order).subscribe(res => {
                 alert(res.body?.delevryAddress);
+                if (!this.customer?.idOrders) {
+                  this.customer!.idOrders = [];
+                }
+                this.customer?.idOrders.push(res.body!);
+                this.customerService.update(this.customer!).subscribe(cus => {
+                  alert(cus.body?.id);
+                });
               });
             }
           });
@@ -256,22 +263,22 @@ export class OrderInfoComponent implements OnInit {
   }
 
   debugTest(): void {
-    // this.customerService.find(3).subscribe(res => {
-    //   if (res.body) {
-    //     const customer = res.body;
-    //     alert(customer.user!.login);
-    //     customer.idOrders?.forEach(value => {
-    //       alert(value.delevryAddress);
-    //     })
-    //   }
-    // });
-    this.orderedService.find(1059).subscribe(res => {
+    this.customerService.find(3).subscribe(res => {
       if (res.body) {
-        res.body.orderLines?.forEach(value => {
-          alert(value.price);
+        const customer = res.body;
+        alert(customer.user!.login);
+        customer.idOrders?.forEach(value => {
+          alert(value.delevryAddress);
         });
       }
     });
+    // this.orderedService.find(1101).subscribe(res => {
+    //   if (res.body) {
+    //     res.body.orderLines?.forEach(value => {
+    //       alert(value.price);
+    //     });
+    //   }
+    // });
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IBook>>): void {

@@ -2,6 +2,7 @@ package com.shaf.ebraire.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -46,7 +47,7 @@ public class Customer implements Serializable {
     @JoinColumn(name = "id")
     private User user;
 
-    @OneToMany(mappedBy = "idCustomer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "idCustomer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Ordered> idOrders = new HashSet<>();
 
