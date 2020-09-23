@@ -27,6 +27,10 @@ export class OrderSummaryComponent implements OnInit {
     });
   }
 
+  getS(num: number): string {
+    return num > 1 ? 'S' : '';
+  }
+
   price(val: number | undefined): string {
     if (val === undefined) return '0.00€';
     let dec = ((val - Math.floor(val)) * 10).toString();
