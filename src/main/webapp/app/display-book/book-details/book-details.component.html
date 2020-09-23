@@ -2,23 +2,23 @@
     .first-row {
         margin-left: 100px;
     }
-    
+
     .spacing-right {
         margin-right: 50px;
     }
-    
+
     .space-right-xs {
         margin-right: 5px;
     }
-    
+
     .space-bottom-xs {
         margin-bottom: 5px;
     }
-    
+
     .spacing-bottom {
         margin-bottom: 20px;
     }
-    
+
     .button1 {
         background-color: #ecb613;
         color: white;
@@ -31,7 +31,7 @@
         box-shadow: 0px 5px 0px #cc9900;
         margin-top: 20px;
     }
-    
+
     .button2 {
         background-color: #e6af57;
         color: #783a24;
@@ -40,28 +40,28 @@
         font-size: 20px;
         /*padding: 16px 32px;*/
     }
-    
+
     .button1:hover {
         background-color: #ffc61a;
         -webkit-box-shadow: 0px 5px 0px #e6ac00;
         -moz-box-shadow: 0px 5px 0px #e6ac00;
         box-shadow: 0px 5px 0px #e6ac00;
     }
-    
+
     .badgeGenre {
         background-color: #a63c40;
         color: white;
     }
-    
+
     .badgeTag {
         background-color: #8384a6;
         color: white;
     }
-    
+
     .responsive2 {
         width: 50%;
     }
-    
+
     .responsiveImg {
         display: flex;
         justify-content: left;
@@ -74,6 +74,7 @@
     .unit-price {
         font-size: 1.5em;
         font-weight: bold;
+        margin-left: auto;
     }
 
     .total {
@@ -101,14 +102,23 @@
         flex-direction: row;
         align-items: center;
         margin-top: 20px;
+        margin-left: auto;
     }
 
     .action {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        margin-right: 10%;
+        margin-left: auto;
     }
-    
+
+    @media screen and (max-width: 1500px) {
+        .action {
+            margin-right: 0;
+        }
+    }
+
     @media screen and (max-width: 1200px) {
         .responsive1 {
             flex-direction: column !important;
@@ -131,9 +141,14 @@
         }
         .quantity {
             margin-top: 5px !important;
+            margin-left: inherit;
         }
         .action {
             align-items: center;
+            margin-left: inherit;
+        }
+        .unit-price{
+            margin-left: inherit;
         }
     }
 </style>
@@ -163,7 +178,7 @@
     </div>
     <div class="action">
         <div class="price unit-price">
-            {{price(book.unitPrice)}}
+            Prix unitaire : {{price(book.unitPrice)}}
         </div>
         <div class="quantity">
             <div class="label">
@@ -179,7 +194,7 @@
                 {{price(getTotalPrice())}}
             </div>
         </div>
-        
+
         <div class="text-center space-bottom-xs">
             <button class="btn button1" (click)="addToCart()">Ajouter au panier</button>
         </div>
