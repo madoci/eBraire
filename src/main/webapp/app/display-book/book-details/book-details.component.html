@@ -1,6 +1,7 @@
 <style>
     .first-row {
-        margin-left: 100px;
+        margin-left: 7%;
+        flex-grow: 1;
     }
 
     .spacing-right {
@@ -82,7 +83,7 @@
         flex-direction: row;
         justify-content: space-between;
         font-size: 1.5em;
-        align-items: center;
+        align-items: baseline;
         margin-top: 20px;
     }
 
@@ -100,7 +101,7 @@
     .quantity {
         display: flex;
         flex-direction: row;
-        align-items: center;
+        align-items: baseline;
         margin-top: 20px;
         margin-left: auto;
     }
@@ -109,13 +110,16 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        margin-right: 10%;
-        margin-left: auto;
+        margin-right: 7%;
+        margin-left: 30px;
     }
 
     @media screen and (max-width: 1500px) {
         .action {
             margin-right: 0;
+        }
+        .first-row {
+            margin-left: 0px !important;
         }
     }
 
@@ -177,8 +181,8 @@
         </div>
     </div>
     <div class="action">
-        <div class="price unit-price">
-            Prix unitaire : {{price(book.unitPrice)}}
+        <div class="quantity">
+            <div class="label">Prix unitaire :</div><div class="price unit-price">{{price(book.unitPrice)}}</div>
         </div>
         <div class="quantity">
             <div class="label">
