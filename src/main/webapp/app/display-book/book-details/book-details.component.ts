@@ -51,6 +51,8 @@ export class BookDetailsComponent implements OnInit {
 
   addToCart(): void {
     this.shoppingCartService.addToCart(this.book, this.quantity);
+    const s = this.quantity > 1 ? 's' : '';
+    alert('Vous avez ajouté ' + this.quantity + ' article' + s + ' à votre panier.');
   }
 
   removeFromCart(): void {
@@ -59,6 +61,10 @@ export class BookDetailsComponent implements OnInit {
     } else {
       this.shoppingCartService.removeAllFromCart(this.book);
     }
+  }
+
+  getTotalPrice(): number {
+    return this.quantity * (this.book.unitPrice ? this.book.unitPrice : 0);
   }
 
   @HostListener('window:resize', ['$event'])

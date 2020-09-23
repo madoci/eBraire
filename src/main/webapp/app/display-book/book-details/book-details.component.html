@@ -176,12 +176,12 @@
                 TOTAL
             </div>
             <div class="total-price price">
-                {{price(quantity*book.unitPrice)}}
+                {{price(getTotalPrice())}}
             </div>
         </div>
         
         <div class="text-center space-bottom-xs">
-            <button class="button1" (click)="addToCart()">Ajouter au panier</button>
+            <button class="btn button1" (click)="addToCart()">Ajouter au panier</button>
         </div>
     </div>
 </div>
