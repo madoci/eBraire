@@ -299,12 +299,6 @@ if (currentBook.isEmpty()){
     public ResponseEntity<BookedBook> CheckBookedBook(@RequestBody BookedBook bookedBook){
     	log.debug("Check book : : {}", bookedBook);
         Date date = new Date();
-        long timeMilliExp = date.getTime();
-        for(BookedBook bookedBooktoRemove:bookedBookRepository.getExpiredBookedBook(timeMilliExp)) {
-        	bookedBooktoRemove.getBook().setQuantity(bookedBooktoRemove.getBook().getQuantity() + bookedBooktoRemove.getQuantity());
-            Book result = bookRepository.save(bookedBooktoRemove.getBook());
-        }
-        bookedBookRepository.removeExpiredBookedBook(timeMilliExp);
         if (bookedBook.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
