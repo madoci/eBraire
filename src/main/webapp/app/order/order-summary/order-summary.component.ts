@@ -11,11 +11,15 @@ import { Router } from '@angular/router';
 export class OrderSummaryComponent implements OnInit {
   items: BookedBook[] = [];
   finalPrice = 0;
+  numberOfItems = 0;
 
   constructor(private shoppingCartService: ShoppingCartService) {}
 
   ngOnInit(): void {
+    //this.shoppingCartService.clearCart();
+    //this.shoppingCartService.checkCart();
     this.items = this.shoppingCartService.getItems();
+    this.numberOfItems = this.shoppingCartService.getNumberOfItems();
     this.calcFinalPrice();
   }
 

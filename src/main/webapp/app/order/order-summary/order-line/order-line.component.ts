@@ -63,6 +63,7 @@ export class OrderLineComponent implements OnInit {
   private initItem(): void {
     this.item = this.shoppingCartService.getItem(this.book);
     this.quantity = this.item.quantity!;
+    this.maxquantity = this.quantity + this.item.book!.quantity!;
     this.quantities = Array.from(Array(this.maxquantity).keys());
   }
 

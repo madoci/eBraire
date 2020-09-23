@@ -16,9 +16,11 @@
       "detail": {
         "title": "Customer"
       },
-      "name": "Name",
-      "lastName": "Last Name",
-      "address": "Address",
+      "addressLine": "Address Line",
+      "addressLine2": "Address Line 2",
+      "postcode": "Postcode",
+      "city": "City",
+      "user": "User",
       "idOrder": "Id Order"
     }
   }

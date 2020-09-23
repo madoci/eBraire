@@ -41,6 +41,11 @@ export class BookedBookService {
     const options = createRequestOption(req);
     return this.http.get<IBookedBook[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
+
+  order(id: number, idOrder: number): Observable<EntityResponseType> {
+    return this.http.delete(SERVER_API_URL + 'api/order-booked-books/' + id + '/' + idOrder, { observe: 'response' });
+  }
+
   deleteFromCustomer(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(SERVER_API_URL + 'api/booked-books-from-customer/' + id, { observe: 'response' });
   }

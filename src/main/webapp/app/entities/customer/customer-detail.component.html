@@ -8,17 +8,25 @@
             <jhi-alert-error></jhi-alert-error>
 
             <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="eBraireApp.customer.name">Name</span></dt>
+                <dt><span jhiTranslate="eBraireApp.customer.addressLine">Address Line</span></dt>
                 <dd>
-                    <span>{{ customer.name }}</span>
+                    <span>{{ customer.addressLine }}</span>
                 </dd>
-                <dt><span jhiTranslate="eBraireApp.customer.lastName">Last Name</span></dt>
+                <dt><span jhiTranslate="eBraireApp.customer.addressLine2">Address Line 2</span></dt>
                 <dd>
-                    <span>{{ customer.lastName }}</span>
+                    <span>{{ customer.addressLine2 }}</span>
                 </dd>
-                <dt><span jhiTranslate="eBraireApp.customer.address">Address</span></dt>
+                <dt><span jhiTranslate="eBraireApp.customer.postcode">Postcode</span></dt>
                 <dd>
-                    <span>{{ customer.address }}</span>
+                    <span>{{ customer.postcode }}</span>
+                </dd>
+                <dt><span jhiTranslate="eBraireApp.customer.city">City</span></dt>
+                <dd>
+                    <span>{{ customer.city }}</span>
+                </dd>
+                <dt><span jhiTranslate="eBraireApp.customer.user">User</span></dt>
+                <dd>
+                    {{ customer.user?.id }}
                 </dd>
             </dl>
 

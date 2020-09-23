@@ -72,9 +72,10 @@ class CustomerGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "name":"SAMPLE_TEXT"
-                , "lastName":"SAMPLE_TEXT"
-                , "address":"SAMPLE_TEXT"
+                , "addressLine":"SAMPLE_TEXT"
+                , "addressLine2":"SAMPLE_TEXT"
+                , "postcode":"SAMPLE_TEXT"
+                , "city":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_customer_url"))).exitHereIfFailed

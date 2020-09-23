@@ -1,7 +1,9 @@
 package com.shaf.ebraire.web.rest;
 
 import com.shaf.ebraire.domain.User;
+import com.shaf.ebraire.domain.Customer;
 import com.shaf.ebraire.repository.UserRepository;
+import com.shaf.ebraire.repository.CustomerRepository;
 import com.shaf.ebraire.security.SecurityUtils;
 import com.shaf.ebraire.service.MailService;
 import com.shaf.ebraire.service.UserService;
@@ -10,15 +12,19 @@ import com.shaf.ebraire.service.dto.UserDTO;
 import com.shaf.ebraire.web.rest.errors.*;
 import com.shaf.ebraire.web.rest.vm.KeyAndPasswordVM;
 import com.shaf.ebraire.web.rest.vm.ManagedUserVM;
+import com.shaf.ebraire.web.rest.vm.ManagedCustomerVM;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 /**
@@ -34,17 +40,21 @@ public class AccountResource {
         }
     }
 
+
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
     private final UserRepository userRepository;
+
+    private final CustomerRepository customerRepository;
 
     private final UserService userService;
 
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(UserRepository userRepository, CustomerRepository customerRepository, UserService userService, MailService mailService) {
 
         this.userRepository = userRepository;
+        this.customerRepository = customerRepository;
         this.userService = userService;
         this.mailService = mailService;
     }
@@ -64,6 +74,37 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+        mailService.sendActivationEmail(user);
+    }
+    
+    /**
+     * {@code POST  /customers} : Create a new customer.
+     *
+     * @param customer the customer to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new customer, or with status {@code 400 (Bad Request)} if the customer has already an ID.
+     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
+     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
+     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/registerCustomer")
+    public void registerCustomer(@Valid @RequestBody ManagedCustomerVM managedCustomerVM) {
+        log.debug("REST request to save Customer : {}", managedCustomerVM);
+        if (managedCustomerVM.getId() != null) {
+            throw new BadRequestAlertException("A new customer cannot already have an ID", "customer", "idexists");
+        }
+        
+        if (!checkPasswordLength(managedCustomerVM.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+        User user = userService.registerUser(
+            new UserDTO(managedCustomerVM.getUser()), 
+            managedCustomerVM.getPassword(), 
+            managedCustomerVM.getAddressLine(), 
+            managedCustomerVM.getAddressLine2(), 
+            managedCustomerVM.getPostcode(), 
+            managedCustomerVM.getCity()
+            );
         mailService.sendActivationEmail(user);
     }
 

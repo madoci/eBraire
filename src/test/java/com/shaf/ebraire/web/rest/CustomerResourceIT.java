@@ -29,14 +29,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class CustomerResourceIT {
 
-    private static final String DEFAULT_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_ADDRESS_LINE = "AAAAAAAAAA";
+    private static final String UPDATED_ADDRESS_LINE = "BBBBBBBBBB";
 
-    private static final String DEFAULT_LAST_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_LAST_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_ADDRESS_LINE_2 = "AAAAAAAAAA";
+    private static final String UPDATED_ADDRESS_LINE_2 = "BBBBBBBBBB";
 
-    private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
-    private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
+    private static final String DEFAULT_POSTCODE = "06925";
+    private static final String UPDATED_POSTCODE = "89546";
+
+    private static final String DEFAULT_CITY = "AAAAAAAAAA";
+    private static final String UPDATED_CITY = "BBBBBBBBBB";
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -57,9 +60,10 @@ public class CustomerResourceIT {
      */
     public static Customer createEntity(EntityManager em) {
         Customer customer = new Customer()
-            .name(DEFAULT_NAME)
-            .lastName(DEFAULT_LAST_NAME)
-            .address(DEFAULT_ADDRESS);
+            .addressLine(DEFAULT_ADDRESS_LINE)
+            .addressLine2(DEFAULT_ADDRESS_LINE_2)
+            .postcode(DEFAULT_POSTCODE)
+            .city(DEFAULT_CITY);
         return customer;
     }
     /**
@@ -70,9 +74,10 @@ public class CustomerResourceIT {
      */
     public static Customer createUpdatedEntity(EntityManager em) {
         Customer customer = new Customer()
-            .name(UPDATED_NAME)
-            .lastName(UPDATED_LAST_NAME)
-            .address(UPDATED_ADDRESS);
+            .addressLine(UPDATED_ADDRESS_LINE)
+            .addressLine2(UPDATED_ADDRESS_LINE_2)
+            .postcode(UPDATED_POSTCODE)
+            .city(UPDATED_CITY);
         return customer;
     }
 
@@ -95,9 +100,10 @@ public class CustomerResourceIT {
         List<Customer> customerList = customerRepository.findAll();
         assertThat(customerList).hasSize(databaseSizeBeforeCreate + 1);
         Customer testCustomer = customerList.get(customerList.size() - 1);
-        assertThat(testCustomer.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testCustomer.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
-        assertThat(testCustomer.getAddress()).isEqualTo(DEFAULT_ADDRESS);
+        assertThat(testCustomer.getAddressLine()).isEqualTo(DEFAULT_ADDRESS_LINE);
+        assertThat(testCustomer.getAddressLine2()).isEqualTo(DEFAULT_ADDRESS_LINE_2);
+        assertThat(testCustomer.getPostcode()).isEqualTo(DEFAULT_POSTCODE);
+        assertThat(testCustomer.getCity()).isEqualTo(DEFAULT_CITY);
     }
 
     @Test
@@ -122,10 +128,10 @@ public class CustomerResourceIT {
 
     @Test
     @Transactional
-    public void checkNameIsRequired() throws Exception {
+    public void checkAddressLineIsRequired() throws Exception {
         int databaseSizeBeforeTest = customerRepository.findAll().size();
         // set the field null
-        customer.setName(null);
+        customer.setAddressLine(null);
 
         // Create the Customer, which fails.
 
@@ -141,10 +147,10 @@ public class CustomerResourceIT {
 
     @Test
     @Transactional
-    public void checkLastNameIsRequired() throws Exception {
+    public void checkPostcodeIsRequired() throws Exception {
         int databaseSizeBeforeTest = customerRepository.findAll().size();
         // set the field null
-        customer.setLastName(null);
+        customer.setPostcode(null);
 
         // Create the Customer, which fails.
 
@@ -160,10 +166,10 @@ public class CustomerResourceIT {
 
     @Test
     @Transactional
-    public void checkAddressIsRequired() throws Exception {
+    public void checkCityIsRequired() throws Exception {
         int databaseSizeBeforeTest = customerRepository.findAll().size();
         // set the field null
-        customer.setAddress(null);
+        customer.setCity(null);
 
         // Create the Customer, which fails.
 
@@ -188,9 +194,10 @@ public class CustomerResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(customer.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
-            .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)));
+            .andExpect(jsonPath("$.[*].addressLine").value(hasItem(DEFAULT_ADDRESS_LINE)))
+            .andExpect(jsonPath("$.[*].addressLine2").value(hasItem(DEFAULT_ADDRESS_LINE_2)))
+            .andExpect(jsonPath("$.[*].postcode").value(hasItem(DEFAULT_POSTCODE)))
+            .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)));
     }
     
     @Test
@@ -204,9 +211,10 @@ public class CustomerResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(customer.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME))
-            .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS));
+            .andExpect(jsonPath("$.addressLine").value(DEFAULT_ADDRESS_LINE))
+            .andExpect(jsonPath("$.addressLine2").value(DEFAULT_ADDRESS_LINE_2))
+            .andExpect(jsonPath("$.postcode").value(DEFAULT_POSTCODE))
+            .andExpect(jsonPath("$.city").value(DEFAULT_CITY));
     }
     @Test
     @Transactional
@@ -229,9 +237,10 @@ public class CustomerResourceIT {
         // Disconnect from session so that the updates on updatedCustomer are not directly saved in db
         em.detach(updatedCustomer);
         updatedCustomer
-            .name(UPDATED_NAME)
-            .lastName(UPDATED_LAST_NAME)
-            .address(UPDATED_ADDRESS);
+            .addressLine(UPDATED_ADDRESS_LINE)
+            .addressLine2(UPDATED_ADDRESS_LINE_2)
+            .postcode(UPDATED_POSTCODE)
+            .city(UPDATED_CITY);
 
         restCustomerMockMvc.perform(put("/api/customers")
             .contentType(MediaType.APPLICATION_JSON)
@@ -242,9 +251,10 @@ public class CustomerResourceIT {
         List<Customer> customerList = customerRepository.findAll();
         assertThat(customerList).hasSize(databaseSizeBeforeUpdate);
         Customer testCustomer = customerList.get(customerList.size() - 1);
-        assertThat(testCustomer.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testCustomer.getLastName()).isEqualTo(UPDATED_LAST_NAME);
-        assertThat(testCustomer.getAddress()).isEqualTo(UPDATED_ADDRESS);
+        assertThat(testCustomer.getAddressLine()).isEqualTo(UPDATED_ADDRESS_LINE);
+        assertThat(testCustomer.getAddressLine2()).isEqualTo(UPDATED_ADDRESS_LINE_2);
+        assertThat(testCustomer.getPostcode()).isEqualTo(UPDATED_POSTCODE);
+        assertThat(testCustomer.getCity()).isEqualTo(UPDATED_CITY);
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.shaf.ebraire.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -26,18 +27,27 @@ public class Customer implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "address_line", nullable = false)
+    private String addressLine;
+
+    @Column(name = "address_line_2")
+    private String addressLine2;
 
     @NotNull
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
+    @Pattern(regexp = "[0-9]{5}$")
+    @Column(name = "postcode", nullable = false)
+    private String postcode;
 
     @NotNull
-    @Column(name = "address", nullable = false)
-    private String address;
+    @Column(name = "city", nullable = false)
+    private String city;
 
-    @OneToMany(mappedBy = "idCustomer")
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    private User user;
+
+    @OneToMany(mappedBy = "idCustomer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Ordered> idOrders = new HashSet<>();
 
@@ -50,43 +60,69 @@ public class Customer implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getAddressLine() {
+        return addressLine;
     }
 
-    public Customer name(String name) {
-        this.name = name;
+    public Customer addressLine(String addressLine) {
+        this.addressLine = addressLine;
         return this;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAddressLine(String addressLine) {
+        this.addressLine = addressLine;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getAddressLine2() {
+        return addressLine2;
     }
 
-    public Customer lastName(String lastName) {
-        this.lastName = lastName;
+    public Customer addressLine2(String addressLine2) {
+        this.addressLine2 = addressLine2;
         return this;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setAddressLine2(String addressLine2) {
+        this.addressLine2 = addressLine2;
     }
 
-    public String getAddress() {
-        return address;
+    public String getPostcode() {
+        return postcode;
     }
 
-    public Customer address(String address) {
-        this.address = address;
+    public Customer postcode(String postcode) {
+        this.postcode = postcode;
         return this;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public Customer city(String city) {
+        this.city = city;
+        return this;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Customer user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Set<Ordered> getIdOrders() {
@@ -136,9 +172,10 @@ public class Customer implements Serializable {
     public String toString() {
         return "Customer{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", lastName='" + getLastName() + "'" +
-            ", address='" + getAddress() + "'" +
+            ", addressLine='" + getAddressLine() + "'" +
+            ", addressLine2='" + getAddressLine2() + "'" +
+            ", postcode='" + getPostcode() + "'" +
+            ", city='" + getCity() + "'" +
             "}";
     }
 }

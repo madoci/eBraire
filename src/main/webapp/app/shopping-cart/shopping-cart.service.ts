@@ -116,12 +116,12 @@ export class ShoppingCartService {
 
       this.bookedBookService.create(booked).subscribe(element => {
         if (element.body === null) {
-          alert('désolé rupture de stoque repassé plus tad :)');
+          alert('Cet article est actuellement en rupture de stock.');
           return;
         }
-        alert(element.body.id);
+        // alert(element.body.id);
         this.items.push(element.body);
-        alert(this.items.length);
+        // alert(this.items.length);
         this.saveCart();
       });
     }
@@ -175,8 +175,9 @@ export class ShoppingCartService {
     this.items.forEach(element => {
       this.bookedBookService.publicCheckBookedBook(element).subscribe(resp => {
         if (resp.body! === null) {
-          alert('Votre commande pour le livre :' + element.book!.title! + "a expirer et il n'y a plus assez de stock :(");
+          alert("L'article " + element.book!.title! + ' ne peut actuellement plus être commandé dans la quantité demandée. ');
           koItems = koItems + 1;
+          alert(koItems);
           if (okItems + koItems === sizeItems) {
             this.items = tempItems;
             this.saveCart();
@@ -197,6 +198,7 @@ export class ShoppingCartService {
       });
     });
   }
+
   public getItem(book: Book): BookedBook {
     for (let i = 0; i < this.items.length; i++) {
       if (this.items[i].book!.id === book.id) {
@@ -205,6 +207,7 @@ export class ShoppingCartService {
     }
     return new BookedBook();
   }
+
   private loadCart(): void {
     if (localStorage.getItem('ShoppingCart')) {
       this.items = JSON.parse(localStorage.getItem('ShoppingCart')!);
