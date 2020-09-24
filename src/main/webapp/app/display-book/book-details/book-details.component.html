@@ -1,24 +1,25 @@
 <style>
     .first-row {
-        margin-left: 100px;
+        margin-left: 7%;
+        flex-grow: 1;
     }
-    
+
     .spacing-right {
         margin-right: 50px;
     }
-    
+
     .space-right-xs {
         margin-right: 5px;
     }
-    
+
     .space-bottom-xs {
         margin-bottom: 5px;
     }
-    
+
     .spacing-bottom {
         margin-bottom: 20px;
     }
-    
+
     .button1 {
         background-color: #ecb613;
         color: white;
@@ -31,7 +32,7 @@
         box-shadow: 0px 5px 0px #cc9900;
         margin-top: 20px;
     }
-    
+
     .button2 {
         background-color: #e6af57;
         color: #783a24;
@@ -40,33 +41,88 @@
         font-size: 20px;
         /*padding: 16px 32px;*/
     }
-    
+
     .button1:hover {
         background-color: #ffc61a;
         -webkit-box-shadow: 0px 5px 0px #e6ac00;
         -moz-box-shadow: 0px 5px 0px #e6ac00;
         box-shadow: 0px 5px 0px #e6ac00;
     }
-    
+
     .badgeGenre {
         background-color: #a63c40;
         color: white;
     }
-    
+
     .badgeTag {
         background-color: #8384a6;
         color: white;
     }
-    
+
     .responsive2 {
         width: 50%;
     }
-    
+
     .responsiveImg {
         display: flex;
         justify-content: left;
     }
-    
+
+    .price {
+        letter-spacing: 0.05em;
+    }
+
+    .unit-price {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-left: auto;
+    }
+
+    .total {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        font-size: 1.5em;
+        align-items: baseline;
+        margin-top: 20px;
+    }
+
+    .total-price {
+        margin-left: 30px;
+        font-weight: bold;
+        font-size: 1.8em;
+    }
+
+    .label {
+        margin-right: 20px;
+        font-size: 1.2em;
+    }
+
+    .quantity {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        margin-top: 20px;
+        margin-left: auto;
+    }
+
+    .action {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-right: 7%;
+        margin-left: 30px;
+    }
+
+    @media screen and (max-width: 1500px) {
+        .action {
+            margin-right: 0;
+        }
+        .first-row {
+            margin-left: 0px !important;
+        }
+    }
+
     @media screen and (max-width: 1200px) {
         .responsive1 {
             flex-direction: column !important;
@@ -82,6 +138,21 @@
             display: block !important;
             margin-left: auto !important;
             margin-right: auto !important;
+        }
+        .total {
+            margin-top: 5px !important;
+            justify-content: center !important;
+        }
+        .quantity {
+            margin-top: 5px !important;
+            margin-left: inherit;
+        }
+        .action {
+            align-items: center;
+            margin-left: inherit;
+        }
+        .unit-price{
+            margin-left: inherit;
         }
     }
 </style>
@@ -109,15 +180,27 @@
             <p>{{book.description}}</p>
         </div>
     </div>
-    <div class="d-flex flex-column justify-content-center">
-        <div class="text-center h1">
-            <p class="font-weight-bold">{{price(book.unitPrice)}}</p>
+    <div class="action">
+        <div class="quantity">
+            <div class="label">Prix unitaire :</div><div class="price unit-price">{{price(book.unitPrice)}}</div>
         </div>
-        <div class="text-center space-bottom-xs">
+        <div class="quantity">
+            <div class="label">
+                Quantité :
+            </div>
             <input type="number" name="quantity" id="quantity" min="1" [max]="itemsInDatabase" onkeyup=imposeMinMax(this) [(ngModel)]="quantity">
         </div>
+        <div class="total">
+            <div>
+                TOTAL
+            </div>
+            <div class="total-price price">
+                {{price(getTotalPrice())}}
+            </div>
+        </div>
+
         <div class="text-center space-bottom-xs">
-            <button class="button1" (click)="addToCart()">Ajouter au panier</button>
+            <button class="btn button1" (click)="addToCart()">Ajouter au panier</button>
         </div>
     </div>
 </div>
