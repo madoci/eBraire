@@ -46,8 +46,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   price(val: number | undefined): string {
     if (val === undefined) return '0.00€';
-    let dec = ((val - Math.floor(val)) * 10).toString();
-    dec = dec.length === 1 ? dec + '0' : dec;
+    const dec = Math.round((val - Math.floor(val)) * 100).toString();
     return Math.trunc(val).toString() + ',' + dec + '€';
   }
 }
