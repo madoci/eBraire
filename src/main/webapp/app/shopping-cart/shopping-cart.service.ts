@@ -98,6 +98,7 @@ export class ShoppingCartService {
               this.items.splice(i, 1);
               this.saveCart();
             } else if (bookedBook.body.quantity !== this.items[i].quantity) {
+              alert("désolé impossible de rajouter des livres à votre panier en raison d'un mnaque de stock");
               this.items[i] = bookedBook.body;
               this.saveCart();
               this.eventManager.broadcast('CartModification');

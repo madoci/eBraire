@@ -271,6 +271,7 @@ if (!currentBook.isPresent()){
         for (BookedBook potentialBookedbook:bookedBooks) {
           Optional<BookedBook> tempbookedBook = bookedBookRepository.findById(potentialBookedbook.getId());
           if(!tempbookedBook.isPresent()){
+        	  log.debug("je sort !!!!!!!!!!!!!");
         	 return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).body(null);
           }
           BookedBook bookedBook = tempbookedBook.get();

@@ -121,7 +121,7 @@
                 {{price(finalPrice)}}
             </div>
         </div>
-        <button class="btn button-confirm" [routerLink]="'/order'">Confirmer votre panier</button>
+        <button class="btn button-confirm" (click)="tryToOrder()">Confirmer votre panier</button>
     </div>
 </div>
 <div *ngIf="items.length === 0">
