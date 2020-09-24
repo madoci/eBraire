@@ -89,15 +89,16 @@ export class ShoppingCartService {
           this.bookedBookService.update(this.items[i]).subscribe(bookedBook => {
             if (bookedBook.body === null) {
               // cas pas trouvé le livre
+              alert("Le livre que vous recherchez n'est plus en vente.");
               this.items.splice(i, 1);
               this.saveCart();
             } else if (bookedBook.body.quantity === 0) {
               // cas pas assez de stock
-              alert('Votre réservation à expiré');
+              alert('Le livre : ' + bookedBook.body.book!.title! + " n'est plus disponnible dans la quantité souhaitée.");
               this.items.splice(i, 1);
               this.saveCart();
             } else if (bookedBook.body.quantity !== this.items[i].quantity) {
-              alert("désolé impossible de rajouter des livres à votre panier en raison d'un mnaque de stock");
+              alert('Le stock du livre : ' + bookedBook.body.book!.title! + " n'est actuellement pas suffisant.");
               this.items[i] = bookedBook.body;
               this.saveCart();
               this.eventManager.broadcast('CartModification');
@@ -116,7 +117,7 @@ export class ShoppingCartService {
 
       this.bookedBookService.create(booked).subscribe(element => {
         if (element.body === null) {
-          alert('désolé rupture de stoque repassé plus tard');
+          alert('Le stock du livre : ' + element.body!.book!.title! + " n'est actuellement pas suffisant.");
           return;
         }
         this.items.push(element.body);
@@ -143,7 +144,7 @@ export class ShoppingCartService {
     this.items.forEach(element => {
       this.bookedBookService.publicCheckBookedBook(element).subscribe(resp => {
         if (resp.body! === null) {
-          alert('Votre commande pour le livre :' + element.book!.title! + "a expirer et il n'y a plus assez de stock :(");
+          alert('Le livre : ' + element.book!.title! + " n'est plus disponnible dans la quantité souhaitée.");
           koItems = koItems + 1;
           if (okItems + koItems === sizeItems) {
             this.items = tempItems;
@@ -170,7 +171,7 @@ export class ShoppingCartService {
     this.items.forEach(element => {
       this.bookedBookService.publicCheckBookedBook(element).subscribe(resp => {
         if (resp.body! === null) {
-          alert('Votre commande pour le livre :' + element.book!.title! + "a expirer et il n'y a plus assez de stock :(");
+          alert('Le livre : ' + element.book!.title! + " n'est plus disponnible dans la quantité souhaitée.");
           koItems = koItems + 1;
           if (okItems + koItems === sizeItems) {
             this.items = tempItems;

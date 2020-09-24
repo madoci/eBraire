@@ -5,9 +5,6 @@ import { ShoppingCartService } from '../../shopping-cart/shopping-cart.service';
 import { Status } from 'app/shared/model/enumerations/status.model';
 import { CustomerService } from '../../entities/customer/customer.service';
 import { OrderedService } from '../../entities/ordered/ordered.service';
-import { Observable } from 'rxjs';
-import { HttpResponse } from '@angular/common/http';
-import { IBook } from '../../shared/model/book.model';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 import { BookedBookService } from '../../entities/booked-book/booked-book.service';
@@ -59,7 +56,7 @@ export class OrderInfoComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.shoppingCartService.getItems().length === 0) {
-      alert("Votre panier est vide vous ne pouvez pas passez de commande ajoutez des livres dans votre panier d'abord.");
+      alert('Votre panier est vide. Veuillez ajouter des livres avant de passer commande.');
       this.router.navigateByUrl('');
     }
 
@@ -163,63 +160,12 @@ export class OrderInfoComponent implements OnInit {
         map(element => {
           if (element.body !== null) {
             this.shoppingCartService.clearCart();
-            alert('Merci pour votre achat et a bientôt chez Ebraire !');
+            alert("Merci pour votre achat et à bientôt chez l'ebraire !");
             this.router.navigateByUrl('');
           } else {
-            alert('Trop long veuilliez recommencer');
+            alert('Délai dépassé pour le paiement.');
             this.router.navigateByUrl('');
           }
-        })
-      )
-      .subscribe();
-  }
-
-  debugTest(): void {
-    this.customerService.find(3).subscribe(res => {
-      if (res.body) {
-        const customer = res.body;
-        customer.idOrders?.forEach(value => {
-          alert(value.delevryAddress);
-        });
-      }
-    });
-    // this.orderedService.find(1101).subscribe(res => {
-    //   if (res.body) {
-    //     res.body.orderLines?.forEach(value => {
-    //       alert(value.price);
-    //     });
-    //   }
-    // });
-  }
-
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IBook>>): void {
-    result.subscribe(
-      () => alert('sucess'),
-      () => alert('Fail')
-    );
-  }
-
-  // constructor(public id?: number, public name?: string, public lastName?: string, public address?: string, public idOrders?: IOrdered[]) {}
-  SendOrdered(): void {
-    this.order.status = Status.ORDERED;
-    const currentTime: moment.Moment = moment();
-    this.order.commandStart = currentTime;
-    this.customerService
-      .update(this.customer!)
-      .pipe(
-        flatMap(result => {
-          this.customer = result.body || this.customer;
-          this.order.idCustomer = this.customer;
-          return this.orderedService.create(this.order);
-        }),
-        flatMap(resultOrder => {
-          this.order = resultOrder.body || this.order;
-          return this.bookedBookService.orderFromCustomer(this.customer!.id!, this.order.id!, this.shoppingCartService.getItems());
-        }),
-        map(() => {
-          this.shoppingCartService.clearCart();
-          alert('Merci pour votre achat et a bientôt chez Ebraire !');
-          this.router.navigateByUrl('');
         })
       )
       .subscribe();
