@@ -8,13 +8,19 @@ import { Book } from '../shared/model/book.model';
 import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { JhiEventManager } from 'ng-jhipster';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShoppingCartService {
   items: BookedBook[] = [];
-  constructor(private customerService: CustomerService, private bookedBookService: BookedBookService, private router: Router) {}
+  constructor(
+    private customerService: CustomerService,
+    private bookedBookService: BookedBookService,
+    private router: Router,
+    protected eventManager: JhiEventManager
+  ) {}
 
   addToCart(book: IBook, quantity: number): void {
     this.addOrUpdate(book, quantity);
@@ -80,7 +86,6 @@ export class ShoppingCartService {
     if (quantity > 0) {
       for (let i = 0; i < this.items.length; i++) {
         if (this.items[i].book!.id === book.id) {
-          alert("creation")
           this.items[i].quantity = this.items[i].quantity! + quantity;
           this.bookedBookService.update(this.items[i]).subscribe(bookedBook => {
             if (bookedBook.body === null) {
@@ -93,9 +98,9 @@ export class ShoppingCartService {
               this.items.splice(i, 1);
               this.saveCart();
             } else if (bookedBook.body.quantity !== this.items[i].quantity) {
-              alert('Pas assez de sotck pour en réserver plus');
               this.items[i] = bookedBook.body;
               this.saveCart();
+              this.eventManager.broadcast('CartModification');
             } else {
               // cas tous vas bien
               this.items[i] = bookedBook.body;
@@ -112,13 +117,12 @@ export class ShoppingCartService {
       this.bookedBookService.create(booked).subscribe(element => {
         if (element.body === null) {
           alert('désolé rupture de stoque repassé plus tad :)');
-            return;
-          };
-          alert(element.body.id);
-          this.items.push(element.body);
-          alert(this.items.length);
-          this.saveCart();
-
+          return;
+        }
+        alert(element.body.id);
+        this.items.push(element.body);
+        alert(this.items.length);
+        this.saveCart();
       });
     }
   }
@@ -130,7 +134,6 @@ export class ShoppingCartService {
     );
   }
   private saveCart(): void {
-      alert(this.items.length);
     localStorage.setItem('ShoppingCart', JSON.stringify(this.items));
   }
 

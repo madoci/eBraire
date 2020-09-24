@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ShoppingItem } from 'app/shopping-cart/shopping-item.model';
 import { ShoppingCartService } from 'app/shopping-cart/shopping-cart.service';
 import { IBook } from 'app/shared/model/book.model';
 import { OrderSummaryComponent } from '../order-summary.component';
 import { BookedBook } from '../../../shared/model/booked-book.model';
+import { JhiEventManager } from 'ng-jhipster';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'jhi-order-line',
@@ -16,12 +17,13 @@ export class OrderLineComponent implements OnInit {
   quantity = 0;
   quantities: number[] = [];
   maxquantity = 10; // TODO : calculer cette valeur
-  fixedmaxquantity = 10; // max quantity ne peux pas être superieur à cette valeur
+  eventSubscriber?: Subscription;
 
-  constructor(private shoppingCartService: ShoppingCartService) {}
+  constructor(private shoppingCartService: ShoppingCartService, protected eventManager: JhiEventManager) {}
 
   ngOnInit(): void {
     this.initItem();
+    this.eventSubscriber = this.eventManager.subscribe('CartModification', () => this.initItem());
   }
 
   getTotalPrice(): number {
