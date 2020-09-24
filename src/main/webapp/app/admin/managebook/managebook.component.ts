@@ -37,6 +37,7 @@ export class ManagebookComponent implements OnInit {
     id: [],
     title: [],
     authors: [],
+    quantity: [],
     description: [],
     unitPrice: [],
     image: [],
@@ -87,6 +88,7 @@ export class ManagebookComponent implements OnInit {
       id: this.book.id,
       title: this.book.title,
       authors: this.book.authors,
+      quantity: this.book.quantity,
       description: this.book.description,
       unitPrice: this.book.unitPrice,
       image: this.book.image,
@@ -108,7 +110,6 @@ export class ManagebookComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-
     // Save Tags
     const checkedListTag = document.getElementsByName('tag');
     const savingTagString: string[] = [];

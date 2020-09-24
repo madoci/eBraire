@@ -1,0 +1,6 @@
+entity BookedBook {
+	id Long,
+	expired Long,
+    quantity Integer, // FILEPATH
+    price Float
+}

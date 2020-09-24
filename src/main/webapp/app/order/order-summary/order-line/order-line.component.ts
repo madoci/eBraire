@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ShoppingItem } from 'app/shopping-cart/shopping-item.model';
 import { ShoppingCartService } from 'app/shopping-cart/shopping-cart.service';
 import { IBook } from 'app/shared/model/book.model';
 import { OrderSummaryComponent } from '../order-summary.component';
+import { BookedBook } from '../../../shared/model/booked-book.model';
+import { JhiEventManager } from 'ng-jhipster';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'jhi-order-line',
@@ -11,55 +13,56 @@ import { OrderSummaryComponent } from '../order-summary.component';
 export class OrderLineComponent implements OnInit {
   @Input() parent!: OrderSummaryComponent;
   @Input() book!: IBook;
-  item!: ShoppingItem;
+  item!: BookedBook;
   quantity = 0;
   quantities: number[] = [];
   maxquantity = 10; // TODO : calculer cette valeur
-  fixedmaxquantity = 10; // max quantity ne peux pas être superieur à cette valeur
+  eventSubscriber?: Subscription;
 
-  constructor(private shoppingCartService: ShoppingCartService) {}
+  constructor(private shoppingCartService: ShoppingCartService, protected eventManager: JhiEventManager) {}
 
   ngOnInit(): void {
     this.initItem();
+    this.eventSubscriber = this.eventManager.subscribe('CartModification', () => this.initItem());
   }
 
   getTotalPrice(): number {
-    return this.item.quantity * this.item.book.unitPrice!;
+    return this.item.quantity! * this.item.book!.unitPrice!;
   }
 
   removeItem(): void {
-    this.shoppingCartService.removeAllFromCart(this.item.book);
+    this.shoppingCartService.removeAllFromCart(this.item.book!);
     this.updateItem();
   }
 
   changeItemQuantity(): void {
     if (this.quantity > 0) {
-      if (this.quantity > this.item.quantity) {
-        this.shoppingCartService.addToCart(this.item.book, this.quantity - this.item.quantity);
-      } else if (this.quantity < this.item.quantity) {
-        this.shoppingCartService.removeFromCart(this.item.book, this.item.quantity - this.quantity);
+      if (this.quantity > this.item.quantity!) {
+        this.shoppingCartService.addToCart(this.item.book!, this.quantity - this.item.quantity!);
+      } else if (this.quantity < this.item.quantity!) {
+        this.shoppingCartService.removeFromCart(this.item.book!, this.item.quantity! - this.quantity);
       }
     }
     this.updateItem();
   }
 
   addOne(): void {
-    if (this.item.quantity < this.maxquantity) {
-      this.shoppingCartService.addToCart(this.item.book, 1);
+    if (this.item.quantity! < this.maxquantity) {
+      this.shoppingCartService.addToCart(this.item.book!, 1);
       this.updateItem();
     }
   }
 
   removeOne(): void {
-    if (this.item.quantity > 1) {
-      this.shoppingCartService.removeFromCart(this.item.book, 1);
+    if (this.item.quantity! > 1) {
+      this.shoppingCartService.removeFromCart(this.item.book!, 1);
       this.updateItem();
     }
   }
 
   private initItem(): void {
     this.item = this.shoppingCartService.getItem(this.book);
-    this.quantity = this.item.quantity;
+    this.quantity = this.item.quantity!;
     this.quantities = Array.from(Array(this.maxquantity).keys());
   }
 

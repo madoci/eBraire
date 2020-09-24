@@ -1,0 +1,27 @@
+{
+  "eBraireApp": {
+    "bookedBook": {
+      "home": {
+        "title": "BookedBooks",
+        "createLabel": "Créer un nouveau Booked Book",
+        "createOrEditLabel": "Créer ou éditer un Booked Book",
+        "search": "Recherche pour Booked Book",
+        "notFound": "Aucun Booked Book trouvé"
+      },
+      "created": "Un nouveau Booked Book a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Booked Book avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Booked Book avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Booked Book {{ id }} ?"
+      },
+      "detail": {
+        "title": "Booked Book"
+      },
+      "quantity": "Quantity",
+      "price": "Price",
+      "expired": "Expired",
+      "customer": "Customer",
+      "book": "Book"
+    }
+  }
+}

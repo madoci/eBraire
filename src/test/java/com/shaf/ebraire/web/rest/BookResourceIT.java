@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,11 +56,20 @@ public class BookResourceIT {
     private static final String DEFAULT_IMAGE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_IMAGE_CONTENT_TYPE = "image/png";
 
+    private static final Integer DEFAULT_QUANTITY = 0;
+    private static final Integer UPDATED_QUANTITY = 1;
+
     @Autowired
     private BookRepository bookRepository;
 
     @Mock
     private BookRepository bookRepositoryMock;
+
+    /**
+     * This repository is mocked in the com.shaf.ebraire.repository.search test package.
+     *
+     * @see com.shaf.ebraire.repository.search.BookSearchRepositoryMockConfiguration
+     */
 
     @Autowired
     private EntityManager em;
@@ -82,7 +92,8 @@ public class BookResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .unitPrice(DEFAULT_UNIT_PRICE)
             .image(DEFAULT_IMAGE)
-            .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE);
+            .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE)
+            .quantity(DEFAULT_QUANTITY);
         return book;
     }
     /**
@@ -98,7 +109,8 @@ public class BookResourceIT {
             .description(UPDATED_DESCRIPTION)
             .unitPrice(UPDATED_UNIT_PRICE)
             .image(UPDATED_IMAGE)
-            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
+            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
+            .quantity(UPDATED_QUANTITY);
         return book;
     }
 
@@ -127,6 +139,8 @@ public class BookResourceIT {
         assertThat(testBook.getUnitPrice()).isEqualTo(DEFAULT_UNIT_PRICE);
         assertThat(testBook.getImage()).isEqualTo(DEFAULT_IMAGE);
         assertThat(testBook.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
+        assertThat(testBook.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
+
     }
 
     @Test
@@ -146,6 +160,7 @@ public class BookResourceIT {
         // Validate the Book in the database
         List<Book> bookList = bookRepository.findAll();
         assertThat(bookList).hasSize(databaseSizeBeforeCreate);
+
     }
 
 
@@ -227,6 +242,25 @@ public class BookResourceIT {
 
     @Test
     @Transactional
+    public void checkQuantityIsRequired() throws Exception {
+        int databaseSizeBeforeTest = bookRepository.findAll().size();
+        // set the field null
+        book.setQuantity(null);
+
+        // Create the Book, which fails.
+
+
+        restBookMockMvc.perform(post("/api/books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(book)))
+            .andExpect(status().isBadRequest());
+
+        List<Book> bookList = bookRepository.findAll();
+        assertThat(bookList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllBooks() throws Exception {
         // Initialize the database
         bookRepository.saveAndFlush(book);
@@ -241,7 +275,8 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))));
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
+            .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -280,7 +315,8 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.doubleValue()))
             .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)));
+            .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)))
+            .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY));
     }
     @Test
     @Transactional
@@ -308,7 +344,8 @@ public class BookResourceIT {
             .description(UPDATED_DESCRIPTION)
             .unitPrice(UPDATED_UNIT_PRICE)
             .image(UPDATED_IMAGE)
-            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
+            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
+            .quantity(UPDATED_QUANTITY);
 
         restBookMockMvc.perform(put("/api/books")
             .contentType(MediaType.APPLICATION_JSON)
@@ -325,6 +362,8 @@ public class BookResourceIT {
         assertThat(testBook.getUnitPrice()).isEqualTo(UPDATED_UNIT_PRICE);
         assertThat(testBook.getImage()).isEqualTo(UPDATED_IMAGE);
         assertThat(testBook.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
+        assertThat(testBook.getQuantity()).isEqualTo(UPDATED_QUANTITY);
+
     }
 
     @Test
@@ -341,6 +380,7 @@ public class BookResourceIT {
         // Validate the Book in the database
         List<Book> bookList = bookRepository.findAll();
         assertThat(bookList).hasSize(databaseSizeBeforeUpdate);
+
     }
 
     @Test
@@ -359,5 +399,7 @@ public class BookResourceIT {
         // Validate the database contains one less item
         List<Book> bookList = bookRepository.findAll();
         assertThat(bookList).hasSize(databaseSizeBeforeDelete - 1);
+
     }
+
 }

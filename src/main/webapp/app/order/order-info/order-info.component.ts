@@ -1,29 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { Customer } from 'app/shared/model/customer.model';
+import { ICustomer } from 'app/shared/model/customer.model';
 import { Ordered } from 'app/shared/model/ordered.model';
-import { OrderLine } from 'app/shared/model/order-line.model';
 import { ShoppingCartService } from '../../shopping-cart/shopping-cart.service';
 import { Status } from 'app/shared/model/enumerations/status.model';
-import { OrderLineService } from '../../entities/order-line/order-line.service';
-import { IOrderLine } from '../../shared/model/order-line.model';
 import { CustomerService } from '../../entities/customer/customer.service';
 import { OrderedService } from '../../entities/ordered/ordered.service';
 import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { IBook } from '../../shared/model/book.model';
 import * as moment from 'moment';
-import { flatMap, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { BookedBookService } from '../../entities/booked-book/booked-book.service';
+import { flatMap, map } from 'rxjs/operators';
 import { AccountService } from 'app/core/auth/account.service';
 import { FormBuilder, Validators } from '@angular/forms';
-
 @Component({
   selector: 'jhi-order-info',
   templateUrl: './order-info.component.html',
   styleUrls: ['./order-info.component.scss'],
 })
 export class OrderInfoComponent implements OnInit {
-  customer?: Customer;
+  customer?: ICustomer;
   displayPayment: Boolean = true;
   order: Ordered = new Ordered();
   loading: Boolean = true;
@@ -52,9 +49,9 @@ export class OrderInfoComponent implements OnInit {
 
   constructor(
     private shoppingCartService: ShoppingCartService,
-    private orderLineService: OrderLineService,
-    private customerService: CustomerService,
+    private bookedBookService: BookedBookService,
     private orderedService: OrderedService,
+    private customerService: CustomerService,
     private accountService: AccountService,
     private fb: FormBuilder,
     private router: Router
@@ -104,6 +101,13 @@ export class OrderInfoComponent implements OnInit {
     this.loading = false;
   }
 
+  getTotalPrice(): number {
+    let price = 0;
+    this.shoppingCartService.items.forEach(element => {
+      price = price + element.book!.unitPrice! * element.quantity!;
+    });
+    return price;
+  }
   public goToPayment(): void {
     this.doNotMatch = this.customerForm.get(['email'])!.value !== this.customerForm.get(['confirmEmail'])!.value;
 
@@ -128,8 +132,10 @@ export class OrderInfoComponent implements OnInit {
   }
 
   public pay(): void {
+    let idResuest = -1;
     if (this.customer) {
       this.order.idCustomer = this.customer;
+      idResuest = this.customer.id!;
     }
 
     this.order.delevryAddress = this.customerForm.get(['lastName'])!.value + ' ' + this.customerForm.get(['firstName'])!.value + '\n';
@@ -147,126 +153,31 @@ export class OrderInfoComponent implements OnInit {
     this.order.status = Status.ORDERED;
 
     this.order.commandStart = moment();
-
-    // this.orderedService.create(this.order).pipe(
-    //   flatMap(orderResponse => {
-    //     this.order = orderResponse.body!;
-    //     this.shoppingCartService.getItems().forEach(item => {
-    //       const orderLine: IOrderLine = new OrderLine();
-    //       orderLine.price = item.book.unitPrice! * item.quantity;
-    //       orderLine.quantity = item.quantity;
-    //       orderLine.book = item.book;
-    //       orderLine.order = this.order;
-    //       return this.orderLineService.create(orderLine);
-    //     });
-    //   }),
-    //   map(orderLineResponse => {
-    //     if (!this.order.orderLines) {
-    //       this.order.orderLines = [];
-    //     }
-    //   }),
-    // ).subscribe();
-
-    this.orderedService.create(this.order).subscribe(orderResponse => {
-      if (orderResponse.body) {
-        this.order = orderResponse.body;
-        this.order.orderLines = [];
-        this.shoppingCartService.getItems().forEach(item => {
-          const orderLine: IOrderLine = new OrderLine();
-          orderLine.price = item.book.unitPrice! * item.quantity;
-          orderLine.quantity = item.quantity;
-          orderLine.book = item.book;
-          orderLine.order = this.order;
-          // let i = 0;
-          this.orderLineService.create(orderLine).subscribe(orderLineResponse => {
-            if (orderLineResponse.body) {
-              this.order.orderLines!.push(orderLineResponse.body);
-            }
-            // i = i + 1;
-            // alert(i);
-            if (this.order.orderLines?.length === this.shoppingCartService.getItems().length) {
-              alert('End');
-              this.orderedService.update(this.order).subscribe(res => {
-                alert(res.body?.delevryAddress);
-                if (!this.customer?.idOrders) {
-                  this.customer!.idOrders = [];
-                }
-                this.customer?.idOrders.push(res.body!);
-                this.customerService.update(this.customer!).subscribe(cus => {
-                  alert(cus.body?.id);
-                });
-              });
-            }
-          });
-        });
-      }
-    });
-
-    // this.order.orderLines = [];
-    // this.shoppingCartService.getItems().forEach(item => {
-    //   const orderLine: IOrderLine = new OrderLine();
-    //   orderLine.price = item.book.unitPrice! * item.quantity;
-    //   orderLine.quantity = item.quantity;
-    //   orderLine.book = item.book;
-    //   orderLine.order = this.order;
-    //   //alert(orderLine.price);
-    //   //this.order.orderLines!.push(orderLine);
-    //   let i = 0;
-    //   this.orderLineService.create(orderLine).subscribe(res => {
-    //     if (res.body) {
-    //       this.order.orderLines!.push(res.body);
-    //     }
-    //     i = i + 1;
-    //     if (i === this.shoppingCartService.getItems().length) {
-    //       this.orderedService.create(this.order).subscribe(res2 => {
-    //         alert(res2.body?.delevryAddress);
-    //       });
-    //     }
-    //   });
-    // });
-    // this.orderedService.create(this.order).subscribe(res => {
-    //   alert(res.body?.delevryAddress);
-    // });
-
-    // this.orderedService.create(this.order).subscribe(result => {
-    //   if (result.body) {
-    //     this.order = result.body;
-    //     this.order.orderLines = new Array(0);
-    //     this.shoppingCartService.getItems().forEach(item => {
-    //       const orderLine: IOrderLine = new OrderLine();
-    //       orderLine.price = item.book.unitPrice! * item.quantity;
-    //       orderLine.quantity = item.quantity;
-    //       orderLine.book = item.book;
-    //       orderLine.order = this.order;
-    //       let i = 0;
-    //       this.orderLineService.create(orderLine).subscribe(response => {
-    //         if (response.body) {
-    //           this.order.orderLines!.push(response.body);
-    //         }
-    //         i = i + 1;
-    //         if (i === this.shoppingCartService.getItems().length) {
-    //           this.orderedService.update(this.order);
-    //         }
-    //       });
-    //     });
-    //     if (this.customer) {
-    //       if (!this.customer.idOrders) {
-    //         this.customer.idOrders = new Array(0);
-    //       }
-    //       this.customer.idOrders.push(this.order);
-    //       this.customerService.update(this.customer).subscribe();
-    //     }
-    //   }
-    // });
-
-    // alert(this.order.delevryAddress);
+    this.orderedService
+      .create(this.order)
+      .pipe(
+        flatMap(resultOrder => {
+          this.order = resultOrder.body || this.order;
+          return this.bookedBookService.orderFromCustomer(idResuest, this.order.id!, this.shoppingCartService.getItems());
+        }),
+        map(element => {
+          if (element.body !== null) {
+            this.shoppingCartService.clearCart();
+            alert('Merci pour votre achat et a bientôt chez Ebraire !');
+            this.router.navigateByUrl('');
+          } else {
+            alert('Trop long veuilliez recommencer');
+            this.router.navigateByUrl('');
+          }
+        })
+      )
+      .subscribe();
   }
 
   debugTest(): void {
     this.customerService.find(3).subscribe(res => {
       if (res.body) {
         const customer = res.body;
-        alert(customer.user!.login);
         customer.idOrders?.forEach(value => {
           alert(value.delevryAddress);
         });
@@ -289,50 +200,28 @@ export class OrderInfoComponent implements OnInit {
   }
 
   // constructor(public id?: number, public name?: string, public lastName?: string, public address?: string, public idOrders?: IOrdered[]) {}
-  // SendOrdered(): void {
-  //   //this.customer.address = this.order.billingAddress;
-  //   this.order.status = Status.ORDERED;
-  //   const currentTime: moment.Moment = moment();
-  //   this.order.commandStart = currentTime;
-  //   this.customerService
-  //     .create(this.customer)
-  //     .pipe(
-  //       flatMap(result => {
-  //         this.customer = result.body || this.customer;
-  //         this.order.idCustomer = this.customer;
-  //         return this.orderedService.create(this.order);
-  //       }),
-  //       map(resultOrder => {
-  //         this.order = resultOrder.body || this.order;
-  //         if (!this.customer.idOrders) {
-  //           this.customer.idOrders = new Array(0);
-  //         }
-  //         this.customer.idOrders.push(this.order);
-  //         this.customerService.update(this.customer);
-  //         this.order.orderLines = new Array(0);
-  //         let i = 0;
-  //         this.shoppingCartService.getItems().forEach(Item => {
-  //           const currentOrderLine: IOrderLine = new OrderLine();
-  //           currentOrderLine.price = Item.book.unitPrice! * Item.quantity;
-  //           currentOrderLine.quantity = Item.quantity;
-  //           currentOrderLine.book = Item.book;
-  //           currentOrderLine.order = this.order;
-  //           this.orderLineService.create(currentOrderLine).subscribe(Response => {
-  //             const orderLine = Response.body;
-  //             if (orderLine) {
-  //               this.order.orderLines!.push(orderLine);
-  //             }
-  //             i = i + 1;
-  //             if (i === this.shoppingCartService.getItems().length) {
-  //               this.orderedService.update(this.order);
-  //             }
-  //           });
-  //         });
-  //         this.shoppingCartService.clearCart();
-  //         alert("Merci pour votre achat et à bientôt chez l'eBraire !");
-  //         this.router.navigateByUrl('');
-  //       })
-  //     )
-  //     .subscribe();
-  // }
+  SendOrdered(): void {
+    this.order.status = Status.ORDERED;
+    const currentTime: moment.Moment = moment();
+    this.order.commandStart = currentTime;
+    this.customerService
+      .update(this.customer!)
+      .pipe(
+        flatMap(result => {
+          this.customer = result.body || this.customer;
+          this.order.idCustomer = this.customer;
+          return this.orderedService.create(this.order);
+        }),
+        flatMap(resultOrder => {
+          this.order = resultOrder.body || this.order;
+          return this.bookedBookService.orderFromCustomer(this.customer!.id!, this.order.id!, this.shoppingCartService.getItems());
+        }),
+        map(() => {
+          this.shoppingCartService.clearCart();
+          alert('Merci pour votre achat et a bientôt chez Ebraire !');
+          this.router.navigateByUrl('');
+        })
+      )
+      .subscribe();
+  }
 }

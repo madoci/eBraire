@@ -31,6 +31,10 @@
                         {{ book.imageContentType }}, {{ byteSize(book.image) }}
                     </div>
                 </dd>
+                <dt><span jhiTranslate="eBraireApp.book.quantity">Quantity</span></dt>
+                <dd>
+                    <span>{{ book.quantity }}</span>
+                </dd>
                 <dt><span jhiTranslate="eBraireApp.book.type">Type</span></dt>
                 <dd>
                     <div *ngIf="book.type">

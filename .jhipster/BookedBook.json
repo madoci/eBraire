@@ -1,0 +1,46 @@
+{
+  "name": "BookedBook",
+  "fields": [
+    {
+      "fieldName": "quantity",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "price",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "expired",
+      "fieldType": "Long"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "customer",
+      "otherEntityName": "customer",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id",
+      "otherEntityRelationshipName": "bookedBook"
+    },
+    {
+      "relationshipName": "book",
+      "otherEntityName": "book",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id",
+      "otherEntityRelationshipName": "bookedBook"
+    }
+  ],
+  "changelogDate": "20200915142637",
+  "entityTableName": "booked_book",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "searchEngine": "elasticsearch",
+  "databaseType": "sql"
+}

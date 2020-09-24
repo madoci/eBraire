@@ -33,6 +33,9 @@
             <column name="image_content_type" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="quantity" type="integer">
+                <constraints nullable="false" />
+            </column>
             <column name="type_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -87,6 +90,7 @@
             <column name="unit_price" type="numeric"/>
             <column name="image" type="blob"/>
             <column name="image_content_type" type="string"/>
+            <column name="quantity" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

@@ -58,6 +58,7 @@ export class AdminpanelComponent implements OnInit {
     for (let i = 0; i < this.numGenerate; i++) {
       const book = new Book();
       book.title = this.makeid(10);
+      book.quantity = 10;
       book.authors = this.makeid(10);
       book.description = this.makeid(Math.random() * 1000);
       book.unitPrice = Math.floor(Math.random() * 20);

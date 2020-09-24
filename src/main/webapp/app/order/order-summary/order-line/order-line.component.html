@@ -4,37 +4,37 @@
         flex-direction: row;
         justify-content: space-between;
     }
-    
+
     .margin-bottom {
         margin-bottom: 10px;
     }
-    
+
     .price {
         margin-top: 20px;
         text-align: end;
         letter-spacing: 0.05em;
     }
-    
+
     .title {
         width: 25%;
         max-width: 25%;
         min-width: 25%;
         margin-left: 10px;
     }
-    
+
     hr {
         border-top: 1px solid darkgrey;
     }
-    
+
     .button-sign {
         background-color: #a63c40;
         color: white;
     }
-    
+
     .scroller {
         min-width: 80px
     }
-    
+
     .button-suppr {
         width: 100%;
     }
@@ -61,7 +61,7 @@
         margin-top: 10px;
         margin-left: 10px;
     }
-    
+
     @media screen and (max-width: 1050px) {
         .container {
             flex-direction: column !important;
@@ -103,12 +103,13 @@
 
 <div class="container margin-bottom">
     <div class="item">
-        <jhi-book-image [book]="item.book" [imgSize]=200 [borderColor]="'#AAAAAA'"></jhi-book-image>
+        <jhi-book-image [book]="item.book!" [imgSize]=200 [borderColor]="'#AAAAAA'"></jhi-book-image>
         <div class="info">
-            <a href="/display-book/{{item.book.id}}">
-                <h2>{{item.book.title}}</h2>
+            <a href="/display-book/{{item.book!.id}}">
+                <h2>{{item.book!.title!}}</h2>
             </a>
-            <div>Prix unitaire: {{price(item.book.unitPrice)}}</div>
+            <div>Prix unitaire: {{price(item.book!.unitPrice!)}}</div>
+
         </div>
     </div>
 

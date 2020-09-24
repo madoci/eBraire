@@ -26,7 +26,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("select book from Book book left join fetch book.tags left join fetch book.genres where book.id =:id")
     Optional<Book> findOneWithEagerRelationships(@Param("id") Long id);
-
+    
 
     @Query("select distinct book from Book book left join fetch book.tags left join fetch book.genres where LOWER(book.title) like LOWER(CONCAT('%',CONCAT( :title,'%' )))")
     List<Book> findBooksByTitle(@Param("title") String title);

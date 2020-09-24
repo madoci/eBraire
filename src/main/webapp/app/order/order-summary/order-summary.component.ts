@@ -1,29 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { ShoppingCartService } from 'app/shopping-cart/shopping-cart.service';
-import { ShoppingItem } from 'app/shopping-cart/shopping-item.model';
+import { BookedBook } from '../../shared/model/booked-book.model';
+import { JhiEventManager } from 'ng-jhipster';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'jhi-order-summary',
   templateUrl: './order-summary.component.html',
 })
 export class OrderSummaryComponent implements OnInit {
-  items: ShoppingItem[] = [];
+  items: BookedBook[] = [];
   finalPrice = 0;
   numberOfItems = 0;
+  eventSubscriber?: Subscription;
 
-  constructor(private shoppingCartService: ShoppingCartService) {}
+  constructor(private shoppingCartService: ShoppingCartService, protected eventManager: JhiEventManager) {}
 
   ngOnInit(): void {
     document.bgColor = '#AAAAAA';
     this.items = this.shoppingCartService.getItems();
     this.numberOfItems = this.shoppingCartService.getNumberOfItems();
     this.calcFinalPrice();
+    this.eventSubscriber = this.eventManager.subscribe(
+      'CartModification',
+      () => (this.numberOfItems = this.shoppingCartService.getNumberOfItems())
+    );
   }
 
   calcFinalPrice(): void {
     this.finalPrice = 0;
     this.items.forEach(element => {
-      this.finalPrice += element.quantity * element.book.unitPrice!;
+      this.finalPrice += element.quantity! * element.book!.unitPrice!;
     });
   }
 
@@ -36,5 +43,9 @@ export class OrderSummaryComponent implements OnInit {
     let dec = ((val - Math.floor(val)) * 10).toString();
     dec = dec.length === 1 ? dec + '0' : dec;
     return Math.trunc(val).toString() + ',' + dec + '€';
+  }
+
+  tryToOrder(): void {
+    this.shoppingCartService.checkCartWithRoute('/order');
   }
 }

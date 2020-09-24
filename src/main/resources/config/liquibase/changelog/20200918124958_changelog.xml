@@ -1,0 +1,272 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.9.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <changeSet author="sonzogbe (generated)" id="1600433409612-1">
+        <createSequence incrementBy="50" sequenceName="sequence_generator" startValue="1"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-2">
+        <createTable tableName="book">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="bookPK"/>
+            </column>
+            <column name="authors" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image" type="BLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_content_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit_price" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-3">
+        <createTable tableName="book_genres">
+            <column name="book_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="genres_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-4">
+        <createTable tableName="book_tags">
+            <column name="book_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="tags_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-5">
+        <createTable tableName="booked_book">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="booked_bookPK"/>
+            </column>
+            <column name="expired" type="BIGINT"/>
+            <column name="price" type="FLOAT"/>
+            <column name="quantity" type="INT"/>
+            <column name="book_id" type="BIGINT"/>
+            <column name="customer_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-6">
+        <createTable tableName="customer">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="customerPK"/>
+            </column>
+            <column name="address" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-7">
+        <createTable tableName="genre">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="genrePK"/>
+            </column>
+            <column name="genre" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-8">
+        <createTable tableName="jhi_authority">
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jhi_authorityPK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-9">
+        <createTable tableName="jhi_persistent_audit_event">
+            <column autoIncrement="true" name="event_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jhi_persistent_audit_eventPK"/>
+            </column>
+            <column name="event_date" type="TIMESTAMP"/>
+            <column name="event_type" type="VARCHAR(255)"/>
+            <column name="principal" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-10">
+        <createTable tableName="jhi_persistent_audit_evt_data">
+            <column name="event_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="value" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-11">
+        <createTable tableName="jhi_user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jhi_userPK"/>
+            </column>
+            <column name="created_by" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP"/>
+            <column name="last_modified_by" type="VARCHAR(50)"/>
+            <column name="last_modified_date" type="TIMESTAMP"/>
+            <column name="activated" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="activation_key" type="VARCHAR(20)"/>
+            <column name="email" type="VARCHAR(254)"/>
+            <column name="first_name" type="VARCHAR(50)"/>
+            <column name="image_url" type="VARCHAR(256)"/>
+            <column name="lang_key" type="VARCHAR(10)"/>
+            <column name="last_name" type="VARCHAR(50)"/>
+            <column name="login" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_hash" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reset_date" type="TIMESTAMP"/>
+            <column name="reset_key" type="VARCHAR(20)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-12">
+        <createTable tableName="jhi_user_authority">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="authority_name" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-13">
+        <createTable tableName="order_line">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="order_linePK"/>
+            </column>
+            <column name="price" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="BIGINT"/>
+            <column name="order_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-14">
+        <createTable tableName="ordered">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="orderedPK"/>
+            </column>
+            <column name="billing_address" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="command_start" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="delevry_address" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_customer_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-15">
+        <createTable tableName="tag">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tagPK"/>
+            </column>
+            <column name="tag" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-16">
+        <createTable tableName="type">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="typePK"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-17">
+        <addUniqueConstraint columnNames="genre" constraintName="UC_GENREGENRE_COL" tableName="genre"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-18">
+        <addUniqueConstraint columnNames="email" constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-19">
+        <addUniqueConstraint columnNames="login" constraintName="UC_JHI_USERLOGIN_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-20">
+        <addUniqueConstraint columnNames="tag" constraintName="UC_TAGTAG_COL" tableName="tag"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-21">
+        <addUniqueConstraint columnNames="type" constraintName="UC_TYPETYPE_COL" tableName="type"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-22">
+        <addForeignKeyConstraint baseColumnNames="customer_id" baseTableName="booked_book" constraintName="FK1h6nts1y6ql58l1mhon1mpgpq" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="customer" validate="true"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-23">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="jhi_user_authority" constraintName="FK290okww5jujghp4el5i7mgwu0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-24">
+        <addForeignKeyConstraint baseColumnNames="event_id" baseTableName="jhi_persistent_audit_evt_data" constraintName="FK2ehnyx2si4tjd2nt4q7y40v8m" deferrable="false" initiallyDeferred="false" referencedColumnNames="event_id" referencedTableName="jhi_persistent_audit_event" validate="true"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-25">
+        <addForeignKeyConstraint baseColumnNames="authority_name" baseTableName="jhi_user_authority" constraintName="FK4psxl0jtx6nr7rhqbynr6itoc" deferrable="false" initiallyDeferred="false" referencedColumnNames="name" referencedTableName="jhi_authority" validate="true"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-26">
+        <addForeignKeyConstraint baseColumnNames="type_id" baseTableName="book" constraintName="FK5s66k3ve9t4i1r9c1ebd37j3p" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="type" validate="true"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-27">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="book_genres" constraintName="FK6soimqwnss59p5wt6m3afnuoo" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="book" validate="true"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-28">
+        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="order_line" constraintName="FK9mq92dv8es0xhasc76smcgv76" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ordered" validate="true"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-29">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="book_tags" constraintName="FKgrb34gudrjkbeew59bty9sh45" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="book" validate="true"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-30">
+        <addForeignKeyConstraint baseColumnNames="genres_id" baseTableName="book_genres" constraintName="FKkemwddl6cxkebe21lsqa2ob4q" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="genre" validate="true"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-31">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="order_line" constraintName="FKodo456q9363b72femnfgx0qu8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="book" validate="true"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-32">
+        <addForeignKeyConstraint baseColumnNames="id_customer_id" baseTableName="ordered" constraintName="FKqte32l839454qi70xa4bob7iv" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="customer" validate="true"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-33">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="booked_book" constraintName="FKr8dn3j4eorm3iyt094yxoxo3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="book" validate="true"/>
+    </changeSet>
+    <changeSet author="sonzogbe (generated)" id="1600433409612-34">
+        <addForeignKeyConstraint baseColumnNames="tags_id" baseTableName="book_tags" constraintName="FKsky6wumpk8q486i2lecduct0d" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="tag" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

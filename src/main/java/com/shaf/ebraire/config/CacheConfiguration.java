@@ -61,6 +61,7 @@ public class CacheConfiguration {
             createCache(cm, com.shaf.ebraire.domain.Tag.class.getName());
             createCache(cm, com.shaf.ebraire.domain.Tag.class.getName() + ".books");
             createCache(cm, com.shaf.ebraire.domain.Type.class.getName());
+            createCache(cm, com.shaf.ebraire.domain.BookedBook.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

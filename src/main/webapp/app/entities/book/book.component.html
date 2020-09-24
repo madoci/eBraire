@@ -4,7 +4,7 @@
 
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-book" [routerLink]="['/book/new']">
             <fa-icon icon="plus"></fa-icon>
-            <span  jhiTranslate="eBraireApp.book.home.createLabel">
+            <span class="hidden-sm-down"  jhiTranslate="eBraireApp.book.home.createLabel">
             Create a new Book
             </span>
         </button>
@@ -13,6 +13,24 @@
     <jhi-alert-error></jhi-alert-error>
 
     <jhi-alert></jhi-alert>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'eBraireApp.book.home.search' | translate }}">
+
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <fa-icon icon="search"></fa-icon>
+                    </button>
+
+                    <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+                        <fa-icon icon="trash-alt"></fa-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div class="alert alert-warning" id="no-result" *ngIf="books?.length === 0">
         <span jhiTranslate="eBraireApp.book.home.notFound">No books found</span>
@@ -28,6 +46,7 @@
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.description">Description</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.unitPrice">Unit Price</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.image">Image</span></th>
+                    <th scope="col" ><span jhiTranslate="eBraireApp.book.quantity">Quantity</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.type">Type</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.tags">Tags</span></th>
                     <th scope="col" ><span jhiTranslate="eBraireApp.book.genres">Genres</span></th>
@@ -45,6 +64,7 @@
                         <a *ngIf="book.image" (click)="openFile(book.imageContentType, book.image)" jhiTranslate="entity.action.open">open</a>
                         <span *ngIf="book.image">{{ book.imageContentType }}, {{ byteSize(book.image) }}</span>
                     </td>
+                    <td>{{ book.quantity }}</td>
                     <td>
                         <div *ngIf="book.type">
                             <a [routerLink]="['/type', book.type?.id, 'view']" >{{ book.type?.id }}</a>

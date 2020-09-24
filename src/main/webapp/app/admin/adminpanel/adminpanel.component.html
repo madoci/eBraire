@@ -21,6 +21,7 @@
                 <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
                 <th scope="col"><span jhiTranslate="eBraireApp.book.title">Title</span></th>
                 <th scope="col"><span jhiTranslate="eBraireApp.book.authors">Authors</span></th>
+                <th scope="col" ><span jhiTranslate="eBraireApp.book.quantity">Quantity</span></th>
                 <th scope="col"><span jhiTranslate="eBraireApp.book.description">Description</span></th>
                 <th scope="col"><span jhiTranslate="eBraireApp.book.unitPrice">Unit Price</span></th>
                 <th scope="col"><span jhiTranslate="eBraireApp.book.image">Image</span></th>
@@ -35,6 +36,7 @@
                 <td><a>{{ book.id }}</a></td>
                 <td>{{ book.title }}</td>
                 <td>{{ book.authors }}</td>
+                <td>{{ book.quantity }}</td>
                 <td>
                     {{ limit(book.description) }}
                 </td>

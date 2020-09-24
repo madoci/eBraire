@@ -50,6 +50,11 @@ public class Book implements Serializable {
     @Column(name = "image_content_type", nullable = false)
     private String imageContentType;
 
+    @NotNull
+    @Min(value = 0)
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+
     @ManyToOne
     @JsonIgnoreProperties(value = "books", allowSetters = true)
     private Type type;
@@ -155,6 +160,19 @@ public class Book implements Serializable {
         this.imageContentType = imageContentType;
     }
 
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Book quantity(Integer quantity) {
+        this.quantity = quantity;
+        return this;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     public Type getType() {
         return type;
     }
@@ -246,6 +264,7 @@ public class Book implements Serializable {
             ", unitPrice=" + getUnitPrice() +
             ", image='" + getImage() + "'" +
             ", imageContentType='" + getImageContentType() + "'" +
+            ", quantity=" + getQuantity() +
             "}";
     }
 }

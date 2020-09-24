@@ -5,6 +5,7 @@
         "title": "Books",
         "createLabel": "Créer un nouveau Book",
         "createOrEditLabel": "Créer ou éditer un Book",
+        "search": "Recherche pour Book",
         "notFound": "Aucun Book trouvé"
       },
       "created": "Un nouveau Book a été créé avec l'identifiant {{ param }}",
@@ -21,6 +22,7 @@
       "description": "Description",
       "unitPrice": "Unit Price",
       "image": "Image",
+      "quantity": "Quantity",
       "type": "Type",
       "tags": "Tags",
       "genres": "Genres"

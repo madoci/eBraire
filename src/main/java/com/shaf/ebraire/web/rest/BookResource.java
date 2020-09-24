@@ -1,9 +1,11 @@
 package com.shaf.ebraire.web.rest;
 
 import com.shaf.ebraire.domain.Book;
+import com.shaf.ebraire.domain.BookedBook;
 import com.shaf.ebraire.domain.Genre;
 import com.shaf.ebraire.domain.Tag;
 import com.shaf.ebraire.repository.BookRepository;
+import com.shaf.ebraire.repository.BookedBookRepository;
 import com.shaf.ebraire.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -19,6 +21,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -42,8 +45,10 @@ public class BookResource {
 
     private final BookRepository bookRepository;
 
-    public BookResource(BookRepository bookRepository) {
+    private final BookedBookRepository bookedBookRepository;
+    public BookResource(BookRepository bookRepository,BookedBookRepository bookedBookRepository) {
         this.bookRepository = bookRepository;
+        this.bookedBookRepository = bookedBookRepository;
     }
 
     /**
@@ -106,6 +111,18 @@ public class BookResource {
      */
     @GetMapping("/books/{id}")
     public ResponseEntity<Book> getBook(@PathVariable Long id) {
+        Date date = new Date();
+        long timeMilliExp = date.getTime();
+        log.debug("supressing removed ");
+        List<BookedBook> bookedBooks=bookedBookRepository.getExpiredBookedBook(timeMilliExp);
+        if (bookedBooks != null) {
+        for(BookedBook bookedBooktoRemove:bookedBooks) {
+        	bookedBooktoRemove.getBook().setQuantity(bookedBooktoRemove.getBook().getQuantity() + bookedBooktoRemove.getQuantity());
+            Book result = bookRepository.save(bookedBooktoRemove.getBook());
+        }
+        log.debug("end for");
+        bookedBookRepository.removeExpiredBookedBook(timeMilliExp);
+        }
         log.debug("REST request to get Book : {}", id);
         Optional<Book> book = bookRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(book);
