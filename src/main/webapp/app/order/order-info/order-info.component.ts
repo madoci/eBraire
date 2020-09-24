@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Customer,ICustomer } from 'app/shared/model/customer.model';
+import { Customer, ICustomer } from 'app/shared/model/customer.model';
 import { Ordered } from 'app/shared/model/ordered.model';
 import { OrderLine, IOrderLine } from 'app/shared/model/order-line.model';
 import { ShoppingCartService } from '../../shopping-cart/shopping-cart.service';
@@ -102,6 +102,13 @@ export class OrderInfoComponent implements OnInit {
     this.loading = false;
   }
 
+  getTotalPrice(): number {
+    let price = 0;
+    this.shoppingCartService.items.forEach(element => {
+      price = price + element.book!.unitPrice! * element.quantity!;
+    });
+    return price;
+  }
   public goToPayment(): void {
     this.doNotMatch = this.customerForm.get(['email'])!.value !== this.customerForm.get(['confirmEmail'])!.value;
 
@@ -126,8 +133,10 @@ export class OrderInfoComponent implements OnInit {
   }
 
   public pay(): void {
+    let idResuest = -1;
     if (this.customer) {
       this.order.idCustomer = this.customer;
+      idResuest = this.customer.id!;
     }
 
     this.order.delevryAddress = this.customerForm.get(['lastName'])!.value + ' ' + this.customerForm.get(['firstName'])!.value + '\n';
@@ -145,22 +154,22 @@ export class OrderInfoComponent implements OnInit {
     this.order.status = Status.ORDERED;
 
     this.order.commandStart = moment();
-    this.customerService
-      .update(this.customer!)
+    this.orderedService
+      .create(this.order)
       .pipe(
-        flatMap(result => {
-          this.customer = result.body || this.customer;
-          this.order.idCustomer = this.customer;
-          return this.orderedService.create(this.order);
-        }),
         flatMap(resultOrder => {
           this.order = resultOrder.body || this.order;
-          return this.bookedBookService.orderFromCustomer(this.customer!.id!, this.order.id!,this.shoppingCartService.getItems());
+          return this.bookedBookService.orderFromCustomer(idResuest, this.order.id!, this.shoppingCartService.getItems());
         }),
-        map(() => {
-          this.shoppingCartService.clearCart();
-          alert('Merci pour votre achat et a bientôt chez Ebraire !');
-          this.router.navigateByUrl('');
+        map(element => {
+          if (element.body !== null) {
+            this.shoppingCartService.clearCart();
+            alert('Merci pour votre achat et a bientôt chez Ebraire !');
+            this.router.navigateByUrl('');
+          } else {
+            alert('Trop long veuilliez recommencer');
+            this.router.navigateByUrl('');
+          }
         })
       )
       .subscribe();
@@ -207,7 +216,7 @@ export class OrderInfoComponent implements OnInit {
         }),
         flatMap(resultOrder => {
           this.order = resultOrder.body || this.order;
-          return this.bookedBookService.orderFromCustomer(this.customer!.id!, this.order.id!,this.shoppingCartService.getItems());
+          return this.bookedBookService.orderFromCustomer(this.customer!.id!, this.order.id!, this.shoppingCartService.getItems());
         }),
         map(() => {
           this.shoppingCartService.clearCart();
@@ -217,5 +226,4 @@ export class OrderInfoComponent implements OnInit {
       )
       .subscribe();
   }
-
 }

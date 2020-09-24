@@ -270,7 +270,7 @@
         <hr>
 
         <button type="submit" [disabled]="billingForm.invalid" class="btn btn-primary float-right m-2">
-            <span class="hidden-sm-down">Acheter</span>
+            <span class="hidden-sm-down">Acheter pour {{getTotalPrice()}}€</span>
         </button>
 
         <button type="button" id="previous" class="btn btn-secondary float-right m-2" (click)="goToInfo()">
@@ -278,5 +278,3 @@
         </button>
     </form>
 </div>
-
-<button (click)="debugTest()">Debug</button>

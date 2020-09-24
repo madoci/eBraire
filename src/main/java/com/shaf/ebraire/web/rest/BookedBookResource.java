@@ -57,8 +57,9 @@ public class BookedBookResource {
 
     private final OrderedRepository orderedRepository;
 
-    private final int bookedTime = 10000;
-    public BookedBookResource(OrderedRepository orderedRepository,OrderLineRepository orderLineRepository, BookedBookRepository bookedBookRepository, BookRepository bookRepository) {
+    private final int bookedTime = 120000;
+    public BookedBookResource(OrderedRepository orderedRepository,OrderLineRepository orderLineRepository, 
+    		BookedBookRepository bookedBookRepository, BookRepository bookRepository) {
         this.bookedBookRepository = bookedBookRepository;
         this.bookRepository = bookRepository;
         this.orderLineRepository = orderLineRepository;
@@ -86,7 +87,7 @@ public class BookedBookResource {
         }
         bookedBookRepository.removeExpiredBookedBook(timeMilliExp);
         Optional<Book> currentBook = bookRepository.findOneWithEagerRelationships(bookedBook.getBook().getId());
-if (currentBook.isEmpty()){
+if (!currentBook.isPresent()){
   return ResponseEntity.created(new URI("/api/booked-books/" + bookedBook.getId()))
           .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, bookedBook.getId().toString()))
           .body(null);
@@ -127,7 +128,7 @@ if (currentBook.isEmpty()){
         Date date = new Date();
         BookedBook resultFinal=null;
         Optional<Book> currentBook = bookRepository.findOneWithEagerRelationships(bookedBook.getBook().getId());
-        if (currentBook.isEmpty()) { // cas ou le livre n'est plus
+        if (!currentBook.isPresent()) { // cas ou le livre n'est plus
             long timeMilliExp = date.getTime();
             for(BookedBook bookedBooktoRemove:bookedBookRepository.getExpiredBookedBook(timeMilliExp)) {
             	bookedBooktoRemove.getBook().setQuantity(bookedBooktoRemove.getBook().getQuantity() + bookedBooktoRemove.getQuantity());
@@ -140,7 +141,7 @@ if (currentBook.isEmpty()){
         }
         BookedBook newBookedBook;
         Optional<BookedBook> previousBookedBook = bookedBookRepository.findById(bookedBook.getId());
-        if (previousBookedBook.isEmpty()) { // si il a été détruit
+        if (!previousBookedBook.isPresent()) { // si il a été détruit
         	newBookedBook= new BookedBook();
         	newBookedBook.setQuantity(0);
         	newBookedBook.setBook(bookedBook.getBook());
@@ -169,7 +170,7 @@ if (currentBook.isEmpty()){
             return ResponseEntity.created(new URI("/api/booked-books/" + resultFinal.getId()))
                     .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, resultFinal.getId().toString()))
                     .body(resultFinal);
-        }else  if (previousBookedBook.isEmpty()){ // cas expiré pas assez de quantitté
+        }else  if (!previousBookedBook.isPresent()){ // cas expiré pas assez de quantitté
             long timeMilliExp = date.getTime();
             for(BookedBook bookedBooktoRemove:bookedBookRepository.getExpiredBookedBook(timeMilliExp)) {
             	bookedBooktoRemove.getBook().setQuantity(bookedBooktoRemove.getBook().getQuantity() + bookedBooktoRemove.getQuantity());
@@ -238,7 +239,7 @@ if (currentBook.isEmpty()){
     public ResponseEntity<Void> deleteBookedBook(@PathVariable Long id) {
         log.debug("REST request to delete BookedBook : {}", id);
         Optional<BookedBook> optBooked = bookedBookRepository.findById(id);
-        if (!optBooked.isEmpty()) {
+        if (!optBooked.isPresent()) {
         BookedBook bookedbook = optBooked.get();
         bookedbook.getBook().setQuantity(bookedbook.getBook().getQuantity() + bookedbook.getQuantity());
         Book result = bookRepository.save(bookedbook.getBook());
@@ -269,8 +270,8 @@ if (currentBook.isEmpty()){
 
         for (BookedBook potentialBookedbook:bookedBooks) {
           Optional<BookedBook> tempbookedBook = bookedBookRepository.findById(potentialBookedbook.getId());
-          if(tempbookedBook.isEmpty()){
-            return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+          if(!tempbookedBook.isPresent()){
+        	 return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).body(null);
           }
           BookedBook bookedBook = tempbookedBook.get();
         	OrderLine orderLine = new OrderLine();
@@ -283,7 +284,7 @@ if (currentBook.isEmpty()){
             bookedBookRepository.deleteById(bookedBook.getId());        
         }
         Ordered result = orderedRepository.save(order);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).body(order);
     }
 
 
@@ -308,13 +309,13 @@ if (currentBook.isEmpty()){
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Optional<Book> currentBook = bookRepository.findOneWithEagerRelationships(bookedBook.getBook().getId());
-        if (currentBook.isEmpty()) {
+        if (!currentBook.isPresent()) {
         	return ResponseEntity.ok()
                     .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bookedBook.getId().toString()))
                     .body(null);
         }
         Optional<BookedBook> optionalPreviousBookedBook = bookedBookRepository.findById(bookedBook.getId());
-        if(optionalPreviousBookedBook.isEmpty()) {
+        if(!optionalPreviousBookedBook.isPresent()) {
         	if (currentBook.get().getQuantity() - bookedBook.getQuantity() >= 0 ) {
         		currentBook.get().setQuantity(currentBook.get().getQuantity() - bookedBook.getQuantity());
                 Book resultbook = bookRepository.save(currentBook.get());

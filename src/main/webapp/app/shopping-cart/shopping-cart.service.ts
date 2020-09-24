@@ -116,12 +116,10 @@ export class ShoppingCartService {
 
       this.bookedBookService.create(booked).subscribe(element => {
         if (element.body === null) {
-          alert('désolé rupture de stoque repassé plus tad :)');
+          alert('désolé rupture de stoque repassé plus tard');
           return;
         }
-        alert(element.body.id);
         this.items.push(element.body);
-        alert(this.items.length);
         this.saveCart();
       });
     }
@@ -159,9 +157,6 @@ export class ShoppingCartService {
             this.items = tempItems;
             this.saveCart();
           }
-          if (okItems === sizeItems) {
-            alert('vos réservation sont à jour keep going!');
-          }
         }
       });
     });
@@ -190,7 +185,6 @@ export class ShoppingCartService {
             this.saveCart();
           }
           if (okItems === sizeItems) {
-            alert('vos réservation sont à jour keep going!');
             this.router.navigate([route]);
           }
         }
