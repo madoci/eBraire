@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
+import { map } from 'rxjs/operators';
+import { JhiEventManager } from 'ng-jhipster';
 
 import { VERSION } from 'app/app.constants';
 import { LANGUAGES } from 'app/core/language/language.constants';
@@ -25,6 +27,7 @@ export class NavbarComponent implements OnInit {
   types: String = 'types-';
   genres: String = 'genres-';
   tags: String = 'tags-';
+  name: String = 'Compte';
   constructor(
     private loginService: LoginService,
     private languageService: JhiLanguageService,
@@ -32,7 +35,8 @@ export class NavbarComponent implements OnInit {
     private accountService: AccountService,
     private loginModalService: LoginModalService,
     private profileService: ProfileService,
-    private router: Router
+    private router: Router,
+    protected eventManager: JhiEventManager
   ) {
     this.version = VERSION ? (VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION) : '';
   }
@@ -42,6 +46,23 @@ export class NavbarComponent implements OnInit {
       this.inProduction = profileInfo.inProduction;
       this.swaggerEnabled = profileInfo.swaggerEnabled;
     });
+    this.update();
+    this.eventManager.subscribe('CloseConnection', () => this.update());
+  }
+
+  update(): void {
+    this.accountService
+      .identity()
+      .pipe(
+        map(account => {
+          if (account) {
+            this.name = account.firstName + ' ' + account.lastName;
+            return;
+          }
+          return;
+        })
+      )
+      .subscribe();
   }
 
   changeLanguage(languageKey: string): void {
@@ -62,6 +83,7 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(): void {
+    this.name = 'Compte';
     this.collapseNavbar();
     this.loginService.logout();
     this.router.navigate(['']);
