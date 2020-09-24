@@ -21,7 +21,7 @@
             <column name="authors" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="description" type="varchar(255)">
+            <column name="description" type="varchar(4096)">
                 <constraints nullable="false" />
             </column>
             <column name="unit_price" type="${floatType}">
