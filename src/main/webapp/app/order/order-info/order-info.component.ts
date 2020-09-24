@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Customer, ICustomer } from 'app/shared/model/customer.model';
+import { ICustomer } from 'app/shared/model/customer.model';
 import { Ordered } from 'app/shared/model/ordered.model';
-import { OrderLine, IOrderLine } from 'app/shared/model/order-line.model';
 import { ShoppingCartService } from '../../shopping-cart/shopping-cart.service';
 import { Status } from 'app/shared/model/enumerations/status.model';
 import { CustomerService } from '../../entities/customer/customer.service';
@@ -179,7 +178,6 @@ export class OrderInfoComponent implements OnInit {
     this.customerService.find(3).subscribe(res => {
       if (res.body) {
         const customer = res.body;
-        //alert(customer.customer!.login);
         customer.idOrders?.forEach(value => {
           alert(value.delevryAddress);
         });

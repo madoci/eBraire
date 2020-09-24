@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ShoppingCartService } from 'app/shopping-cart/shopping-cart.service';
-import { ShoppingItem } from 'app/shopping-cart/shopping-item.model';
 import { BookedBook } from '../../shared/model/booked-book.model';
-import { Router } from '@angular/router';
+import { JhiEventManager } from 'ng-jhipster';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'jhi-order-summary',
@@ -12,14 +12,19 @@ export class OrderSummaryComponent implements OnInit {
   items: BookedBook[] = [];
   finalPrice = 0;
   numberOfItems = 0;
+  eventSubscriber?: Subscription;
 
-  constructor(private shoppingCartService: ShoppingCartService) {}
+  constructor(private shoppingCartService: ShoppingCartService, protected eventManager: JhiEventManager) {}
 
   ngOnInit(): void {
     document.bgColor = '#AAAAAA';
     this.items = this.shoppingCartService.getItems();
     this.numberOfItems = this.shoppingCartService.getNumberOfItems();
     this.calcFinalPrice();
+    this.eventSubscriber = this.eventManager.subscribe(
+      'CartModification',
+      () => (this.numberOfItems = this.shoppingCartService.getNumberOfItems())
+    );
   }
 
   calcFinalPrice(): void {
