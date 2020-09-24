@@ -94,11 +94,61 @@
                     </div>
                 </div>
 
-                <div class="form-group" *ngIf="languages && languages.length > 0">
+                <!--div class="form-group" *ngIf="languages && languages.length > 0">
                     <label for="langKey" jhiTranslate="settings.form.language">Language</label>
                     <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
                         <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
                     </select>
+                </div-->
+        
+                <div class="form-group d-flex flex-column">
+                    <label class="form-control-label" for="addressLine" jhiTranslate="customer-info.form.addressline.label">Adresse postale</label>
+                    <input type="text" class="form-control" id="addressLine" name="addressLine" placeholder="{{ 'customer-info.form.addressline.placeholder' | translate }}"
+                            formControlName="addressLine">
+        
+                    <div *ngIf="settingsForm.get('addressLine')!.invalid && (settingsForm.get('addressLine')!.dirty || settingsForm.get('addressLine')!.touched)">
+                        <small class="form-text text-danger"
+                                *ngIf="settingsForm.get('addressLine')?.errors?.required">
+                            Votre adresse est requise.
+                        </small>
+                    </div>
+                </div>
+        
+                <div class="form-group d-flex flex-column">
+                    <label class="form-control-label" for="addressLine2" jhiTranslate="customer-info.form.addressline2.label">Complément d'adresse</label>
+                    <input type="text" class="form-control" id="addressLine2" name="addressLine2" placeholder="{{ 'customer-info.form.addressline2.placeholder' | translate }}"
+                            formControlName="addressLine2">
+                </div>
+        
+                <div class="form-group d-flex flex-column">
+                    <label class="form-control-label" for="postcode" jhiTranslate="customer-info.form.postcode.label">Code postal</label>
+                    <input type="text" class="form-control" id="postcode" name="postcode" placeholder="{{ 'customer-info.form.postcode.placeholder' | translate }}"
+                            formControlName="postcode" maxlength="5">
+                    
+                    <div *ngIf="settingsForm.get('postcode')!.invalid && (settingsForm.get('postcode')!.dirty || settingsForm.get('postcode')!.touched)">
+                        <small class="form-text text-danger"
+                                *ngIf="settingsForm.get('postcode')?.errors?.required">
+                            Votre code postal est requis.
+                        </small>
+        
+                        <small class="form-text text-danger"
+                                *ngIf="settingsForm.get('postcode')?.errors?.pattern">
+                            Votre code postal n'est pas valide.
+                        </small>
+                    </div>
+                </div>
+        
+                <div class="form-group d-flex flex-column">
+                    <label class="form-control-label" for="city" jhiTranslate="customer-info.form.city.label">Ville</label>
+                    <input type="text" class="form-control" id="city" name="city" placeholder="{{ 'customer-info.form.city.placeholder' | translate }}"
+                            formControlName="city">
+                    
+                    <div *ngIf="settingsForm.get('city')!.invalid && (settingsForm.get('city')!.dirty || settingsForm.get('city')!.touched)">
+                        <small class="form-text text-danger"
+                                *ngIf="settingsForm.get('city')?.errors?.required">
+                            Votre ville est requise.
+                        </small>
+                    </div>
                 </div>
 
                 <button type="submit" [disabled]="settingsForm.invalid" class="btn btn-primary" jhiTranslate="settings.form.button">Save</button>

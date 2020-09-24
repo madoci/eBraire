@@ -1,7 +1,9 @@
 package com.shaf.ebraire.web.rest;
 
 import com.shaf.ebraire.domain.Customer;
+import com.shaf.ebraire.domain.User;
 import com.shaf.ebraire.repository.CustomerRepository;
+import com.shaf.ebraire.repository.UserRepository;
 import com.shaf.ebraire.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -36,8 +38,11 @@ public class CustomerResource {
 
     private final CustomerRepository customerRepository;
 
-    public CustomerResource(CustomerRepository customerRepository) {
+    private final UserRepository userRepository;
+
+    public CustomerResource(CustomerRepository customerRepository, UserRepository userRepository) {
         this.customerRepository = customerRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -115,5 +120,23 @@ public class CustomerResource {
         log.debug("REST request to delete Customer : {}", id);
         customerRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * {@code GET  /customersResearch/:login} : get the "login" customer.
+     *
+     * @param login the login of the customer to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the customer, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/customersResearch/{login}")
+    @Transactional(readOnly = true)
+    public ResponseEntity<Customer> getCustomer(@PathVariable String login) {
+        log.debug("REST request to get Customer : {}", login);
+        Optional<User> user = userRepository.findOneByLogin(login);
+        if(!user.isPresent()){
+            return ResponseUtil.wrapOrNotFound(null);
+        }
+        Optional<Customer> customer = customerRepository.findById(user.get().getId());
+        return ResponseUtil.wrapOrNotFound(customer);
     }
 }

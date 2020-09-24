@@ -1,17 +1,12 @@
+import { ICustomer, Customer } from 'app/shared/model/customer.model';
 import { IUser } from 'app/core/user/user.model';
 import { IOrdered } from 'app/shared/model/ordered.model';
 
-export interface ICustomer {
-  id?: number;
-  addressLine?: string;
-  addressLine2?: string;
-  postcode?: string;
-  city?: string;
-  user?: IUser;
-  idOrders?: IOrdered[];
+export interface IRegister extends ICustomer {
+  password?: string;
 }
 
-export class Customer implements ICustomer {
+export class Register implements IRegister {
   constructor(
     public id?: number,
     public addressLine?: string,
@@ -19,6 +14,7 @@ export class Customer implements ICustomer {
     public postcode?: string,
     public city?: string,
     public user?: IUser,
-    public idOrders?: IOrdered[]
+    public idOrders?: IOrdered[],
+    public password?: string
   ) {}
 }

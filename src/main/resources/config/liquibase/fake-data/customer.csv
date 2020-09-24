@@ -1,11 +1,5 @@
-id;name;last_name;address
-1;Assistant;Marquardt;Money Market Account
-2;wireless mint green;Murray;Bedfordshire Security
-3;Team-oriented;Gutmann;index
-4;Auto Loan Account;Armstrong;functionalities
-5;sky blue Consultant Malta;Huel;deposit multi-byte indexing
-6;Ball Extended;Johnson;Pa'anga Directives Direct
-7;Villages fuchsia Administrator;Botsford;Uzbekistan Sum
-8;artificial intelligence;Pouros;Ergonomic California withdrawal
-9;invoice secondary database;Haag;Tennessee deposit transmit
-10;Ford;Bosco;Small Credit Card Account Chicken
+id;address_line;address_line_2;postcode;city
+1;Assistant;Generic heuristic;"91128";West Noble
+2;mission-critical auxiliary;functionalities;"76085";Kertzmannport
+3;dedicated;users;"92894";East Margarettahaven
+4;artificial intelligence;bypass Awesome Steel Tuna Spurs;"38586";Lake Peteberg

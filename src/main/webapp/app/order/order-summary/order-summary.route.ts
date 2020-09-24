@@ -6,6 +6,6 @@ export const ORDERSUMMARY_ROUTE: Route = {
   component: OrderSummaryComponent,
   data: {
     authorities: [],
-    pageTitle: 'home.title',
+    pageTitle: 'pagetitle.ordersummary',
   },
 };

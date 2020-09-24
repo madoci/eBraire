@@ -1,60 +1,128 @@
 <style>
+    .shopping-cart {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
     .button-confirm {
-        background-color: green;
+        background-color: #ecb613;
         color: white;
         border-radius: 5px;
         border: none;
         font-size: 30px;
         padding: 16px 32px;
-        -webkit-box-shadow: 0px 5px 0px darkgreen;
-        -moz-box-shadow: 0px 5px 0px darkgreen;
-        box-shadow: 0px 5px 0px darkgreen;
-        margin-left: 40px
+        -webkit-box-shadow: 0px 5px 0px #cc9900;
+        -moz-box-shadow: 0px 5px 0px #cc9900;
+        box-shadow: 0px 5px 0px #cc9900;
+        font-size: 1.1em;
+        margin-top: 40px;
     }
-    
+
     .button-confirm:hover {
-        background-color: #e0aa50;
-        -webkit-box-shadow: 0px 5px 0px #c49646;
-        -moz-box-shadow: 0px 5px 0px #c49646;
-        box-shadow: 0px 5px 0px #c49646;
+        background-color: #ffc61a;
+        -webkit-box-shadow: 0px 5px 0px #e6ac00;
+        -moz-box-shadow: 0px 5px 0px #e6ac00;
+        box-shadow: 0px 5px 0px #e6ac00;
     }
-    
+
     .confirm-contain {
         display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-left: 60px;
+        position: sticky;
+        top: 150px;
+        background-color: lightgrey;
+        padding: 30px 30px;
+        height: 300px;
+        width: 300px;
+        min-width: 300px;
     }
-    
+
     .final-price {
-        height: 100px;
-        line-height: 100px;
-        text-align: center;
-        font-size: 30px
+        text-align: end;
+        font-size: 30px;
+        letter-spacing: 0.05em;
     }
-    
+
+    .shopping-list {
+        flex-grow: 1;
+    }
+
+    .total {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-grow: 1;
+    }
+
+    .hr {
+        border-color: black;
+    }
+
     @media screen and (max-width: 1050px) {
         .confirm-contain {
             justify-content: center !important;
             align-content: center;
             flex-direction: column;
+            position: fixed;
+            top: auto !important;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            margin-left: auto !important;
+            padding: 0.6em 2em !important;
+            height: auto !important;
+            width: auto !important;
+            min-width: auto !important;
         }
         .button-confirm {
             margin-bottom: 10px;
-            margin-left: 0px !important;
+            margin-top: 5px !important;
+            padding: 8px 16px !important;
+        }
+        .shopping-cart {
+            flex-direction: column !important;
+        }
+        .shopping-list {
+            margin-bottom: 40px;
+            margin-right: 0px;
+        }
+        .total {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+        .final-price {
+            flex-grow: 1;
+        }
+        .hr {
+            display: none;
         }
     }
 </style>
 
-<div class="d-flex flex-column">
-    <div *ngFor="let item of items">
-        <jhi-order-line *ngIf="item.book" [parent]="this" [book]="item.book"></jhi-order-line>
+<div *ngIf="items.length > 0" class="shopping-cart">
+    <div class="d-flex flex-column shopping-list">
+        <div *ngFor="let item of items">
+            <jhi-order-line [parent]="this" [book]="item.book!"></jhi-order-line>
+        </div>
     </div>
-</div>
-<div *ngIf="items.length > 0" class="confirm-contain">
-    <div class="final-price font-weight-bold">
-        {{price(finalPrice)}}
+    <div class="confirm-contain">
+        <div class="total">
+            <div class="flex-grow-1" style="font-size: 1.25em">
+                TOTAL ({{numberOfItems}} PRODUITS)
+                <hr class="hr">
+            </div>
+            <div class="final-price font-weight-bold">
+                {{price(finalPrice)}}
+            </div>
+        </div>
+        <button class="btn button-confirm" [routerLink]="'/order'">Confirmer votre panier</button>
     </div>
-    <button class="button-confirm" (click)="tryToOrder()">Confirmer</button>
 </div>
 <div *ngIf="items.length === 0">
     <p class="h2">Panier vide</p>

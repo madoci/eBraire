@@ -23,18 +23,24 @@
             <thead>
                 <tr>
                     <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
-                    <th scope="col" ><span jhiTranslate="eBraireApp.customer.name">Name</span></th>
-                    <th scope="col" ><span jhiTranslate="eBraireApp.customer.lastName">Last Name</span></th>
-                    <th scope="col" ><span jhiTranslate="eBraireApp.customer.address">Address</span></th>
+                    <th scope="col" ><span jhiTranslate="eBraireApp.customer.addressLine">Address Line</span></th>
+                    <th scope="col" ><span jhiTranslate="eBraireApp.customer.addressLine2">Address Line 2</span></th>
+                    <th scope="col" ><span jhiTranslate="eBraireApp.customer.postcode">Postcode</span></th>
+                    <th scope="col" ><span jhiTranslate="eBraireApp.customer.city">City</span></th>
+                    <th scope="col" ><span jhiTranslate="eBraireApp.customer.user">User</span></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let customer of customers ;trackBy: trackId">
                     <td><a [routerLink]="['/customer', customer.id, 'view']">{{ customer.id }}</a></td>
-                    <td>{{ customer.name }}</td>
-                    <td>{{ customer.lastName }}</td>
-                    <td>{{ customer.address }}</td>
+                    <td>{{ customer.addressLine }}</td>
+                    <td>{{ customer.addressLine2 }}</td>
+                    <td>{{ customer.postcode }}</td>
+                    <td>{{ customer.city }}</td>
+                    <td>
+                        {{ customer.user?.id }}
+                    </td>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"

@@ -1,8 +1,12 @@
 <style>
     .my-border {
         width: 100%;
+        height: auto;
         box-shadow: 2px 2px 2px 2px grey;
         margin-bottom: 10px;
+        word-wrap: break-word;
+        display: flex;
+        flex-direction: row;
     }
 
     .my-border:hover {
@@ -13,29 +17,39 @@
         cursor: pointer;
     }
 
-    .disp {
-        display: flex;
+    .text-container {
+        max-width: 70%;
+     }
+
+    .text-container-desc {
+        max-width: 100%;
     }
-    @media (max-width: 768px){
+    @media (max-width: 768px) {
         .disp {
             display: none;
+        }
+        .text-container {
+            max-width: 100%;
+        }
+        .my-border {
+            flex-direction: column;
+            justify-content: center;
         }
     }
 </style>
 
-<h1 class="font-weight-bold">Bienvenu sur eBraire !</h1>
+<h1 class="font-weight-bold">Bienvenue sur l'eBraire !</h1>
 <h2>Best sellers</h2>
-<div class="d-flex flex-column" >
-    <div *ngFor="let book of bestSellers" class="my-border clic d-flex flex-row" [routerLink]="'/display-book/'+book.id">
-        <div style="margin: 5px">
-            <jhi-book-image *ngIf="book" [book]="book" [imgSize]="200" [borderColor]="'#FFFFFF'"></jhi-book-image>
+<div class="d-flex flex-column">
+    <div *ngFor="let book of bestSellers" class="my-border clic" [routerLink]="'/display-book/'+book.id">
+        <div class="d-flex justify-content-center" style="margin: 5px">
+            <jhi-book-image class="justify-content-center" *ngIf="book" [book]="book" [imgSize]="200" [borderColor]="'#FFFFFF'"></jhi-book-image>
         </div>
-        <div class="d-flex flex-column align-items-start">
+        <div class="d-flex flex-column align-items-start text-container">
             <div class="font-weight-bold text-center h3">{{book.title}}</div>
             <div class="font-italic text-center h5">De: {{book.authors}}</div>
             <div>{{price(book.unitPrice)}}</div>
-            <div class="disp">
-                {{book.description}}
+            <div class="disp text-container-desc">{{book.description}}
             </div>
         </div>
     </div>

@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser
 public class BookedBookResourceIT {
-
+/*
     private static final Integer DEFAULT_QUANTITY = 1;
     private static final Integer UPDATED_QUANTITY = 2;
 
@@ -53,7 +53,7 @@ public class BookedBookResourceIT {
      * @see com.shaf.ebraire.repository.search.BookedBookSearchRepositoryMockConfiguration
      */
 
-    @Autowired
+/*    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -67,7 +67,7 @@ public class BookedBookResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static BookedBook createEntity(EntityManager em) {
+/*public static BookedBook createEntity(EntityManager em) {
         BookedBook bookedBook = new BookedBook()
             .quantity(DEFAULT_QUANTITY)
             .price(DEFAULT_PRICE)
@@ -80,7 +80,7 @@ public class BookedBookResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static BookedBook createUpdatedEntity(EntityManager em) {
+  /*  public static BookedBook createUpdatedEntity(EntityManager em) {
         BookedBook bookedBook = new BookedBook()
             .quantity(UPDATED_QUANTITY)
             .price(UPDATED_PRICE)
@@ -149,7 +149,7 @@ public class BookedBookResourceIT {
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].expired").value(hasItem(DEFAULT_EXPIRED.intValue())));
     }
-    
+
     @Test
     @Transactional
     public void getBookedBook() throws Exception {
@@ -253,5 +253,5 @@ public class BookedBookResourceIT {
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].expired").value(hasItem(DEFAULT_EXPIRED.intValue())));
-    }
+    }*/
 }

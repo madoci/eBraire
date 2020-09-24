@@ -6,6 +6,9 @@ export const orderRoute: Routes = [
   {
     path: 'order',
     component: OrderInfoComponent,
+    data: {
+      pageTitle: 'pagetitle.orderinfo',
+    },
   },
   {
     path: 'summary',

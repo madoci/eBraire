@@ -262,23 +262,28 @@ if (currentBook.isEmpty()){
     }
 
 
-    @DeleteMapping("/order-booked-books-from-customer/{id}/{idOrder}")
-    public ResponseEntity<Void> OrderBookedBookOfCustomer(@PathVariable Long id,@PathVariable Long idOrder ) {
+    @PutMapping("/order-booked-books-from-customer/{id}/{idOrder}")
+    public ResponseEntity<Ordered> OrderBookedBookOfCustomer(@PathVariable Long id,@PathVariable Long idOrder,@RequestBody List<BookedBook> bookedBooks ) {
         log.debug("REST request to order BookedBook from Customer : {}", idOrder);
-        List<BookedBook> temp = bookedBookRepository.getFromCustomer(id);
         Ordered order = orderedRepository.findById(idOrder).get();
-        for (BookedBook bookedbook:temp) {
+
+        for (BookedBook potentialBookedbook:bookedBooks) {
+          Optional<BookedBook> tempbookedBook = bookedBookRepository.findById(potentialBookedbook.getId());
+          if(tempbookedBook.isEmpty()){
+            return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+          }
+          BookedBook bookedBook = tempbookedBook.get();
         	OrderLine orderLine = new OrderLine();
-        	orderLine.setQuantity(bookedbook.getQuantity());
+        	orderLine.setQuantity(bookedBook.getQuantity());
         	orderLine.setOrder(order);
-        	orderLine.setPrice(bookedbook.getPrice());
-        	orderLine.setBook(bookedbook.getBook());
+        	orderLine.setPrice(bookedBook.getQuantity() * bookedBook.getBook().getUnitPrice());
+        	orderLine.setBook(bookedBook.getBook());
         	OrderLine result = orderLineRepository.save(orderLine);
-            order.addOrderLines(orderLine);
+            order.addOrderLines(orderLine);  
+            bookedBookRepository.deleteById(bookedBook.getId());        
         }
         Ordered result = orderedRepository.save(order);
-        bookedBookRepository.deleteFromCustomer(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 
 

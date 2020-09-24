@@ -35,4 +35,8 @@ export class CustomerService {
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
+
+  findByLogin(login: string): Observable<EntityResponseType> {
+    return this.http.get<ICustomer>(`${this.resourceUrl}Research/${login}`, { observe: 'response' });
+  }
 }

@@ -44,8 +44,9 @@ export class BookedBookService {
   deleteFromCustomer(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(SERVER_API_URL + 'api/booked-books-from-customer/' + id, { observe: 'response' });
   }
-  orderFromCustomer(id: number, idOrder: number): Observable<EntityResponseType> {
-    return this.http.delete(SERVER_API_URL + 'api/order-booked-books-from-customer/' + id + '/' + idOrder, { observe: 'response' });
+  orderFromCustomer(id: number, idOrder: number, bookedBooks: IBookedBook[]): Observable<EntityResponseType> {
+    return this.http.put(SERVER_API_URL + 'api/order-booked-books-from-customer/' + id + '/' + idOrder ,
+  bookedBooks  ,{ observe: 'response' });
   }
   publicCheckBookedBook(bookedBook: IBookedBook): Observable<HttpResponse<{}>> {
     return this.http.put<IBookedBook>(this.resourceUrl + '-check', bookedBook, { observe: 'response' });

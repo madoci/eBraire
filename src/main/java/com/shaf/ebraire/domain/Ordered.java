@@ -46,7 +46,7 @@ public class Ordered implements Serializable {
     @Column(name = "status", nullable = false)
     private Status status;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<OrderLine> orderLines = new HashSet<>();
 

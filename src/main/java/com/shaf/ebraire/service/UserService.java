@@ -3,8 +3,10 @@ package com.shaf.ebraire.service;
 import com.shaf.ebraire.config.Constants;
 import com.shaf.ebraire.domain.Authority;
 import com.shaf.ebraire.domain.User;
+import com.shaf.ebraire.domain.Customer;
 import com.shaf.ebraire.repository.AuthorityRepository;
 import com.shaf.ebraire.repository.UserRepository;
+import com.shaf.ebraire.repository.CustomerRepository;
 import com.shaf.ebraire.security.AuthoritiesConstants;
 import com.shaf.ebraire.security.SecurityUtils;
 import com.shaf.ebraire.service.dto.UserDTO;
@@ -37,17 +39,20 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final CustomerRepository customerRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
 
     private final CacheManager cacheManager;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager, CustomerRepository customerRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.customerRepository = customerRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -122,6 +127,56 @@ public class UserService {
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+
+        return newUser;
+    }
+
+    public User registerUser(UserDTO userDTO, String password, String addressLine, String addressLine2, String postcode, String city) {
+        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new UsernameAlreadyUsedException();
+            }
+        });
+        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new EmailAlreadyUsedException();
+            }
+        });
+        User newUser = new User();
+        String encryptedPassword = passwordEncoder.encode(password);
+        newUser.setLogin(userDTO.getLogin().toLowerCase());
+        // new user gets initially a generated password
+        newUser.setPassword(encryptedPassword);
+        newUser.setFirstName(userDTO.getFirstName());
+        newUser.setLastName(userDTO.getLastName());
+        if (userDTO.getEmail() != null) {
+            newUser.setEmail(userDTO.getEmail().toLowerCase());
+        }
+        newUser.setImageUrl(userDTO.getImageUrl());
+        newUser.setLangKey(userDTO.getLangKey());
+        // new user is not active
+        newUser.setActivated(false);
+        // new user gets registration key
+        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        Set<Authority> authorities = new HashSet<>();
+        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        newUser.setAuthorities(authorities);
+        userRepository.save(newUser);
+        this.clearUserCaches(newUser);
+        log.debug("Created Information for User: {}", newUser);
+
+        // Create and save the customer entity
+        Customer customer = new Customer();
+        customer.setUser(newUser);
+        customer.setAddressLine(addressLine);
+        customer.setAddressLine2(addressLine2);
+        customer.setPostcode(postcode);
+        customer.setCity(city);
+        customerRepository.save(customer);
+        log.debug("Created Information for Customer: {}", customer);
+
         return newUser;
     }
 
@@ -165,6 +220,7 @@ public class UserService {
         userRepository.save(user);
         this.clearUserCaches(user);
         log.debug("Created Information for User: {}", user);
+
         return user;
     }
 

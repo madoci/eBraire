@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 
 import { ICustomer, Customer } from 'app/shared/model/customer.model';
 import { CustomerService } from './customer.service';
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'jhi-customer-update',
@@ -14,28 +16,40 @@ import { CustomerService } from './customer.service';
 })
 export class CustomerUpdateComponent implements OnInit {
   isSaving = false;
+  users: IUser[] = [];
 
   editForm = this.fb.group({
     id: [],
-    name: [null, [Validators.required]],
-    lastName: [null, [Validators.required]],
-    address: [null, [Validators.required]],
+    addressLine: [null, [Validators.required]],
+    addressLine2: [],
+    postcode: [null, [Validators.required, Validators.pattern('[0-9]{5}$')]],
+    city: [null, [Validators.required]],
+    user: [],
   });
 
-  constructor(protected customerService: CustomerService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    protected customerService: CustomerService,
+    protected userService: UserService,
+    protected activatedRoute: ActivatedRoute,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ customer }) => {
       this.updateForm(customer);
+
+      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
     });
   }
 
   updateForm(customer: ICustomer): void {
     this.editForm.patchValue({
       id: customer.id,
-      name: customer.name,
-      lastName: customer.lastName,
-      address: customer.address,
+      addressLine: customer.addressLine,
+      addressLine2: customer.addressLine2,
+      postcode: customer.postcode,
+      city: customer.city,
+      user: customer.user,
     });
   }
 
@@ -57,9 +71,11 @@ export class CustomerUpdateComponent implements OnInit {
     return {
       ...new Customer(),
       id: this.editForm.get(['id'])!.value,
-      name: this.editForm.get(['name'])!.value,
-      lastName: this.editForm.get(['lastName'])!.value,
-      address: this.editForm.get(['address'])!.value,
+      addressLine: this.editForm.get(['addressLine'])!.value,
+      addressLine2: this.editForm.get(['addressLine2'])!.value,
+      postcode: this.editForm.get(['postcode'])!.value,
+      city: this.editForm.get(['city'])!.value,
+      user: this.editForm.get(['user'])!.value,
     };
   }
 
@@ -77,5 +93,9 @@ export class CustomerUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
+  }
+
+  trackById(index: number, item: IUser): any {
+    return item.id;
   }
 }
