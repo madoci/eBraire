@@ -14,9 +14,15 @@ export class BooklistitemComponent implements OnInit {
 
   price(val: number | undefined): string {
     if (val === undefined) return '0.00€';
-    let dec = Math.trunc((val - Math.trunc(val)) * 10).toString()[0] + Math.trunc((val - Math.trunc(val)) * 10 * 100).toString()[0];
-    if (dec === '0') {
+    const decArray = val.toString().split('.');
+    let dec = '00';
+    if (decArray.length === 1) {
       dec = '00';
+    } else {
+      dec = decArray[1].substring(0, 2);
+      if (dec.length === 1) {
+        dec = dec + '0';
+      }
     }
     return Math.trunc(val).toString() + ',' + dec + '€';
   }
