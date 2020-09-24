@@ -239,13 +239,11 @@ if (!currentBook.isPresent()){
     public ResponseEntity<Void> deleteBookedBook(@PathVariable Long id) {
         log.debug("REST request to delete BookedBook : {}", id);
         Optional<BookedBook> optBooked = bookedBookRepository.findById(id);
-        if (!optBooked.isPresent()) {
+        if (optBooked.isPresent()) {
         BookedBook bookedbook = optBooked.get();
         bookedbook.getBook().setQuantity(bookedbook.getBook().getQuantity() + bookedbook.getQuantity());
         Book result = bookRepository.save(bookedbook.getBook());
         bookedBookRepository.deleteById(id);
-        }else {
-
         }
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }

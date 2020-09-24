@@ -29,7 +29,7 @@ export class ShoppingCartService {
   removeAllFromCart(book: IBook): void {
     for (let i = 0; i < this.items.length; i++) {
       if (this.items[i].book!.id === book.id) {
-        this.bookedBookService.delete(this.items[i].id!);
+        this.bookedBookService.delete(this.items[i].id!).subscribe();
         this.items.splice(i, 1);
       }
     }
@@ -117,7 +117,7 @@ export class ShoppingCartService {
 
       this.bookedBookService.create(booked).subscribe(element => {
         if (element.body === null) {
-          alert('Le stock du livre : ' + element.body!.book!.title! + " n'est actuellement pas suffisant.");
+          alert('Le stock du livre : ' + book.title! + " n'est actuellement pas suffisant.");
           return;
         }
         this.items.push(element.body);
