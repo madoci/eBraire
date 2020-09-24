@@ -30,6 +30,7 @@ export class BookDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.itemsInDatabase = this.book.quantity!;
     this.titleService.setTitle('' + this.book.title);
     this.organizedTags = [[]];
     if (this.book.tags) {
