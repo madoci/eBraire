@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { IBook } from 'app/shared/model/book.model';
-import { Customer } from '../shared/model/customer.model';
 import { CustomerService } from '../entities/customer/customer.service';
 import { BookedBookService } from '../entities/booked-book/booked-book.service';
 import { BookedBook } from '../shared/model/booked-book.model';
