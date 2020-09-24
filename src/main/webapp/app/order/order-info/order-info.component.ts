@@ -98,13 +98,23 @@ export class OrderInfoComponent implements OnInit {
     this.loading = false;
   }
 
-  getTotalPrice(): number {
+  getTotalPrice(): string {
     let price = 0;
     this.shoppingCartService.items.forEach(element => {
       price = price + element.book!.unitPrice! * element.quantity!;
     });
-    return price;
+    return this.price(price);
   }
+
+  price(val: number | undefined): string {
+    if (val === undefined) return '0.00€';
+    let dec = Math.trunc((val - Math.trunc(val)) * 10).toString()[0] + Math.trunc((val - Math.trunc(val)) * 10 * 100).toString()[0];
+    if (dec === '0') {
+      dec = '00';
+    }
+    return Math.trunc(val).toString() + ',' + dec;
+  }
+
   public goToPayment(): void {
     this.doNotMatch = this.customerForm.get(['email'])!.value !== this.customerForm.get(['confirmEmail'])!.value;
 

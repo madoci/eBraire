@@ -73,7 +73,10 @@ export class OrderLineComponent implements OnInit {
 
   price(val: number | undefined): string {
     if (val === undefined) return '0.00€';
-    const dec = Math.round((val - Math.floor(val)) * 100).toString();
+    let dec = Math.trunc((val - Math.trunc(val)) * 10).toString()[0] + Math.trunc((val - Math.trunc(val)) * 10 * 100).toString()[0];
+    if (dec === '0') {
+      dec = '00';
+    }
     return Math.trunc(val).toString() + ',' + dec + '€';
   }
 }

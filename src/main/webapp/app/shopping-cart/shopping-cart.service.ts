@@ -116,12 +116,14 @@ export class ShoppingCartService {
       booked.book = book;
 
       this.bookedBookService.create(booked).subscribe(element => {
+        alert('yo');
         if (element.body === null) {
           alert('Le stock du livre : ' + element.body!.book!.title! + " n'est actuellement pas suffisant.");
           return;
         }
         this.items.push(element.body);
         this.saveCart();
+        alert('end');
       });
     }
   }
